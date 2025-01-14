@@ -22,8 +22,8 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { PagesTypes } from './AllTypes';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice';
+// import { useDispatch } from 'react-redux';
+// import { setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice';
 import ProfilePage from './ProfilePage';
 
 const drawerWidth = 240;

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import { CanteenUserType, CreateOrderType, LoginType, MenuItemType } from "./AllTypes"
+import { CanteenUserType, CreateOrderType, LoginType,  } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 

@@ -3,7 +3,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import XIcon from '@mui/icons-material/X';
 import { FacebookOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import React from "react";
 import { LoginCanteenUser } from "./AllPostApi";
 import { toast } from "react-toastify";
 import { LoginType } from "./AllTypes";
@@ -81,7 +81,7 @@ const LoginCanteenPage = () => {
                 dispatch(setLoginCanteenUser(res.data.canteen));
                 dispatch(setLoginCanteenUserToken(res.data.token));
             }
-        } catch (error : any) {
+        } catch (error: any) {
             toast.error(error?.message);
         }
     }, [loginCheck, navigate, dispatch]);

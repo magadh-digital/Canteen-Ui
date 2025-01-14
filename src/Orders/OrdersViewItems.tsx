@@ -1,7 +1,7 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../Store'
-import { Box, colors, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, } from '@mui/material'
+import { Box, colors, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@mui/material'
 import { setItemViewId } from '../AllStoreSlice/ItemViewSlice'
 
 const OrdersViewItems = () => {
