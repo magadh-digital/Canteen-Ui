@@ -77,23 +77,23 @@ function AppContent({ dispatch }: { dispatch: any }) {
     return (
         <>
             <Routes>
-                <Route element={<PublicRoute redirectTo="/dashboard" />}>
-                    <Route path="/login" element={<LoginCanteenPage />} />
-                </Route>
+                {/* <Route element={<PublicRoute redirectTo="/dashboard" />}> */}
+                <Route path="/login" element={<LoginCanteenPage />} />
+                {/* </Route> */}
 
-                <Route element={<PrivateRoute redirectTo="/login" />}>
-                    <Route element={<Layout />}>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/canteen" element={<CanteenList />} />
-                        <Route path="/orders" element={<OrderList />} />
-                        <Route path='/products-items' element={<ProductList />} />
-                    </Route>
+                {/* <Route element={<PrivateRoute redirectTo="/login" />}> */}
+                <Route element={<Layout />}>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/canteen" element={<CanteenList />} />
+                    <Route path="/orders" element={<OrderList />} />
+                    <Route path='/products-items' element={<ProductList />} />
                 </Route>
+                {/* </Route> */}
 
-                <Route element={<PrivateRoute redirectTo="/login" />}>
-                    <Route path="/pos" element={<PosList />} />
-                </Route>
+                {/* <Route element={<PrivateRoute redirectTo="/login" />}> */}
+                <Route path="/pos" element={<PosList />} />
+                {/* </Route> */}
             </Routes>
 
             <AllModalList />
