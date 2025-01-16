@@ -11,8 +11,10 @@ import { RootState } from '../Store';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import PaymentMethod from './PaymentMethod';
 import { GetCanteenUserApi } from '../AllGetApi';
+import QrCode from "react-qr-code";
 import { resetData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
+import { setCanteenIdURl } from '../AllStoreSlice/CanteenIdSlice';
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -41,6 +43,7 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
 const PosList = () => {
     const theme = useTheme()
     const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
+    const { canteenId: canteenIdUrl } = useSelector((state: RootState) => state.canteenId)
     const [open, setOpen] = React.useState(true);
     const [tableSlected, setTableSelected] = React.useState<boolean>(false);
     const navigate = useNavigate()
@@ -83,6 +86,25 @@ const PosList = () => {
     const newDate = new Date();
     const currentDate = newDate.toISOString().split('T')[0] + ' ' + newDate.toLocaleTimeString();
 
+    useEffect(() => {
+        let location = new URL(window.location.href);
+        let canteen_id = location.search;
+        if (canteen_id) {
+            dispatch(setCanteenIdURl(canteen_id))
+        }
+    }, [dispatch])
+    const Barcode = () => {
+        const qrCodeUrl = `http://localhost:3000/pos?canteenId=${canteenIdUrl}`;
+        console.log(qrCodeUrl)
+
+        return (
+            <QrCode
+                size={256}
+                value={qrCodeUrl}
+                style={{ width: "400px", height: "400px" }}
+            />
+        );
+    };
     return (
         <Box sx={{
             width: '100vw',
@@ -99,6 +121,7 @@ const PosList = () => {
                     boxShadow: "none",
                     borderBottom: "0.1px solid #E0E0E0",
                 }}>
+
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -356,6 +379,15 @@ const PosList = () => {
                             >
                                 <AllProductCard canteenId={canteenId || ""} />
                             </Box>
+                            {canteenIdUrl ? (
+                                <>
+                                {canteenIdUrl}
+                                    <p>Scan this code to redirect to the desired page:</p>
+                                    <Barcode />
+                                </>
+                            ) : (
+                                <p>Please provide a valid canteenId in the URL to generate the QR code.</p>
+                            )}
 
                             <Box
                                 sx={{

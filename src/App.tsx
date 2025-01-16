@@ -93,6 +93,8 @@ function AppContent({ dispatch }: { dispatch: any }) {
 
                 {/* <Route element={<PrivateRoute redirectTo="/login" />}> */}
                 <Route path="/pos" element={<PosList />} />
+                
+              
                 {/* </Route> */}
             </Routes>
 
