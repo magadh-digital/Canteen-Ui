@@ -18,7 +18,7 @@ const Transition = React.forwardRef(function Transition(
 });
 export const ProductItemsEdit = () => {
     const { menuItemId, menuItemsData } = useSelector((state: RootState) => state.allMenuItems)
-    const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
+    const canteen_id = localStorage.getItem('canteen_user_id')
     const dispatch = useDispatch()
     const { mutateAsync: updateMenuItem } = UpdateProductItem()
 
@@ -30,7 +30,7 @@ export const ProductItemsEdit = () => {
         unit: menuItemsData?.unit,
         available: menuItemsData?.available,
         image_url: menuItemsData?.image_url,
-        canteen_id: canteen?.id
+        canteen_id: canteen_id
     })
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export const ProductItemsEdit = () => {
             unit: menuItemsData?.unit,
             available: menuItemsData?.available,
             image_url: menuItemsData?.image_url,
-            canteen_id: canteen?.id
+            canteen_id: canteen_id
         })
     }, [menuItemsData, menuItemId])
     const handleClose = () => {

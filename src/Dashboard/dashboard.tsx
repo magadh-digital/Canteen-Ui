@@ -201,9 +201,7 @@ export const Dashboard = () => {
             y2: 26.483,
         },
     ]
-
-    // const { canteen, token } = useSelector((state: RootState) => state.LoginCanteenUser)
-
+    
     return (
         <Box sx={{
             margin: 2

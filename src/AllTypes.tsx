@@ -97,7 +97,9 @@ export interface CreateOrderType {
   total_amount: number;
   customer_name: string;
   customer_type: string;
-  payment_type?: string
+  payment_type?: string;
+  voucher?: boolean;
+
 }
 
 export interface UpdateOrderType {
@@ -128,39 +130,44 @@ export interface LoginType {
   password: string
 }
 
-
-// {
-//     "canteen": {
-//         "id": "6780bb535e0b1d0fb1daadd9",
-//         "name": "Carrot",
-//         "location": "",
-//         "description": "carrot",
-//         "contact": 1231231230,
-//         "image_url": "",
-//         "created_at": "2025-01-10T06:16:51.418Z",
-//         "updated_at": "2025-01-10T06:16:51.418Z",
-//         "email": "step.deepanshu10@gmail.com",
-//         "password": "$2a$10$ZOBrpSqUEBJ2JSWa2iM6leBBKWdAbv2PXSVpl50slQ9dQ9ziMMnaS"
-//     },
-//     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjY3ODBiYjUzNWUwYjFkMGZiMWRhYWRkOSIsImlzcyI6InRlc3QiLCJleHAiOjE3MzkwODI3MTF9.popcBefAVbro25yL1-zCqCDqUzKv1tkQkLgZLCMlXcc"
-// }
-
-
 export interface LoginUserType {
-  canteen: CanteenUserDataType;
-  token: string
+  canteen: CanteenData[];
+  token: string;
+  user: CanteenUserDataType;
+  userType: string
+}
+
+export interface CanteenData {
+  id: string;
+  name: string;
+  location: string;
+  description: string;
+  contact: number;
+  image_url: string;
+  created_at: string;
+  updated_at: string;
+  email: string;
+  password: string
+
+}
+
+export interface AllUserType {
+  total: number;
+  users: CanteenUserDataType[]
 }
 
 export interface CanteenUserDataType {
   id: string;
   name: string;
   description: string;
-  contact: number;
+  phone: number;
   email: string;
   password: string;
   image_url: string;
   created_at: string;
   updated_at: string;
-  location: string
+  location: string;
+  role: string;
+  cp_code: string
 
 }

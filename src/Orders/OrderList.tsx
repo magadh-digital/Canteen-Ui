@@ -8,7 +8,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "../Store"
 
 export const OrderList = () => {
-    const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
+   const canteen_id = localStorage.getItem("canteen_user_id")
     const [search, setSearch] = useState<string>("")
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
@@ -17,7 +17,7 @@ export const OrderList = () => {
     const { data, isRefetching, refetch } = GetOrderDetailsApi({
         page: paginationModel.page + 1,
         limit: paginationModel.pageSize,
-        canteen_id: canteen?.id || ""
+        canteen_id: canteen_id || ""
 
     })
 

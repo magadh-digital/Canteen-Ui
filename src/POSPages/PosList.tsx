@@ -15,6 +15,7 @@ import QrCode from "react-qr-code";
 import { resetData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
 import { setCanteenIdURl } from '../AllStoreSlice/CanteenIdSlice';
+import moment from 'moment';
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -42,8 +43,8 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
 
 const PosList = () => {
     const theme = useTheme()
-    const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
     const { canteenId: canteenIdUrl } = useSelector((state: RootState) => state.canteenId)
+    const canteen_id = localStorage.getItem('canteen_user_id')
     const [open, setOpen] = React.useState(true);
     const [tableSlected, setTableSelected] = React.useState<boolean>(false);
     const navigate = useNavigate()
@@ -55,56 +56,46 @@ const PosList = () => {
     const { data } = useSelector((state: RootState) => state.Quantity)
     const { data: canteenList } = GetCanteenUserApi()
     const [canteenId, setCanteenID] = React.useState<string | null>('');
-    const [canteenData, setCanteenData] = React.useState<any | null>(null);
     const dispatch = useDispatch()
 
 
     const handleChange = (event: SelectChangeEvent) => {
         const selectedId = event.target.value;
-        setCanteenID(selectedId);
-        const selectedCanteen = canteenList?.canteens?.find((canteen: any) => canteen.id === selectedId);
-        setCanteenData(selectedCanteen || null);
-        dispatch(resetData())
-
-    }
+        if (selectedId !== canteenId) {
+            setCanteenID(selectedId); 
+            dispatch(resetData()); 
+        }
+    };
 
     useEffect(() => {
-
-        if (canteen.id) {
-            setCanteenID(canteen.id)
-            setCanteenData(canteenList?.canteens?.find((canteen: any) => canteen.id === canteen.id));
-
+        const storedCanteenId = localStorage.getItem('canteen_user_id');
+        if (storedCanteenId) {
+            setCanteenID(storedCanteenId);
         }
-        else if (canteen.id === "") {
-            const firstCanteen = canteenList?.canteens[0];
-            setCanteenID(firstCanteen?.id || '');
-            setCanteenData(firstCanteen);
-
-        }
-    }, [canteen.id, canteenList?.canteens])
+    }, []);
 
     const newDate = new Date();
-    const currentDate = newDate.toISOString().split('T')[0] + ' ' + newDate.toLocaleTimeString();
+    const currentDate = moment(newDate).format("DD-MM-YYYY hh:mm:ss");
 
-    useEffect(() => {
-        let location = new URL(window.location.href);
-        let canteen_id = location.search;
-        if (canteen_id) {
-            dispatch(setCanteenIdURl(canteen_id))
-        }
-    }, [dispatch])
-    const Barcode = () => {
-        const qrCodeUrl = `http://localhost:3000/pos?canteenId=${canteenIdUrl}`;
-        console.log(qrCodeUrl)
+    // useEffect(() => {
+    //     let location = new URL(window.location.href);
+    //     let canteen_id = location.search;
+    //     if (canteen_id) {
+    //         dispatch(setCanteenIdURl(canteen_id))
+    //     }
+    // }, [dispatch])
+    // const Barcode = () => {
+    //     const qrCodeUrl = `http://localhost:3000/pos?canteenId=${canteenIdUrl}`;
+    //     console.log(qrCodeUrl)
 
-        return (
-            <QrCode
-                size={256}
-                value={qrCodeUrl}
-                style={{ width: "400px", height: "400px" }}
-            />
-        );
-    };
+    //     return (
+    //         <QrCode
+    //             size={256}
+    //             value={qrCodeUrl}
+    //             style={{ width: "400px", height: "400px" }}
+    //         />
+    //     );
+    // };
     return (
         <Box sx={{
             width: '100vw',
@@ -166,7 +157,7 @@ const PosList = () => {
                                     id="demo-simple-select-autowidth"
                                     value={canteenId || ""}
                                     onChange={handleChange}
-                                    label="Age"
+                                    label="canteen"
                                 >
                                     {canteenList?.canteens?.map((item) => {
                                         return (
@@ -289,7 +280,7 @@ const PosList = () => {
                                     sx={{
                                         width: '100%',
                                         bgcolor: colors.green[100],
-                                        height: '100px',
+                                        height: '70px',
                                         display: 'flex',
                                         flexShrink: 0,
                                     }}
@@ -321,7 +312,7 @@ const PosList = () => {
                                     }}
                                     >
 
-                                        <PaymentMethod canteenId={canteenId || ""} canteenData={canteenData || ""} />
+                                        <PaymentMethod canteen_id={canteenId || ""} />
                                     </Stack>
                                     <Stack
                                         sx={{
@@ -381,9 +372,8 @@ const PosList = () => {
                             </Box>
                             {canteenIdUrl ? (
                                 <>
-                                {canteenIdUrl}
                                     <p>Scan this code to redirect to the desired page:</p>
-                                    <Barcode />
+                                    {/* <Barcode /> */}
                                 </>
                             ) : (
                                 <p>Please provide a valid canteenId in the URL to generate the QR code.</p>
@@ -427,7 +417,7 @@ const PosList = () => {
                                     cursor: 'pointer',
                                 }}>
 
-                                    <PaymentMethod canteenId={canteenId || ""} canteenData={canteenData || ""} />
+                                    <PaymentMethod canteen_id={canteenId || ""} />
                                 </Stack>
                                 <Stack
                                     sx={{

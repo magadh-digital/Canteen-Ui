@@ -9,9 +9,9 @@ import { ProductItemsColumn } from "../DataGridColumn/ProductItemsColumn";
 import { setAddProduct } from "../AllStoreSlice/AddProductCanteenSlice";
 
 const ProductList = () => {
-    const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser);
+    const canteen_id = localStorage.getItem("canteen_user_id");
     const { data, isLoading, isRefetching, refetch } = GetMenuItemListApi({
-        canteen_id: canteen.id,
+        canteen_id: canteen_id || "",
     });
     const dispatch = useDispatch()
     const [page, setPage] = useState<GridPaginationModel>({
@@ -57,7 +57,7 @@ const ProductList = () => {
                         variant="contained"
                         size="small"
                         onClick={() => {
-                            dispatch(setAddProduct(canteen?.id))
+                            dispatch(setAddProduct(canteen_id))
                         }}
                     >
                         Add Product

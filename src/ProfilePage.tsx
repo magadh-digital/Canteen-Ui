@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { setLoginCanteenUser, setLoginCanteenUserToken } from "./AllStoreSlice/LoginCanteenUserSlice";
 import { RootState } from "./Store";
 
-const ProfilePage = () => {
+export const ProfilePage = () => {
     const [open, setOpen] = useState(false);
-    const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
+    const { user: canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const handleClickOpen = () => {
@@ -17,7 +17,9 @@ const ProfilePage = () => {
     const handleLogout = () => {
         dispatch(setLoginCanteenUserToken(""))
         dispatch(setLoginCanteenUser(null))
-        localStorage.removeItem('token')
+        localStorage.removeItem('canteen_token')
+        localStorage.removeItem('canteen_user_id')
+        localStorage.removeItem('canteen_data')
         navigate('/login');
     };
 
@@ -105,7 +107,7 @@ const ProfilePage = () => {
                                 }}>
                                 Contact
                             </Typography>
-                            {canteen?.contact}
+                            {canteen?.phone}
                         </Stack>
                         <hr />
                         <Stack direction="row"
@@ -174,4 +176,3 @@ const ProfilePage = () => {
     )
 }
 
-export default ProfilePage

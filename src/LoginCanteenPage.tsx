@@ -1,46 +1,30 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import XIcon from '@mui/icons-material/X';
 import { FacebookOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { LoginCanteenUser } from "./AllPostApi";
+import { PostOtpSender, PostVerifyOtp } from "./AllPostApi";
 import { toast } from "react-toastify";
-import { LoginType } from "./AllTypes";
 import { useDispatch } from "react-redux";
-import { setLoginCanteenUser, setLoginCanteenUserToken } from "./AllStoreSlice/LoginCanteenUserSlice";
+import { setLoginCanteenData, setLoginCanteenUser, setLoginCanteenUserToken } from "./AllStoreSlice/LoginCanteenUserSlice";
+import { LoadingButton } from "@mui/lab";
 
-interface LoginTypes {
-    user: {
-        email?: string | null;
-        password?: string | null;
-        userName?: string | null;
-    } | null
-}
+
 
 const LoginCanteenPage = () => {
 
     const navigate = useNavigate()
     const [signInPage, setSignInPage] = React.useState(false)
     const [loginData, setLoginData] = React.useState<{
-        email?: string,
-        password?: string,
-        userName?: string
+        phone?: number,
+        otp?: number,
     }>({
-        email: "",
-        password: "",
-        userName: "",
+        phone: 0,
+        otp: 0,
     })
-
-    const [loginCheck, setLoginCheck] = React.useState<{
-        email?: string,
-        password?: string,
-
-    }>({
-        email: "",
-        password: "",
-
-    })
+    const { mutateAsync: OtpSender, isPending } = PostOtpSender()
+    const { mutateAsync: VerifyOtp, isPending: isPendingVerify } = PostVerifyOtp()
 
 
 
@@ -51,44 +35,52 @@ const LoginCanteenPage = () => {
         }))
     }
 
-    const handleSavePassword = () => {
-        const { email, password, userName } = loginData;
-        const userData: LoginTypes = {
-            user: { email, password, userName },
-        };
-        localStorage.setItem('user', JSON.stringify(userData));
-        navigate('/');
+    const handleSavePassword = async () => {
+        const userData = {
+            phone: loginData.phone || 0,
+        }
+        try {
+            const res = await OtpSender({ data: Number(userData.phone) })
+
+            if (res.status === 200) {
+                setLoginData((prevState) => ({
+                    ...prevState,
+                    otp: res.data.otp
+                }))
+                setSignInPage(true)
+            }
+
+        } catch (error: any) {
+            toast.error(error.response.data.error)
+
+        }
     };
 
-    const { mutateAsync } = LoginCanteenUser()
-
-    const handleUpdateCheckPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLoginCheck((prevState) => ({
-            ...prevState,
-            [event.target.name]: event.target.value
-        }))
-    }
     const dispatch = useDispatch()
-    const handleCheckPassword = React.useCallback(async () => {
-        try {
-            const res = await mutateAsync({
-                data: loginCheck as LoginType,
-            });
-            if (res.status === 200) {
-                toast.success("Login Successfully");
-                navigate("/");
-                localStorage.setItem("token", res.data.token);
-                dispatch(setLoginCanteenUser(res.data.canteen));
-                dispatch(setLoginCanteenUserToken(res.data.token));
+    const handleCheckPassword = async () => {
+        if (loginData.otp !== 0) {
+            const userData = {
+                phone: loginData.phone || 0,
+                otp: loginData.otp || 0
             }
-        } catch (error: any) {
-            toast.error(error?.message);
+            try {
+                const res = await VerifyOtp({ data: Number(userData.otp), phone: Number(userData.phone) })
+                if (res.status === 200) {
+                    localStorage.setItem('canteen_token', res.data.token)
+                    localStorage.setItem('canteen_data', JSON.stringify(res.data.canteen))
+                    dispatch(setLoginCanteenUser(res.data.user))
+                    dispatch(setLoginCanteenUserToken(res.data.token))
+                    dispatch(setLoginCanteenData(res.data.canteen))
+                    navigate('/SelectCanteen')
+                }
+            } catch (error: any) {
+                setSignInPage(false)
+                toast.error(error.response.data.error)
+            }
+        } else {
+            toast.error("Enter OTP")
         }
-    }, [loginCheck, navigate, dispatch]);
-
-
-
-
+    }
 
     return (
         <Box sx={{
@@ -143,7 +135,7 @@ const LoginCanteenPage = () => {
                     }}>
                         <Typography variant="h5" sx={{
                             color: "white",
-                            // mt: -54,
+
                             ml: 13
                         }}>
                             <img src="public/Pasted image (2).png" width={"20%"} alt="logo" />
@@ -195,6 +187,7 @@ const LoginCanteenPage = () => {
                                 width={"100%"}
                                 height={"100%"}
                                 overflow={"auto"}
+                                justifyContent={"center"}
                                 sx={{
                                     "&::-webkit-scrollbar": {
                                         width: "2px",
@@ -213,215 +206,149 @@ const LoginCanteenPage = () => {
                                     },
                                 }}
                             >
-                                {signInPage === false && (
-                                    <>
-                                        <Stack sx={{ alignItems: "left", width: "100%", }}>
-                                            <Typography variant="h6" sx={{ color: "white", mt: 2 }}>
-                                                Username
+                                <Stack sx={{ width: "100%", height: "100%", justifyContent: "space-between", }}>
+                                    <Stack mt={12} spacing={3}>
+                                        <Stack sx={{ alignItems: "left", width: "100%", height: "100%", justifyContent: "flex-end" }}>
+                                            <Typography variant="h6" sx={{ color: "white", }}>
+                                                Mobile No.
                                             </Typography>
                                             <TextField
                                                 sx={{
                                                     width: "90%",
-                                                    height: "40%",
+                                                    height: "auto",
                                                     bgcolor: "white",
                                                     // border: "1px solid white",
                                                     borderRadius: "5px",
                                                     color: "white",
-                                                    mt: 0
                                                 }}
-                                                name="userName"
-                                                value={loginData.userName}
+                                                type="number"
+                                                name="phone"
+                                                value={loginData.phone}
                                                 onChange={handleUpdatePassword}
                                                 size="small"
                                             />
+                                            {signInPage === true && (
+                                                <Stack sx={{ alignItems: "left", width: "100%", }}>
+                                                    <Typography variant="h6" sx={{ color: "white", mt: 2 }}>
+                                                        OTP
+                                                    </Typography>
+                                                    <TextField
+                                                        sx={{
+                                                            width: "90%",
+                                                            height: "40%",
+                                                            bgcolor: "white",
+                                                            // border: "1px solid white",
+                                                            borderRadius: "5px",
+                                                            color: "white",
+                                                            mt: 0
+                                                        }}
+                                                        name="otp"
+                                                        type="number"
+                                                        value={loginData.otp}
+                                                        onChange={handleUpdatePassword}
+                                                        size="small"
+                                                    />
+                                                </Stack>
+                                            )}
                                         </Stack>
-                                        <Stack sx={{ alignItems: "left", width: "100%", }}>
-                                            <Typography variant="h6" sx={{ color: "white", mt: 2 }}>
-                                                Email
-                                            </Typography>
-                                            <TextField
-                                                sx={{
-                                                    width: "90%",
-                                                    height: "40%",
-                                                    bgcolor: "white",
-                                                    // border: "1px solid white",
-                                                    borderRadius: "5px",
-                                                    color: "white",
-                                                    mt: 0
-                                                }}
-                                                name="email"
-                                                value={loginData.email}
-                                                onChange={handleUpdatePassword}
-                                                size="small"
-                                            />
-                                        </Stack>
-                                        <Stack sx={{ alignItems: "left", width: "100%", }}>
-                                            <Typography variant="h6" sx={{ color: "white", mt: 2 }}>
-                                                Password
-                                            </Typography>
-                                            <TextField
-                                                sx={{
-                                                    width: "90%",
-                                                    height: "40%",
-                                                    bgcolor: "white",
-                                                    // border: "1px solid white",
-                                                    borderRadius: "5px",
-                                                    color: "white",
-                                                    mt: 0
-                                                }}
-                                                name="password"
-                                                onChange={handleUpdatePassword}
-                                                type="password"
-                                                value={loginData.password}
-                                                size="small"
-                                            />
-                                        </Stack>
-                                        <Stack sx={{ alignItems: "left", width: "100%", mt: 3 }}>
-                                            <Button
-                                                sx={{
-                                                    width: "90%",
-                                                    height: "fit-content",
-                                                    borderRadius: "5px",
-                                                    bgcolor: "orangered",
-                                                    color: "white",
-                                                    fontSize: "14px",
-                                                    fontWeight: "bold"
-                                                }}
-                                                variant="contained"
-                                                onClick={() => handleSavePassword()}
-                                            > Register
-                                            </Button>
-                                        </Stack>
-                                    </>
+                                        <Stack sx={{ alignItems: "left", }}>
+                                            {isPending && <CircularProgress />}
+                                            {signInPage === false ? (
+                                                <LoadingButton
+                                                    sx={{
+                                                        width: "90%",
+                                                        height: "fit-content",
+                                                        borderRadius: "5px",
+                                                        bgcolor: "orangered",
+                                                        color: "white",
+                                                        fontSize: "14px",
+                                                        fontWeight: "bold"
+                                                    }}
+                                                    variant="contained"
+                                                    loading={isPending}
+                                                    onClick={() => handleSavePassword()}
+                                                > Send OTP
+                                                </LoadingButton>
+                                            ) : (
+                                                <>
+                                                    <LoadingButton
+                                                        sx={{
+                                                            width: "90%",
+                                                            height: "fit-content",
+                                                            borderRadius: "5px",
+                                                            bgcolor: "orangered",
+                                                            color: "white",
+                                                            fontSize: "14px",
+                                                            fontWeight: "bold"
+                                                        }}
+                                                        disabled={isPendingVerify}
+                                                        onClick={() => handleCheckPassword()}
+                                                    >
+                                                        Verify
+                                                    </LoadingButton>
 
-                                )}
-
-                                {signInPage === true && (
-                                    <>
-                                        <Stack sx={{ alignItems: "left", width: "100%", }}>
-                                            <Typography variant="h6" sx={{ color: "white", mt: 2 }}>
-                                                Email
-                                            </Typography>
-                                            <TextField
-                                                sx={{
-                                                    width: "90%",
-                                                    height: "40%",
-                                                    bgcolor: "white",
-                                                    borderRadius: "5px",
-                                                    color: "white",
-                                                    mt: 0
-                                                }}
-                                                name="email"
-                                                value={loginCheck.email}
-                                                onChange={handleUpdateCheckPassword}
-                                                size="small"
-                                            />
+                                                </>
+                                            )}
                                         </Stack>
-                                        <Stack sx={{ alignItems: "left", width: "100%", }}>
-                                            <Typography variant="h6" sx={{ color: "white", mt: 2 }}>
-                                                Password
-                                            </Typography>
-                                            <TextField
-                                                sx={{
-                                                    width: "90%",
-                                                    height: "40%",
-                                                    bgcolor: "white",
-                                                    // border: "1px solid white",
-                                                    borderRadius: "5px",
-                                                    color: "white",
-                                                    mt: 0
-                                                }}
-                                                name="password"
-                                                onChange={handleUpdateCheckPassword}
-                                                type="password"
-                                                value={loginCheck.password}
-                                                size="small"
-                                            />
-                                        </Stack>
-                                        <Stack sx={{ alignItems: "left", width: "100%", mt: 3 }}>
-                                            <Button
-                                                sx={{
-                                                    width: "90%",
-                                                    height: "fit-content",
-                                                    borderRadius: "5px",
-                                                    bgcolor: "orangered",
-                                                    color: "white",
-                                                    fontSize: "14px",
-                                                    fontWeight: "bold"
-                                                }}
-                                                variant="contained"
-                                                onClick={() => handleCheckPassword()}
-                                            >Sign In
-                                            </Button>
-                                        </Stack>
-                                    </>
-                                )}
-                                <Stack sx={{ alignItems: "center", width: "100%", height: "100%", justifyContent: "end" }}>
-                                    <span style={{ color: "white", fontSize: "12px", fontWeight: "bold" }}>
-                                        <u style={{
-                                            cursor: "pointer",
-                                            color: "white",
-                                            fontWeight: "bold",
-                                            fontSize: "14px",
-                                            textDecoration: "none"
-                                        }}
-                                            onClick={() => setSignInPage(true)}
-                                        >sign in </u>
-                                        /
-                                        <u
-                                            style={{
-                                                cursor: "pointer",
-                                                color: "white",
-                                                fontSize: "14px",
-                                                fontWeight: "bold",
-                                                textDecoration: "none"
-                                            }}
-                                            onClick={() => setSignInPage(false)}
-                                        >new register</u>
-                                    </span>
-                                </Stack>
-                                <Stack
-                                    direction={"row"}
-                                    mb={1}
-                                    sx={{
-                                        justifyContent: "end",
-                                        width: "100%",
-                                        height: "100%",
 
-                                    }}
-                                    flexDirection={"column"}
-                                >
-                                    <Stack direction={"row"}
-                                        spacing={2}
-                                        justifyContent={"center"}
-                                        alignContent={"center"}
-                                        width={"100%"}
-
-                                    >
-                                        <GoogleIcon sx={{
-                                            color: "red",
-                                            bgcolor: "white",
-                                            borderRadius: "50%",
-                                            width: "60px",
-                                            p: 0.2
-                                        }} />
-                                        <FacebookOutlined sx={{
-                                            color: "red",
-                                            bgcolor: "white",
-                                            borderRadius: "50%",
-                                            width: "60px",
-                                            p: 0.2
-                                        }} />
-                                        <XIcon sx={{
-                                            color: "red",
-                                            bgcolor: "white",
-                                            borderRadius: "50%",
-                                            width: "60px",
-                                            p: 0.2
-                                        }}
-                                        />
                                     </Stack>
+                                    <Stack spacing={2}>
+                                        <Stack sx={{ alignItems: "center", width: "100%", height: "100%", justifyContent: "end" }}>
+                                            <span style={{ color: "white", fontSize: "12px", fontWeight: "bold" }}>
+                                                <u style={{
+                                                    cursor: "pointer",
+                                                    color: "white",
+                                                    fontWeight: "bold",
+                                                    fontSize: "14px",
+                                                    textDecoration: "none"
+                                                }}
+                                                >sign in </u>
+                                            </span>
+                                        </Stack>
+                                        <Stack
+                                            direction={"row"}
+                                            mb={1}
+                                            sx={{
+                                                justifyContent: "end",
+                                                width: "100%",
+                                                height: "100%",
 
+                                            }}
+                                            flexDirection={"column"}
+                                        >
+                                            <Stack direction={"row"}
+                                                spacing={2}
+                                                justifyContent={"center"}
+                                                alignContent={"center"}
+                                                width={"100%"}
+
+                                            >
+                                                <GoogleIcon sx={{
+                                                    color: "red",
+                                                    bgcolor: "white",
+                                                    borderRadius: "50%",
+                                                    width: "60px",
+                                                    p: 0.2
+                                                }} />
+                                                <FacebookOutlined sx={{
+                                                    color: "red",
+                                                    bgcolor: "white",
+                                                    borderRadius: "50%",
+                                                    width: "60px",
+                                                    p: 0.2
+                                                }} />
+                                                <XIcon sx={{
+                                                    color: "red",
+                                                    bgcolor: "white",
+                                                    borderRadius: "50%",
+                                                    width: "60px",
+                                                    p: 0.2
+                                                }}
+                                                />
+                                            </Stack>
+
+                                        </Stack>
+                                    </Stack>
                                 </Stack>
                             </Stack>
                         </Box>

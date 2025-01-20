@@ -24,7 +24,11 @@ import { PagesTypes } from './AllTypes';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 // import { useDispatch } from 'react-redux';
 // import { setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice';
-import ProfilePage from './ProfilePage';
+import { useSelector } from 'react-redux';
+import { RootState } from './Store';
+import { ProfilePage } from './ProfilePage';
+
+
 
 const drawerWidth = 240;
 
@@ -100,6 +104,8 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
     const [expandedSegment, setExpandedSegment] = React.useState<string | null>(null);
     const navigate = useNavigate()
     const location = useLocation();
+    const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
+    const canteen_id = localStorage.getItem('canteen_user_id')
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -172,7 +178,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                             gap: 5
                         }}>
                             <Button
-                                onClick={() => navigate("/pos")}
+                                onClick={() => navigate(`/pos?canteen_id=${canteen_id}`)}
                                 variant="contained"
                                 size="small"
                                 style={{
@@ -217,8 +223,8 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                                         px: 2.5,
                                         color: 'white',
                                     }}
-                                    component={!item.children ? (Link as React.ElementType) : 'div'} 
-                                    to={!item.children ? `/${item.segment}` : undefined} 
+                                    component={!item.children ? (Link as React.ElementType) : 'div'}
+                                    to={!item.children ? `/${item.segment}` : undefined}
                                 >
                                     <ListItemIcon
                                         sx={{
@@ -249,8 +255,8 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                                             <ListItemButton
                                                 key={childIndex}
                                                 sx={{ pl: open ? 4 : 2 }}
-                                                component={Link as React.ElementType} 
-                                                to={`/${child.segment}`} 
+                                                component={Link as React.ElementType}
+                                                to={`/${child.segment}`}
                                             >
                                                 <ListItemIcon
                                                     sx={{

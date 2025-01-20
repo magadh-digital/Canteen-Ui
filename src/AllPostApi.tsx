@@ -1,6 +1,6 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import { CanteenUserType, CreateOrderType, LoginType,  } from "./AllTypes"
+import { CanteenUserType, CreateOrderType, LoginType, } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 
@@ -108,3 +108,42 @@ export const DeleteProductItem = () => {
         }
     })
 }
+
+
+
+
+export const PostOtpSender = () => {
+    const queryClient = useQueryClient();
+    const otpSender = async ({ data }: { data: Number }) => {
+        const response = await axios.post(`${baseUrl}/user/request-otp`, {
+            phone: data
+        })
+        return response
+    }
+    return useMutation({
+        mutationFn: otpSender,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['otp'] })
+        }
+    })
+}
+
+
+
+
+export const PostVerifyOtp = () => {
+    const queryClient = useQueryClient();
+    const otpSender = async ({ data, phone }: { data: Number, phone: Number }) => {
+        const response = await axios.post(`${baseUrl}/user/login`, {
+            otp: data,
+            phone: phone
+        })
+        return response
+    }
+    return useMutation({
+        mutationFn: otpSender,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['otp'] })
+        }
+    })
+}   

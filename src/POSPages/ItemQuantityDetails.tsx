@@ -10,7 +10,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 const ItemQuantityDetails = ({ setTableSelected }: any) => {
-    const { data : data } = useSelector((state: RootState) => state.Quantity);
+    const { data: data } = useSelector((state: RootState) => state.Quantity);
     const dispatch = useDispatch();
     const totalQuantity = data.reduce((sum, item) => sum + (item.quantity || 1), 0);
     const totalPrice = data.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
@@ -33,7 +33,7 @@ const ItemQuantityDetails = ({ setTableSelected }: any) => {
             flexDirection: "column"
         }}>
 
-            <TableContainer sx={{ height: "100%", overflowY: "auto", width: "100%" }}>
+            <TableContainer sx={{ height: "100%", overflowY: "auto", }}>
                 {!mobile && (
                     <Box
                         display={"flex"}
@@ -73,11 +73,11 @@ const ItemQuantityDetails = ({ setTableSelected }: any) => {
                 <Table>
                     <TableHead>
                         <TableRow sx={{ bgcolor: colors.red[200] }}>
-                            <TableCell>Quantity</TableCell>
-                            <TableCell>Item Name</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell>Quantity</TableCell>
-                            <TableCell>Remove</TableCell>
+                            <TableCell sx={{ fontSize: !mobile ? "10px" : "" }}>Quantity</TableCell>
+                            <TableCell sx={{ fontSize: !mobile ? "10px" : "" }} >Item Name</TableCell>
+                            <TableCell sx={{ fontSize: !mobile ? "10px" : "" }}>Price</TableCell>
+                            <TableCell sx={{ fontSize: !mobile ? "10px" : "" }}>Quantity</TableCell>
+                            <TableCell sx={{ fontSize: !mobile ? "10px" : "" }}>Remove</TableCell>
                         </TableRow>
 
                     </TableHead>
