@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { baseUrl } from './ApiEndPoint'
+import { CanteenData } from './AllTypes'
 
 
 const SelectCanteen = () => {
@@ -41,8 +42,9 @@ const SelectCanteen = () => {
             });
         }
     }, [navigate]);
-    const onSelect = (canteen: string) => {
+    const onSelect = (canteen: string, name: CanteenData) => {
         localStorage.setItem('canteen_user_id', canteen)
+        localStorage.setItem('canteen_name', JSON.stringify(name))
         setOpenModal(false)
         navigate('/dashboard')
     }
@@ -86,14 +88,14 @@ const SelectCanteen = () => {
             <DialogContent>
                 <Stack direction={"row"} width={"100%"} gap={2} mt={2} justifyContent={"center"}>
                     <List>
-                        {canteen?.map((canteen, index: number) => (
+                        {canteen?.map((canteen: CanteenData, index: number) => (
                             <ListItem key={index} sx={{
                                 width: "100%",
                                 borderRadius: "10px",
                                 bgcolor: colors.red[100],
                                 mt: 1
                             }}>
-                                <ListItemButton onClick={() => onSelect(canteen.id)}>
+                                <ListItemButton onClick={() => onSelect(canteen.id, canteen)}>
                                     {canteen.name}
                                 </ListItemButton>
                             </ListItem>

@@ -2,6 +2,7 @@ import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
 import { AllUserType, GetApiUserCanteens, GetMenuItemList, UpdateOrderType } from "./AllTypes"
+import { toast } from "react-toastify"
 
 export const GetCanteenUserApi = () => {
     const canteenUser = async () => {
@@ -75,7 +76,7 @@ export const GetAllUserApi = () => {
             const data = response.data
             return data as AllUserType
         } catch (error) {
-            console.error('Error fetching data:', error)
+            toast.error('Error fetching data:')
         }
     }
     return useQuery({

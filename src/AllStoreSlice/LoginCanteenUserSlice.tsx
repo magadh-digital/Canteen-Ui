@@ -33,7 +33,6 @@ const initialState: LoginUserType = {
         email: "",
         password: ""
     }]
-
 }
 
 

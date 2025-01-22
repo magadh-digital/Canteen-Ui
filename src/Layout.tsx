@@ -17,15 +17,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { NAVIGATION } from './SidebarPages';
-import { Button, Collapse, colors, Stack } from '@mui/material';
+import { Button, Collapse, colors, Stack, } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { PagesTypes } from './AllTypes';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
-// import { setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from './Store';
 import { ProfilePage } from './ProfilePage';
 
 
@@ -104,8 +100,8 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
     const [expandedSegment, setExpandedSegment] = React.useState<string | null>(null);
     const navigate = useNavigate()
     const location = useLocation();
-    const { canteen } = useSelector((state: RootState) => state.LoginCanteenUser)
     const canteen_id = localStorage.getItem('canteen_user_id')
+
 
     const handleDrawerOpen = () => {
         setOpen(true);

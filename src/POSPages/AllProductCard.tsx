@@ -8,11 +8,13 @@ import {
     CircularProgress,
     colors,
     FormControl,
+    InputAdornment,
     MenuItem,
     Select,
     Stack,
     TextField,
     Typography,
+    useMediaQuery,
 } from '@mui/material';
 import { GetMenuItemListApi } from '../AllGetApi';
 import { useDispatch } from 'react-redux';
@@ -20,6 +22,7 @@ import { setData } from '../AllStoreSlice/AddQuantitySlice';
 import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
+import { GridSearchIcon } from '@mui/x-data-grid';
 
 const AllProductCard = ({ canteenId }: { canteenId: string }) => {
     const [Search, setSearch] = useState<string>('');
@@ -40,7 +43,7 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
             const filterCategory = Category === "ALL" || item?.category === Category
             return filterSearch && filterCategory
         }) || []
-
+    const mobile = useMediaQuery("(max-width:800px)")
 
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -54,10 +57,10 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                     boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                 }}
             >
-                <Stack direction="row" spacing={1} alignItems="center" mt={8}>
+                <Stack direction="row" spacing={1} alignItems="center" mt={mobile ? 7 : 8}>
                     <TextField
                         size="small"
-                        label="Search"
+                        placeholder="Search Items"
                         variant="filled"
                         value={Search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -68,6 +71,13 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                             '& .MuiOutlinedInput-root': {
                                 borderRadius: '8px',
                             },
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <GridSearchIcon />
+                                </InputAdornment>
+                            ),
                         }}
                     />
                     <FormControl sx={{ minWidth: 150, }}
@@ -134,6 +144,7 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                             display: 'grid',
                             gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
                             gap: 1,
+                            pb: !mobile ? 12 : 8
                         }}
                     >
                         {filteredItems.length > 0 ? (

@@ -4,8 +4,6 @@ import { GetOrderDetailsApi } from "../AllGetApi"
 import { useMemo, useState } from "react"
 import RefecthButton from "../RefecthButton"
 import { OrderDetailsColumn } from "../DataGridColumn/OrderDetailsColumn"
-import { useSelector } from "react-redux"
-import { RootState } from "../Store"
 
 export const OrderList = () => {
    const canteen_id = localStorage.getItem("canteen_user_id")

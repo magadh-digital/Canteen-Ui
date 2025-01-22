@@ -1,17 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { CanteenData } from "../AllTypes";
+
+interface CanteenDataState {
+    canteenData: CanteenData;
+}
+
+const initialState: CanteenDataState = {
+    canteenData: {
+        id: "",
+        name: "",
+        location: "",
+        description: "",
+        contact: 0,
+        image_url: "",
+        created_at: "",
+        updated_at: "",
+        email: "",
+        password: "",
+    } 
+}
 
 
-const CanteenIdSlice = createSlice({
-    name: "canteenId",
-    initialState: {
-        canteenId: "",
-    },
+const CanteenDataSlice = createSlice({
+    name: "canteenData",
+    initialState ,
     reducers: {
-        setCanteenIdURl: (state, action) => {
-            state.canteenId = action.payload;
+        setCanteenDataSlice: (state, action) => {
+            state.canteenData = action.payload;
         },
     },
 });
 
-export const { setCanteenIdURl } = CanteenIdSlice.actions;
-export default CanteenIdSlice.reducer
+export const { setCanteenDataSlice } = CanteenDataSlice.actions;
+export default CanteenDataSlice.reducer

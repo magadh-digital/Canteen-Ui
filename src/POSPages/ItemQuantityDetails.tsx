@@ -5,10 +5,11 @@ import { MenuItemType } from '../AllTypes';
 import { Delete } from '@mui/icons-material';
 import { decrementQuantity, incrementQuantity, removeItem, resetData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQuantitySlice';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 const ItemQuantityDetails = ({ setTableSelected }: any) => {
     const { data: data } = useSelector((state: RootState) => state.Quantity);
     const dispatch = useDispatch();
@@ -19,58 +20,79 @@ const ItemQuantityDetails = ({ setTableSelected }: any) => {
         dispatch(setPrice(totalPrice));
         dispatch(setQuantity(totalQuantity));
         dispatch(setOrderData(data));
-    }, [data, dispatch]);
+    }, [data]);
 
     const mobile = useMediaQuery("(min-width: 800px)");
+    let wasDragged = useRef(false);
+    const handleDrag = (_: DraggableEvent, __: DraggableData) => {
+        // Mark drag as occurred
+        wasDragged.current = true;
+    };
 
+    const handleStop = (_: DraggableEvent, __: DraggableData) => {
+        
+        if (!wasDragged.current) {
+            setTableSelected(false);
+        }
+       
+        wasDragged.current = false;
+    };
     return (
         <Box sx={{
             width: "100%",
             height: "100%",
-            mt: !mobile ? 2 : 8,
+            mt: !mobile ? 2 : 3,
             bgcolor: colors.grey[200],
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
         }}>
 
-            <TableContainer sx={{ height: "100%", overflowY: "auto", }}>
+            <TableContainer sx={{ height: "100%", overflowY: "auto" }}>
                 {!mobile && (
-                    <Box
-                        display={"flex"}
-                        justifyContent={"end"}
-                        alignItems={"center"}
-                        margin={"auto"}
-                        zIndex={1}
-                        position={"sticky"}
-                        top={400}
-                    >
-                        <Tooltip title="Add Product">
-                            <span
-                                style={{
-                                    cursor: "pointer",
-                                    backgroundColor: colors.deepOrange[300],
-                                    width: "40px",
-                                    padding: 3,
-                                    height: "30px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    borderRadius: "8px"
-                                }}
-                                onClick={() => setTableSelected(false)}>
-                                <ShoppingCartIcon
-                                    sx={{
+                    <Draggable
+                        bounds="parent"
+                        onDrag={handleDrag}
+                        onStop={handleStop}
 
-                                        color: "white",
-                                        width: "30px",
-                                        height: "30px"
+                    >
+                        <Box
+                            display={"flex"}
+                            flexDirection={"column"}
+                            height={"90%"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            position={"absolute"}
+                            right={0}
+                            zIndex={1}
+                            style={{ cursor: "move" }}
+                        >
+                            <Tooltip title="Add Product">
+                                <span
+                                    style={{
+                                        cursor: "pointer",
+                                        backgroundColor: colors.deepOrange[300],
+                                        width: "50px",
+                                        height: "50px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        borderRadius: "50%",
+                                        boxShadow: "0px 4px 6px rgba(0,0,0,0.2)",
                                     }}
-                                />
-                            </span>
-                        </Tooltip>
-                    </Box>
+                                >
+                                    <ShoppingCartIcon
+                                        sx={{
+                                            color: "white",
+                                            width: "30px",
+                                            height: "30px",
+                                        }}
+                                    />
+                                </span>
+                            </Tooltip>
+                        </Box>
+                    </Draggable>
                 )}
-                <Table>
+                <Table sx={{ mt: 5 }}>
                     <TableHead>
                         <TableRow sx={{ bgcolor: colors.red[200] }}>
                             <TableCell sx={{ fontSize: !mobile ? "10px" : "" }}>Quantity</TableCell>
@@ -133,7 +155,9 @@ const ItemQuantityDetails = ({ setTableSelected }: any) => {
                                     <TableCell>{item.quantity || 1}</TableCell>
                                     <TableCell>
 
-                                        <Delete onClick={() => dispatch(removeItem(item.id))} />
+                                        <Delete sx={{
+                                            cursor: "pointer",
+                                        }} onClick={() => dispatch(removeItem(item.id))} />
 
                                     </TableCell>
                                 </TableRow>
@@ -144,12 +168,12 @@ const ItemQuantityDetails = ({ setTableSelected }: any) => {
             </TableContainer>
             <Box sx={{
                 p: 2,
-                m: 2,
+                // m: 2,
                 borderRadius: "8px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "end",
-                height: "10%",
+                // height: "10%",
             }}>
 
                 <Button

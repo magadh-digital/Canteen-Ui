@@ -1,21 +1,21 @@
 import { styled, useTheme, } from '@mui/material/styles';
-import { Box, Button, colors, FormControl, Icon, IconButton, MenuItem, Select, SelectChangeEvent, Stack, StepIcon, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material"
+import { Box, colors, IconButton, Stack, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material"
 import { GridMenuIcon } from "@mui/x-data-grid";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import React, { useEffect } from "react";
+
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import AllProductCard from './AllProductCard';
-import ItemQuantityDetails from './ItemQuantityDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import PaymentMethod from './PaymentMethod';
-import { GetCanteenUserApi } from '../AllGetApi';
-import { resetData, } from '../AllStoreSlice/AddQuantitySlice';
-import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
+
+
 import moment from 'moment';
+import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
+import AllProductCard from '../POSPages/AllProductCard';
+import UserPaymentMethod from './UserPaymentMethod';
+import React, { useEffect } from 'react';
+import { GetCanteenUserApi } from '../AllGetApi';
 import { setCanteenDataSlice } from '../AllStoreSlice/CanteenIdSlice';
-import { AddIcCallTwoTone } from '@mui/icons-material';
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -41,50 +41,25 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
 
 
 
-const PosList = () => {
-    const theme = useTheme()
+const UserPosList = ({ canteenId }: { canteenId: string }) => {
     const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
-    const { canteenData: canteen } = useSelector((state: RootState) => state.canteenData)
+    const theme = useTheme()
     const [open, setOpen] = React.useState(true);
     const [tableSlected, setTableSelected] = React.useState<boolean>(false);
-    const navigate = useNavigate()
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const mobile = useMediaQuery('(min-width:800px)');
     const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
     const { data } = useSelector((state: RootState) => state.Quantity)
-    const { data: canteenList } = GetCanteenUserApi()
-    const [canteenId, setCanteenID] = React.useState<string | null>('');
-    const dispatch = useDispatch()
-
-
-    const handleChange = (event: SelectChangeEvent) => {
-        const selectedId = event.target.value;
-        if (selectedId !== canteenId) {
-            setCanteenID(selectedId);
-            dispatch(setCanteenDataSlice(canteenList?.canteens?.find((canteen: any) => canteen.id === selectedId)));
-            dispatch(resetData());
-        }
-    };
-
-    useEffect(() => {
-        const storedCanteenId = localStorage.getItem('canteen_user_id');
-        if (storedCanteenId) {
-            setCanteenID(storedCanteenId);
-        }
-    }, []);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCurrentDate(moment().format("DD-MM-YYYY hh:mm:ss"));
         }, 1000);
 
-
         return () => clearInterval(intervalId);
-
     }, []);
-
 
     return (
         <Box sx={{
@@ -109,20 +84,17 @@ const PosList = () => {
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        sx={{ marginRight: 5, color: 'black', ...(open && { display: 'none' }) }}
+                        sx={{
+                            marginRight: 5,
+                            color: 'black',
+                            ...(open && { display: 'none' })
+                        }}
                     >
                         <GridMenuIcon />
                     </IconButton>
                     {
                         open ? null :
-                            <img src='public/2795550.png'
-                                alt='"no img'
-                                width={"48px"}
-                                height={"48px"}
-                                style={{
-                                    borderRadius: "30%",
-                                    marginRight: "10px"
-                                }} />
+                            <img src='public/2795550.png' alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
                     }
                     <Stack
                         width={"100%"}
@@ -133,91 +105,38 @@ const PosList = () => {
                     >
                         <div style={{
                             display: "flex",
-                            flexDirection: !mobile ? "column" : "row",
-                            alignItems: mobile ? "center" : "start",
-                            gap: !mobile ? 0 : 12
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 12
                         }}>
-                            <Typography noWrap component="div" sx={{
-                                color: "black",
-                                letterSpacing: "1px",
-                                fontStyle: "unset",
-                                fontFamily: "sans-",
-                                fontWeight: "bold",
-                                fontSize: mobile ? "20px" : "15px"
-                            }}>
-                                {canteen.name}
+                            <Typography
+                                noWrap
+                                component="div"
+                                sx={{
+                                    color: 'black',
+                                    fontWeight: "bold",
+                                    fontSize: mobile ? "20px" : "18px",
+                                    fontFamily: "Poppins",
+                                    letterSpacing: "1px"
+                                }}>
+                                    Magadh Canteen
                             </Typography>
                             <Typography
+                                noWrap
                                 textAlign={"center"}
-                                sx={{
-                                    color:
-                                        'black',
-                                    fontSize: mobile ? "18px" : "12px"
-                                }}
-                                noWrap component="div">
+                                sx={{ color: 'black' }}>
                                 ({currentDate})
                             </Typography>
                         </div>
-                        <Stack direction="row" spacing={0} alignItems="center">
-                            <Tooltip title="Add Product">
-                                <span onClick={() =>
-                                    dispatch(setAddProduct(canteenId))}
-                                    style={{
-                                        cursor: "pointer"
-                                    }}>
-                                    <img
-                                        src="public/10608872.png"
-                                        width={"50px"}
-                                    />
-                                </span>
-                            </Tooltip>
-                            <FormControl size='small' sx={{
-                                m: 1,
-                                minWidth: !mobile ? "100px" : "300px",
-                                bgcolor: colors.grey[100],
-                                border: "none",
-                                borderRadius: "1px",
-                                p: 1
-                            }}
-                                variant='standard'
-                            >
-                                <Select
-                                    labelId="demo-simple-select-autowidth-label"
-                                    id="demo-simple-select-autowidth"
-                                    value={canteenId || ""}
-                                    onChange={handleChange}
-                                    label="canteen"
-                                >
-                                    {canteenList?.canteens?.map((item) => {
-                                        return (
-                                            <MenuItem
-                                                key={item?.id}
-                                                value={item?.id}
-                                            >{item?.name}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
-
-                            <div>
-                                <img src="public/618729-200.png"
-                                    width={mobile ? "60px" : "30px"}
-                                    height={mobile ? "50px" : "30px"}
-                                    style={{
-                                        backgroundColor: "white",
-                                        borderRadius: "50%",
-                                        cursor: "pointer"
-                                    }}
-                                    onClick={() => navigate("/dashboard")}
-                                />
-                            </div>
-
-
-                        </Stack>
                     </Stack>
                 </Toolbar>
             </AppBar>
-            <Box sx={{ display: "flex", width: "100%", height: "100%", overflow: "hidden" }}>
+            <Box sx={{
+                display: "flex",
+                width: "100%",
+                height: "100%",
+                overflow: "hidden"
+            }}>
 
                 {!mobile ? (
                     <>
@@ -229,10 +148,13 @@ const PosList = () => {
                                 justifyContent: "center",
                                 alignItems: "center",
                                 flexDirection: "column",
-                                bgcolor: "white",
+                                bgcolor: "white"
                             }}>
 
-                                <ItemQuantityDetails tableSelected={tableSlected} setTableSelected={setTableSelected} />
+                                <ItemQuantityDetails
+                                    tableSelected={tableSlected}
+                                    setTableSelected={setTableSelected}
+                                />
                             </Box>
                         ) : (
                             <Box
@@ -280,6 +202,7 @@ const PosList = () => {
                                             >
                                                 {data?.length}
                                             </Box>
+
 
                                             <Tooltip title="View List Product">
                                                 <span
@@ -346,15 +269,15 @@ const PosList = () => {
                                     }}
                                     >
 
-                                        <PaymentMethod canteen_id={canteenId || ""} />
+                                        <UserPaymentMethod canteen_id={canteenId || ""} />
                                     </Stack>
                                     <Stack
                                         sx={{
                                             width: '300px',
                                             height: '100%',
                                             justifyContent: 'center',
-                                            backgroundColor: colors.green[500],
                                             alignItems: 'center',
+                                            backgroundColor: colors.green[500],
                                             textAlign: 'center'
                                         }}
                                     >
@@ -404,8 +327,6 @@ const PosList = () => {
                             >
                                 <AllProductCard canteenId={canteenId || ""} />
                             </Box>
-
-
                             <Box
                                 sx={{
                                     width: '100%',
@@ -436,23 +357,17 @@ const PosList = () => {
                                         Quantity : {quantity}
                                     </span>
                                 </Stack>
-                                <Stack sx={{
-                                    width: '100%',
-                                    height: '100%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                }}>
 
-                                    <PaymentMethod canteen_id={canteenId || ""} />
-                                </Stack>
+
+                                <UserPaymentMethod canteen_id={canteenId || ""} />
                                 <Stack
                                     sx={{
                                         width: '300px',
                                         height: '100%',
+                                        display: 'flex',
                                         justifyContent: 'center',
-                                        alignItems: 'center',
                                         backgroundColor: colors.green[500],
+                                        alignItems: 'center'
                                     }}
                                 >
                                     <span style={{
@@ -473,4 +388,4 @@ const PosList = () => {
     )
 }
 
-export default PosList
+export default UserPosList

@@ -20,6 +20,7 @@ export const ProfilePage = () => {
         localStorage.removeItem('canteen_token')
         localStorage.removeItem('canteen_user_id')
         localStorage.removeItem('canteen_data')
+        localStorage.removeItem('canteen_name')
         navigate('/login');
     };
 

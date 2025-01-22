@@ -6,7 +6,7 @@ import ItemViewSlice from "./AllStoreSlice/ItemViewSlice";
 import LoginCanteenUserSlice from "./AllStoreSlice/LoginCanteenUserSlice";
 import AddProductCanteenSlice from "./AllStoreSlice/AddProductCanteenSlice";
 import AllMenuItemsSlice from "./AllStoreSlice/AllMenuItemsSlice";
-import canteenIdSlice from "./AllStoreSlice/CanteenIdSlice";    
+import canteenDataSlice from "./AllStoreSlice/CanteenIdSlice";
 
 
 
@@ -19,7 +19,7 @@ export const store = configureStore({
         LoginCanteenUser: LoginCanteenUserSlice,
         AddProductCanteen: AddProductCanteenSlice,
         allMenuItems: AllMenuItemsSlice,
-        canteenId : canteenIdSlice,
+        canteenData: canteenDataSlice,
     }
 })
 

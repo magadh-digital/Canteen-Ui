@@ -51,6 +51,7 @@ const LoginCanteenPage = () => {
             }
 
         } catch (error: any) {
+            toast.error(error.message)
             toast.error(error.response.data.error)
 
         }

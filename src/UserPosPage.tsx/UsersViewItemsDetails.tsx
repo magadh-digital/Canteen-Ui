@@ -1,25 +1,37 @@
+
+
 import { Box, Checkbox, colors, FormControl, InputLabel, MenuItem, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../Store'
 import { CreateOrderType, MenuItemType } from '../AllTypes'
 import { useEffect, useState } from 'react'
-import { UserDataType } from './RenderUserLogin'
 import { setPrice } from '../AllStoreSlice/PriceAndQuantitySlice'
+import { UserDataType } from './UserRenderUserLogin'
+import { GetReamainingVoucherApi } from '../AllGetApi'
 import { toast } from 'react-toastify'
 
 
-const ViewItemsDetails = ({ userData,
+const UsersViewItemsDetails = ({ userData,
     setCreatedOrderData,
-    createdOrderData
+    createdOrderData,
+    setUserData
 }: {
     userData: UserDataType,
     setCreatedOrderData: React.Dispatch<React.SetStateAction<CreateOrderType>>,
-    createdOrderData: CreateOrderType
+    createdOrderData: CreateOrderType;
+    setUserData: React.Dispatch<React.SetStateAction<UserDataType>>
 
 }) => {
-    const dispatch = useDispatch()
     const [voucherChecked, setVoucherChecked] = useState(false)
+    const { orderData: data, price: totalPrice, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
+    const rateCheck = () => {
+        const value = data.reduce((acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0), 0)
+        return value
+    }
     const [alertVouhcer, setAlertVoucher] = useState(false)
+    const { data: voucherData, isLoading } = GetReamainingVoucherApi({
+        user_id: userData?.user.id || ""
+    })
 
     useEffect(() => {
         if ((userData?.vouchers ?? 0) > 0) {
@@ -29,50 +41,43 @@ const ViewItemsDetails = ({ userData,
             setAlertVoucher(false)
         }
     }, [userData?.vouchers])
-
-    const { orderData: data, price: totalPrice, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
-    const rateCheck = () => {
-        const value = data.reduce((acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0), 0)
-        return value
-    }
-    const totalPaybaleAmount = () => {
-        if (voucherChecked) {
-            const rate = totalPrice - (userData?.vouchers ?? 0)
-            if (rate > 0) {
-                return rate
-            } else {
-                return 0
-            }
-        } else {
-            return rateCheck()
+    useEffect(() => {
+        if (voucherData) {
+            setUserData((prevState) => ({
+                ...prevState,
+                vouchers: voucherData.vouchers,
+            }));
         }
-    }
-
+    }, [voucherData]);
+    const totalPayableAmount = () => {
+        if (voucherChecked) {
+            const rate = totalPrice - (userData?.vouchers ?? 0);
+            return rate > 0 ? rate : 0;
+        }
+        return data.reduce(
+            (acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0),
+            0
+        );
+    };
     const [selectPyment, setSelectPyment] = useState("CASH")
     const mobile = useMediaQuery('(max-width: 800px)')
     const checkedVoucher = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (voucherChecked === true) {
-            dispatch(setPrice(totalPaybaleAmount()))
-        }
-        if (voucherChecked === false) {
-            const ratePrice = data?.reduce((acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0), 0)
-            dispatch(setPrice(ratePrice))
-        }
-        setVoucherChecked(event.target.checked)
+        setVoucherChecked(event.target.checked);
         setCreatedOrderData((prevState) => ({
             ...prevState,
             voucher: event.target.checked,
-            total_amount: totalPaybaleAmount()
-        }))
-    }
+            total_amount: totalPayableAmount(),
+        }));
+    };
 
     useEffect(() => {
         setCreatedOrderData((prevState) => ({
             ...prevState,
-            total_amount: totalPaybaleAmount(),
-            voucher: voucherChecked
-        }))
-    },[voucherChecked, userData?.vouchers, totalPrice])
+            total_amount: totalPayableAmount(),
+            voucher: voucherChecked,
+        }));
+    }, [voucherChecked, userData.vouchers, totalPrice]);
+
 
     return (
         <Box sx={{
@@ -168,7 +173,7 @@ const ViewItemsDetails = ({ userData,
                             </TableRow>
                             <TableRow>
                                 <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Total Payable Amount</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{totalPaybaleAmount()}</TableCell>
+                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{totalPayableAmount()}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -232,4 +237,4 @@ const ViewItemsDetails = ({ userData,
     )
 }
 
-export default ViewItemsDetails
+export default UsersViewItemsDetails
