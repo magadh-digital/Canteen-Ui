@@ -123,6 +123,8 @@ export interface GetOrderTypes {
   customer_type: string;
   id?: string;
   order_id?: string;
+  canteen: CanteenData;
+  user: CanteenUserDataType
 }
 
 export interface LoginType {
@@ -157,6 +159,7 @@ export interface AllUserType {
 }
 
 export interface CanteenUserDataType {
+  canteen_id?: string;
   id: string;
   name: string;
   description: string;

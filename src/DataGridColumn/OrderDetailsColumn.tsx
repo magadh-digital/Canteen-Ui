@@ -12,6 +12,23 @@ export const OrderDetailsColumn: GridColDef[] = [
         width: 70,
     },
     {
+        field: "canteen",
+        headerName: "Canteen Name",
+        width: 130,
+        renderCell: ({ value }) => {
+            return (
+                <Stack direction="row" sx={{ alignItems: "center", height: "100%" }}>
+                    <Typography sx={{ fontWeight: "bold", color: colors.blue[500] }}>{value.name}</Typography>
+                </Stack>
+            )
+        }
+    },
+    {
+        field: 'order_id',
+        headerName: 'Order Id',
+        width: 130
+    },
+    {
         field: 'customer_name',
         headerName: 'Customer Name',
         width: 230,
