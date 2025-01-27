@@ -194,7 +194,10 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                                     <CardActionArea>
                                         <Stack
                                             direction="row"
-                                            onClick={() => dispatch(setData(item))}
+                                            onClick={() => dispatch(setData({
+                                                ...item,
+                                                image_url: `${data?.base_url}${item.image_url}`,
+                                            }))}
                                             sx={{
                                                 bgcolor: colors.red[400],
                                                 cursor: 'pointer',

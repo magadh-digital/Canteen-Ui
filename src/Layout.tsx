@@ -138,7 +138,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                 open={open}
                 sx={{
                     zIndex: theme.zIndex.drawer + 1,
-                    bgcolor: "#9FD675",
+                    backgroundColor: "white",
                     border: "none",
                     boxShadow: "none",
                     borderBottom: "0.1px solid #E0E0E0",
@@ -191,95 +191,139 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                     </Stack>
                 </Toolbar>
             </AppBar>
-            <Drawer variant="permanent" open={open}
-                sx={{
-                    '& .MuiDrawer-paper': {
-                        backgroundColor: '#090301',
-                        color: 'white',
+            <Drawer
+  variant="permanent"
+  open={open}
+  sx={{
+    '& .MuiDrawer-paper': {
+      background: 'linear-gradient(135deg, #1e1e2f, #252542)',
+      color: '#e0e0e0',
+      borderRight: '1px solid #333',
+      boxShadow: '2px 0 5px rgba(0, 0, 0, 0.2)',
+    },
+  }}
+>
+  <DrawerHeader>
+    <img
+      src="public/2795550.png"
+      alt="no img"
+      width="40px"
+      height="40px"
 
+      style={{
+        borderRadius: '50%',
+        marginRight: open ? '20px' : '0',
+        transition: 'margin-right 0.3s',
+        backgroundColor: 'white',
+      }}
+    />
+    <IconButton onClick={handleDrawerClose} sx={{ color: '#e0e0e0' }}>
+      {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+    </IconButton>
+  </DrawerHeader>
+  <Divider />
+  <List>
+    {NAVIGATION.map((item: PagesTypes, index) => (
+      <React.Fragment key={index}>
+        <ListItem
+          disablePadding
+          sx={{
+            display: 'block',
+            margin: '5px 0',
+            borderRadius: '8px',
+            backgroundColor: expandedSegment === item.segment ? '#303050' : 'transparent',
+            '&:hover': {
+              backgroundColor: '#404060',
+            },
+            transition: 'background-color 0.3s',
+          }}
+        >
+          <ListItemButton
+            onClick={() => {
+              if (item.children) toggleExpand(item.segment || '');
+            }}
+            sx={{
+              justifyContent: open ? 'initial' : 'center',
+              px: 1.5,
+              color: '#e0e0e0',
+            }}
+            component={!item.children ? (Link as React.ElementType) : 'div'}
+            to={!item.children ? `/${item.segment}` : undefined}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                justifyContent: 'center',
+                mr: open ? 1.5 : 'auto',
+                color: '#e0e0e0',
+              }}
+            >
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText
+              primary={item.title}
+              sx={{
+                opacity: open ? 1 : 0,
+                fontSize: '0.875rem',
+                color: '#e0e0e0',
+              }}
+            />
+            {item.children &&
+              (expandedSegment === item.segment ? (
+                <ExpandLess sx={{ color: '#e0e0e0' }} />
+              ) : (
+                <ExpandMore sx={{ color: '#e0e0e0' }} />
+              ))}
+          </ListItemButton>
+        </ListItem>
+        {item.children && (
+          <Collapse in={expandedSegment === item.segment} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {item.children.map((child, childIndex) => (
+                <ListItemButton
+                  key={childIndex}
+                  sx={{
+                    pl: open ? 3 : 2,
+                    py: 0.5,
+                    backgroundColor: '#2e2e3e',
+                    borderRadius: '5px',
+                    margin: '3px 0',
+                    '&:hover': {
+                      backgroundColor: '#3e3e50',
                     },
-                }}>
-                <DrawerHeader>
-                    <img src='public/2795550.png' alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "50px" }} />
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
-                </DrawerHeader>
-                <Divider />
-                <List>
-                    {NAVIGATION.map((item: PagesTypes, index) => (
-                        <React.Fragment key={index}>
-                            <ListItem disablePadding sx={{ display: 'block' }}>
-                                <ListItemButton
-                                    onClick={() => {
-                                        if (item.children) toggleExpand(item.segment || '');
-                                    }}
-                                    sx={{
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                        color: 'white',
-                                    }}
-                                    component={!item.children ? (Link as React.ElementType) : 'div'}
-                                    to={!item.children ? `/${item.segment}` : undefined}
-                                >
-                                    <ListItemIcon
-                                        sx={{
-                                            minWidth: 0,
-                                            justifyContent: 'center',
-                                            mr: open ? 3 : 'auto',
-                                            color: 'white',
-                                        }}
-                                    >
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={item.title}
-                                        sx={{ opacity: open ? 1 : 0, color: 'white' }}
-                                    />
-                                    {item.children &&
-                                        (expandedSegment === item.segment ? (
-                                            <ExpandLess sx={{ color: 'white' }} />
-                                        ) : (
-                                            <ExpandMore sx={{ color: 'white' }} />
-                                        ))}
-                                </ListItemButton>
-                            </ListItem>
-                            {item.children && (
-                                <Collapse in={expandedSegment === item.segment} timeout="auto" unmountOnExit>
-                                    <List component="div" disablePadding>
-                                        {item.children.map((child, childIndex) => (
-                                            <ListItemButton
-                                                key={childIndex}
-                                                sx={{ pl: open ? 4 : 2 }}
-                                                component={Link as React.ElementType}
-                                                to={`/${child.segment}`}
-                                            >
-                                                <ListItemIcon
-                                                    sx={{
-                                                        minWidth: 0,
-                                                        justifyContent: 'center',
-                                                        mr: open ? 3 : 'auto',
-                                                        color: 'white',
-                                                    }}
-                                                >
-                                                    {child.icon}
-                                                </ListItemIcon>
-                                                <ListItemText
-                                                    primary={child.title}
-                                                    sx={{ opacity: open ? 1 : 0, color: 'white' }}
-                                                />
-                                            </ListItemButton>
-                                        ))}
-                                    </List>
-                                </Collapse>
-                            )}
-                        </React.Fragment>
-                    ))}
-                </List>
+                  }}
+                  component={Link as React.ElementType}
+                  to={`/${child.segment}`}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      justifyContent: 'center',
+                      mr: open ? 1.5 : 'auto',
+                      color: '#c0c0c0',
+                    }}
+                  >
+                    {child.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={child.title}
+                    sx={{
+                      opacity: open ? 1 : 0,
+                      fontSize: '0.8125rem',
+                      color: '#c0c0c0',
+                    }}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
+        )}
+      </React.Fragment>
+    ))}
+  </List>
+</Drawer>
 
-
-
-            </Drawer>
+ 
             <Box
                 sx={{
                     flexGrow: 1,
