@@ -2,8 +2,9 @@ import { Button, Chip, colors, Stack, Typography } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { GetOrderTypes } from "../AllTypes";
 import { useDispatch } from "react-redux";
-import { setItemViewData, setItemViewId } from "../AllStoreSlice/ItemViewSlice";
+import { setItemViewData, setItemViewId, setOrderDetails } from "../AllStoreSlice/ItemViewSlice";
 import moment from "moment";
+
 
 export const OrderDetailsColumn: GridColDef[] = [
     {
@@ -99,6 +100,7 @@ export const OrderDetailsColumn: GridColDef[] = [
             const handleViewItem = () => {
                 dispatch(setItemViewId(row.id))
                 dispatch(setItemViewData(row.items))
+                dispatch(setOrderDetails(row))
             }
             return (
                 <Stack
@@ -107,18 +109,22 @@ export const OrderDetailsColumn: GridColDef[] = [
                         alignItems: "center",
                         height: "100%"
                     }}>
-                    <Button
-                        variant="contained"
-                        size="small"
-                        color="warning"
-                        sx={{
-                            fontWeight: "bold"
-                        }}
-                        onClick={() => {
-                            handleViewItem()
-                        }}
-                    > Items
-                    </Button>
+
+                        <p 
+                         style={{
+                            color: colors.blue[500],
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            textDecoration: "underline",
+                            textDecorationColor: colors.blue[500],
+                            textDecorationThickness: "1px",
+
+                         }}
+                         onClick={handleViewItem}
+                        >
+                            view
+                        </p>
+                  
                 </Stack>
             )
         }

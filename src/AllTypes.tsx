@@ -123,8 +123,17 @@ export interface GetOrderTypes {
   customer_type: string;
   id?: string;
   order_id?: string;
+  payment_type?: string;
+  voucher?: boolean;
+  voucher_amt?: Number;
+  payable_amt?: Number;
+  created_at?: string;
+  updated_at?: string;
+  // canteen?: CanteenData;
+  user?: CanteenUserDataType;
+  customer_email?: string
   canteen: CanteenData;
-  user: CanteenUserDataType
+  // user: CanteenUserDataType
 }
 
 export interface LoginType {

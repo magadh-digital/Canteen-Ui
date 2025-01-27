@@ -1,13 +1,14 @@
-import { Autocomplete, Box, Button, Checkbox, colors, FormControlLabel, FormGroup, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Autocomplete, Box, Checkbox, colors, FormControlLabel, FormGroup, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
-;
-import ViewItemsDetails from "./ViewItemsDetails";
 import { CreateOrderType } from "../AllTypes";
+import ViewItemsDetails from "./ViewItemsDetails";
+;
 // import { useSelector } from "react-redux";
 
-import { GetAllUserApi } from "../AllGetApi";
 import axios from "axios";
+import { GetAllUserApi } from "../AllGetApi";
 import { baseUrl } from "../ApiEndPoint";
+import AnimatedMessage from "./AnimatedMessage";
 
 export interface UserDataType {
     user: {
@@ -68,14 +69,21 @@ export const RenderUserLogin = ({
     };
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
-            <Box sx={{ width: mobile ? "100%" : "40%", display: "flex", flexDirection: "column", justifyContent: "start", bgcolor: colors.grey[50] }}>
+        <Box sx={{ display: "flex", justifyContent: "center", width: "100%", height: "100%" }} 
+        
+        >
+            <Box component={Paper} 
+             p={2}
+            sx={{ width: mobile ? "100%" : "40%", display: "flex", flexDirection: "column", justifyContent: "start"}}>
                 <Stack direction={mobile ? "column" : "row"} sx={{ mt: 10, width: "100%", justifyContent: "space-between", }} spacing={2} >
                     <Stack>
                         <FormGroup row sx={{
                             ml: !mobile ? 0 : 5
                         }}>
                             <FormControlLabel
+                             sx={{
+                                 fontSize: 12
+                             }}
                                 control={
                                     <Checkbox
                                         checked={
@@ -136,22 +144,46 @@ export const RenderUserLogin = ({
                     </Stack>
 
                 </Stack>
-                {userData?.user && (
-                    <Stack sx={{ mt: 1, width: "100%" }}>
-                        <Box sx={{ display: "flex", gap: 2, bgcolor: colors.grey[100], p: 2, justifyContent: "space-between" }}>
-                            <Typography sx={{ fontWeight: "bold", color: colors.blue[800] }}>
-                                {userData.user?.name || ""}
-                            </Typography>
-                            <Typography sx={{ fontWeight: "bold", color: colors.red[400] }}>
-                                {userData.user?.phone || ""}
-                            </Typography>
-                            <Typography sx={{ fontWeight: "bold", color: colors.blue[800] }}>
-                                {userData.user?.email || ""}
-                            </Typography>
-                        </Box>
-                    </Stack>
+                {userData?.user?.name && (
+                    <TableContainer sx={{ border: "0.5px solid #ccc", mt: 2 }}>
+
+                        <Table size="small">
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px",
+
+                                        backgroundColor: colors.grey[200],
+                                     }}>
+                                        Name :
+                                    </TableCell>
+                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px", }}>{
+                                        userData?.user?.name
+                                    }</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell style={{ fontSize: "12px",backgroundColor: colors.grey[200], fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                        Email     :                               </TableCell>
+                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px" }}>
+                                        {userData?.user?.email || 'N/A'}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px",backgroundColor: colors.grey[200], }}>
+                                        Phone     :
+                                    </TableCell>
+                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", textAlign: "right" }}>{userData?.user?.phone}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 )}
 
+{
+    (userData?.vouchers || 0 )> 0 && (
+        <AnimatedMessage userData={userData}/>
+      
+    )
+}
 
 
                 <ViewItemsDetails userData={userData}

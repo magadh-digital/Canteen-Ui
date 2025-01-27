@@ -1,13 +1,21 @@
 import { styled, useTheme, } from '@mui/material/styles';
-import { Box, Button, colors, IconButton, Stack, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material"
+import {
+    Box,
+    Button,
+    colors,
+    IconButton, ListItemIcon, ListItemIconProps, ListItemText, ListItemButton, Menu, MenuItem, Stack, Toolbar, Tooltip, Typography, useMediaQuery,
+    Popover,
+    List,
+    ListItem,
+    Divider
+} from "@mui/material"
 import { GridMenuIcon } from "@mui/x-data-grid";
 // import React, { useEffect } from "react";
 
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Store';
-import ViewListIcon from '@mui/icons-material/ViewList';
-
+import ListIcon from '@mui/icons-material/List';
 
 import moment from 'moment';
 import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
@@ -43,16 +51,26 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
 
 const UserPosList = ({ canteenId }: { canteenId: string }) => {
     const navigate = useNavigate()
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
     const theme = useTheme()
-    const [open, setOpen] = React.useState(true);
-    const handleDrawerOpen = () => {
-        setOpen(true);
+    const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
     };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const open = Boolean(anchorEl);
+    const id = open ? 'list-popover' : undefined;
+    const listItems = [
+        'Item 1',
+        'Item 2',
+
+    ];
+
     const mobile = useMediaQuery('(min-width:800px)');
     const { data: canteen } = useSelector((state: RootState) => state.Quantity)
     const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
-  
 
 
     useEffect(() => {
@@ -81,23 +99,8 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                 }}>
 
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            color: 'black',
-                            ...(open && { display: 'none' })
-                        }}
-                    >
-                        <GridMenuIcon />
-                    </IconButton>
-                    {
-                        open ? null :
-                            <img src='public/2795550.png' alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
-                    }
+
+
                     <Stack
                         width={"100%"}
                         direction="row"
@@ -107,9 +110,9 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                     >
                         <div style={{
                             display: "flex",
-                            flexDirection: "row",
+                            flexDirection: mobile ? "row" : "column",
                             alignItems: "center",
-                            gap: 12
+                            gap: mobile ? 12 : 1
                         }}>
                             <Typography
                                 noWrap
@@ -126,10 +129,55 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                             <Typography
                                 noWrap
                                 textAlign={"center"}
-                                sx={{ color: 'black' }}>
+                                sx={{ color: 'black', fontSize: mobile ? "16px" : "12px" }}>
                                 ({currentDate})
                             </Typography>
                         </div>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleOpen}
+                            edge="start"
+                            sx={{
+                                marginRight: 5,
+                                color: 'black',
+                                ...(open && { display: 'none' })
+                            }}
+                        >
+                            <GridMenuIcon />
+                        </IconButton>
+                        <Popover
+                            id={id}
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            PaperProps={{
+                                style: {
+                                    maxHeight: 200,
+                                    width: 200,
+                                    padding: '8px',
+                                },
+                            }}
+                        >
+                            <List>
+                                {listItems.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        <ListItem button>
+                                            <ListItemText primary={item} />
+                                        </ListItem>
+                                        {index < listItems.length - 1 && <Divider />}
+                                    </React.Fragment>
+                                ))}
+                            </List>
+                        </Popover>
                     </Stack>
                 </Toolbar>
             </AppBar>
@@ -161,7 +209,14 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                 }}
                                 variant='contained'
                                 color='success'
-                                onClick={() => navigate("/view_item?canteen_id=6780bb535e0b1d0fb1daadd9")}>
+                                onClick={() => {
+                                    if (canteen.length === 0) {
+                                        alert("Please Select Item First")
+                                    } else {
+
+                                        navigate("/view_item?canteen_id=6780bb535e0b1d0fb1daadd9")
+                                    }
+                                }}>
                                 View Cart  ({canteen.length})
                             </Button>
                         </Box>
@@ -229,9 +284,8 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                         Quantity : {quantity}
                                     </span>
                                 </Stack>
-
-
                                 <UserPaymentMethod canteen_id={canteenId || ""} />
+
                                 <Stack
                                     sx={{
                                         width: '300px',

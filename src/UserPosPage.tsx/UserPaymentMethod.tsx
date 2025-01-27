@@ -37,7 +37,6 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
         };
     });
     const handleCreate = async () => {
-
         const changeItemData = orderData.map((item: MenuItemType) => ({
             qty: item.quantity ?? 0,
             item_id: item.id ?? "",
@@ -50,13 +49,14 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
             canteen_id: canteen_id,
             items: changeItemData,
         }
+        if(!loginUser){
+            return alert("Please Login First")
+        }
         try {
             const res = await orderCreate({ data })
             if (res.status === 201) {
                 toast.success("Order Created Successfully")
                 setOpen(false)
-                localStorage.removeItem('user')
-                localStorage.removeItem('user_token')
                 dispatch(resetData())
                 setLoginUser(false)
                 setCreateOrderData(initialState)
@@ -80,7 +80,13 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                 alignItems: 'center',
                 cursor: 'pointer',
             }}
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                    if (orderData.length > 0) {
+                        setOpen(true)
+                    } else {
+                        alert("Please Select Product")
+                    }
+                }}
             >
 
                 <span style={{
@@ -102,7 +108,7 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    '& .MuiDrawer-paper': { height: mobile ? '100%' : '80%', overflow: mobile ? 'auto' : 'hidden' },
+                    '& .MuiDrawer-paper': { height: mobile ? '100%' : '80%', overflow: 'auto' },
                 }}
             >
                 <UserRenderUserLogin

@@ -1,15 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import { styled, useTheme, } from '@mui/material/styles';
-import { Box, Button, colors, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import { Box, Button, colors, IconButton, Stack, Table, Checkbox, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Tooltip, Typography, useMediaQuery, ButtonGroup } from '@mui/material';
 import { MenuItemType } from '../AllTypes';
 import { Delete } from '@mui/icons-material';
-import { decrementQuantity, incrementQuantity, removeItem, resetData, } from '../AllStoreSlice/AddQuantitySlice';
+import { decrementQuantity, incrementQuantity, removeItem, resetData, setData, setnewData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQuantitySlice';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useNavigate } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { GridMenuIcon } from '@mui/x-data-grid';
@@ -71,6 +75,45 @@ export const MobileViewItemDetails = () => {
     const queryParams = new URLSearchParams(location.search);
     const canteenId = queryParams.get("canteen_id");
     // const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
+
+
+
+    const [selectedItems, setSelectedItems] = useState<string[]>([])
+    const handleCheckboxChange = (itemId: string) => {
+        if (selectedItems.includes(itemId)) {
+            setSelectedItems(selectedItems.filter((id) => id !== itemId));
+        } else {
+            setSelectedItems([...selectedItems, itemId]);
+        }
+    }
+
+    const handleSelectAll = (event: any) => {
+        if (event.target.checked) {
+            setSelectedItems(data.map((item: MenuItemType) => item.id));
+        } else {
+            setSelectedItems([]);
+        }
+
+    };
+
+    const handleBulkDelete = () => {
+        const filteredData = data.filter((item: MenuItemType) => !selectedItems.includes(item.id));
+
+        console.log(filteredData)
+
+        dispatch(setnewData(filteredData));
+
+    };
+
+    const handleSelectItem = () => {
+
+    }
+
+
+
+
+
+
 
     return (
         <Box sx={{
@@ -143,97 +186,125 @@ export const MobileViewItemDetails = () => {
                 </Toolbar>
             </AppBar>
             <Box sx={{
-                width: "100%",
+
                 height: "100%",
                 bgcolor: colors.grey[200],
                 display: "flex",
                 flexDirection: "column",
+                // padding: "10px"
             }}>
 
 
-                <TableContainer sx={{ width: "100%", height: "60%", overflowY: "auto", mb: 12 }}>
-                    <Table sx={{ mt: 5 }}>
+                <TableContainer sx={{ width: "100%", maxHeight: "70%", overflowY: "auto", borderRadius: "8px", mt: 5 }}>
+                    <Table stickyHeader sx={{}}>
                         <TableHead>
-                            <TableRow sx={{ bgcolor: colors.red[200] }}>
-                                <TableCell sx={{ fontSize: !mobile ? "9px" : "", width: "10%" }}>Quantity</TableCell>
-                                <TableCell sx={{ fontSize: !mobile ? "9px" : "", width: "auto", m: 0, p: 0 }} >Item Name</TableCell>
-                                <TableCell sx={{ fontSize: !mobile ? "9px" : "" }}>Price</TableCell>
-                                <TableCell sx={{ fontSize: !mobile ? "9px" : "" }}>Quantity</TableCell>
-                                <TableCell sx={{ fontSize: !mobile ? "9px" : "" }}>Remove</TableCell>
+                            <TableRow style={{ backgroundColor: "#f5f5f5", borderBottom: "2px solid #ddd" }}>
+                                <TableCell sx={{ backgroundColor: "#f5f5f5", fontSize: !mobile ? "12px" : "10px", padding: "10px", fontWeight: "bold" }}>
+                                    Name
+                                </TableCell>
+                                <TableCell sx={{ backgroundColor: "#f5f5f5", fontSize: !mobile ? "12px" : "10px", padding: "10px", fontWeight: "bold" }}>
+                                    Price
+                                </TableCell>
+                                <TableCell sx={{ backgroundColor: "#f5f5f5", fontSize: !mobile ? "12px" : "10px", padding: "10px", fontWeight: "bold" }}>
+                                    Quantity
+                                </TableCell>
+                                <TableCell sx={{ backgroundColor: "#f5f5f5", fontSize: !mobile ? "12px" : "10px", padding: "10px", }}>
+                                    <Checkbox
+                                        checked={selectedItems.length === data.length}
+                                        onChange={handleSelectAll}
+                                    />
+                                </TableCell>
                             </TableRow>
-
                         </TableHead>
                         <TableBody>
                             {data?.map((item: MenuItemType, index: number) => {
                                 const itemQuantity = item.quantity || 1;
                                 const itemTotalPrice = item.price * itemQuantity;
                                 return (
-                                    <TableRow key={index}>
-                                        <TableCell>
-                                            <Stack m={-2} alignItems={"center"}>
-                                                <ExpandMoreIcon
-                                                    sx={{
-                                                        bgcolor: "green",
-                                                        color: "white",
-                                                        cursor: "pointer",
-                                                        width: "60px",
-                                                        borderRadius: "4px",
-                                                        height: "15px",
-
-                                                    }}
-                                                    onClick={() =>
-                                                        dispatch(incrementQuantity(item.id))}
-                                                />
-                                                <span
-                                                    style={{
-                                                        fontSize: "14px",
-                                                        color: "red",
-                                                    }}
-                                                >
-                                                    {itemQuantity}
-                                                </span>
-                                                <ExpandLessIcon
-                                                    sx={{
-                                                        bgcolor: "red",
-                                                        color: "white",
-                                                        cursor: "pointer",
-                                                        width: "60px",
-                                                        borderRadius: "4px",
-                                                        height: "15px",
-                                                    }}
-                                                    onClick={() =>
-                                                        dispatch(decrementQuantity(item.id))}
-                                                />
+                                    <TableRow key={index} sx={{ "&:hover": { bgcolor: "#f4f4f4" } }}>
+                                        <TableCell sx={{ fontSize: !mobile ? "12px" : "10px", padding: "10px", fontWeight: "500" }}>
+                                            <Stack direction="row" spacing={1} alignItems="center">
+                                                <img src={item.image_url} alt='' width={"28px"} height={"28px"} />
+                                                <Typography
+                                                    fontSize={!mobile ? "12px" : "10px"}
+                                                >{item.name}</Typography>
                                             </Stack>
                                         </TableCell>
-                                        <TableCell sx={{
-                                            fontSize: !mobile ? "10px" : "",
-                                            width: "auto",
-                                            m: 0,
-                                            p: 1
-                                        }}>{item.name}</TableCell>
-                                        <TableCell sx={{
-                                            fontSize: !mobile ? "10px" : "",
-                                        }}>
+                                        <TableCell sx={{ fontSize: !mobile ? "12px" : "10px", padding: "10px", fontWeight: "500" }}>
                                             <span style={{ color: "green" }}>
-                                                &#8377;{`${itemTotalPrice}`}
+                                                &#8377;{`${itemTotalPrice.toFixed(2)}`}
                                             </span>
                                         </TableCell>
-                                        <TableCell>{item.quantity || 1}</TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ fontSize: !mobile ? "12px" : "10px", padding: "10px" }}>
+                                            <Stack direction="row" spacing={1} alignItems="center">
+                                                <IconButton
+                                                    onClick={() => dispatch(incrementQuantity(item.id))}>
+                                                    <AddIcon />
+                                                </IconButton>
+                                                <span>{itemQuantity}</span>
+                                                <IconButton onClick={() => dispatch(decrementQuantity(item.id))}>
 
-                                            <Delete sx={{
-                                                cursor: "pointer",
-                                            }} onClick={() => dispatch(removeItem(item.id))} />
+                                                    <RemoveIcon />
+                                                </IconButton>
+                                            </Stack>
+                                        </TableCell>
+                                        <TableCell sx={{ padding: "10px" }}>
+                                            <Checkbox
+                                                color='error'
+                                                checked={selectedItems.includes(item.id)}
+                                                onChange={() => handleCheckboxChange(item.id)}
 
+                                            />
                                         </TableCell>
                                     </TableRow>
-                                )
+                                );
                             })}
-                              
+
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Table>
+                    <TableRow
+                        sx={{
+                            backgroundColor: colors.grey[300],
+                            width: "30%"
+                        }}
+                    >
+                        <TableCell sx={{
+                            fontSize: !mobile ? "12px" : "10px",
+                            padding: "10px",
+                            fontWeight: "bold",
+                            width: "30%"
+                        }}>
+                            Total
+                        </TableCell>
+                        <TableCell sx={{ fontSize: !mobile ? "12px" : "10px", padding: "10px", fontWeight: "bold" }}>
+                            <span style={{ color: "green" }}>
+                                &#8377;{totalPrice.toFixed(2)}
+                            </span>
+                        </TableCell>
+                        <TableCell
+                            align='center'
+                            sx={{
+                                fontSize: !mobile ? "12px" : "10px",
+                                padding: "10px",
+                                fontWeight: "bold",
+                                width: "30%"
+                            }}>
+                            <span style={{ color: "green" }}>
+                                {totalQuantity}
+                            </span>
+                        </TableCell>
+                        <TableCell sx={{ padding: "10px" }}>
+                            <IconButton onClick={handleBulkDelete}>
+                                <DeleteIcon
+                                    color='error'
+
+                                />
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
+                </Table>
                 <Box sx={{
                     position: "fixed",
                     bottom: 4,
@@ -242,119 +313,50 @@ export const MobileViewItemDetails = () => {
                     flexDirection: "column",
                     width: "100%",
                 }}>
-                    <Button sx={{
-                        width: "100%",
-                        alignSelf: "center",
-                        height: "20px"
-                    }} variant='contained' onClick={() => {
-                        dispatch(resetData())
-                        dispatch(setPrice(null))
-                        dispatch(setQuantity(null))
-                    }}>
-                        Reset
-                    </Button>
-                    <Stack sx={{ width: "100%" }} direction={"row"}>
-                        <Button
-                            variant='contained'
-                            sx={{
-                                width: "100%",
-                                bgcolor: colors.red[300],
-                                color: "white",
-                                fontSize: "16px",
-                                fontWeight: "600",
-                                borderRadius: "8px",
-                                "&:hover": {
-                                    bgcolor: colors.red[400],
-                                },
-                            }}
-                            onClick={() => {
-                                navigate('/user?canteen_id=' + canteenId)
-                            }}
-                        >
-                            Go to Store
-                        </Button>
-                        <Button
-                            variant='contained'
-                            sx={{
-                                width: "100%",
-                                bgcolor: colors.green[300],
-                                color: "white",
-                                fontSize: "16px",
-                                fontWeight: "600",
-                                borderRadius: "8px",
-                                "&:hover": {
-                                    bgcolor: colors.green[400],
-                                },
-                            }}
-                            onClick={() => {
 
-                            }}
-                        >
-                            <UserPaymentMethod canteen_id={canteenId || ""} />
-                        </Button>
+                    <Stack sx={{ width: "100%" }} direction={"row"}>
+                        <ButtonGroup
+                            sx={{
+                                width: "100%",
+                            }}>
+                            <Button
+                                variant='contained'
+                                sx={{
+                                    width: "100%",
+                                    bgcolor: colors.red[300],
+                                    color: "white",
+                                    fontSize: "16px",
+                                    fontWeight: "600",
+
+                                    "&:hover": {
+                                        bgcolor: colors.red[400],
+                                    },
+                                }}
+                                onClick={() => {
+                                    navigate('/user?canteen_id=' + canteenId)
+                                }}
+                            >
+                                Back
+                            </Button>
+                            <Button
+                                variant='contained'
+                                sx={{
+                                    width: "100%",
+                                    bgcolor: colors.green[300],
+                                    color: "white",
+                                    fontSize: "16px",
+                                    fontWeight: "600",
+
+                                    "&:hover": {
+                                        bgcolor: colors.green[400],
+                                    },
+                                }}
+                            >
+                                <UserPaymentMethod canteen_id={canteenId || ""} />
+                            </Button>
+                        </ButtonGroup>
                     </Stack>
                 </Box>
-
-                {/* <Box
-                        sx={{
-                            position: 'fixed',
-                            bottom: 0,
-                            width: '100%',
-                            bgcolor: colors.green[100],
-                            height: '70px',
-                            display: 'flex',
-                            flexShrink: 0,
-                        }}
-                    >
-                        <Stack
-                            sx={{
-                                width: '300px',
-                                height: '100%',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                backgroundColor: colors.green[500],
-                                alignItems: 'center'
-                            }}
-                        >
-                            <span style={{
-                                fontSize: '',
-                                fontWeight: 'bold',
-                                color: 'white',
-                            }}>
-                                Quantity : {quantity}
-                            </span>
-                        </Stack>
-                        <Stack sx={{
-                            width: '100%',
-                            height: '100%',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            cursor: 'pointer',
-                        }}
-                        >
-
-                            <UserPaymentMethod canteen_id={canteenId || ""} />
-                        </Stack>
-                        <Stack
-                            sx={{
-                                width: '300px',
-                                height: '100%',
-                                justifyContent: 'center',
-                                backgroundColor: colors.green[500],
-                                alignItems: 'center',
-                                textAlign: 'center'
-                            }}
-                        >
-                            <span style={{
-                                fontSize: '',
-                                fontWeight: 'bold',
-                                color: 'white',
-                            }}>
-                                Total Price &#8377;{price}
-                            </span>
-                        </Stack>
-                    </Box> */}
-
             </Box >
         </Box >
     );
