@@ -18,6 +18,10 @@ import SelectCanteen from './SelectCanteen';
 import UserPosList from './UserPosPage.tsx/UserPosList';
 import Qrcode from './Qrcode';
 import { setCanteenDataSlice } from './AllStoreSlice/CanteenIdSlice';
+import Supplier from './Supplier/supplier';
+import Purchases from './Purchase/Purchases';
+import ItemQuantityDetails from './POSPages/ItemQuantityDetails';
+import { MobileViewItemDetails } from './UserPosPage.tsx/MobileViewItemDetails';
 
 
 function PrivateRoute({ redirectTo }: any) {
@@ -50,6 +54,7 @@ function App() {
                 <AppContent dispatch={dispatch} />
                 <Routes>
                     <Route path="/user" element={<UserPosListWrapper />} />
+                    <Route path='/view_item' element={<MobileViewItemDetails />} />
                 </Routes>
             </Router>
         </QueryClientProvider>
@@ -96,13 +101,17 @@ function AppContent({ dispatch }: { dispatch: any }) {
                         <Route path="/orders" element={<OrderList />} />
                         <Route path="/canteen" element={<CanteenList />} />
                         <Route path="/products" element={<ProductList />} />
-                        <Route path="/qrcode" element={<Qrcode />} />
                         <Route path="/selectCanteen" element={<SelectCanteen />} />
+                        <Route path='/products-items' element={<ProductList />} />
+                        <Route path="/supplier" element={<Supplier />} />
+                        <Route path="/purchase" element={<Purchases />} />
                     </Route>
                 </Route>
                 <Route element={<PrivateRoute redirectTo="/login" />}>
+                    <Route path="/qrcode" element={<Qrcode />} />
                     <Route path="/pos" element={<PosList />} />
                 </Route>
+
             </Routes>
             <AllModalList />
             <ToastContainer />

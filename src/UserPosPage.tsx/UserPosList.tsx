@@ -1,10 +1,10 @@
 import { styled, useTheme, } from '@mui/material/styles';
-import { Box, colors, IconButton, Stack, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material"
+import { Box, Button, colors, IconButton, Stack, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material"
 import { GridMenuIcon } from "@mui/x-data-grid";
 // import React, { useEffect } from "react";
 
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import ViewListIcon from '@mui/icons-material/ViewList';
 
@@ -14,8 +14,8 @@ import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
 import AllProductCard from '../POSPages/AllProductCard';
 import UserPaymentMethod from './UserPaymentMethod';
 import React, { useEffect } from 'react';
-import { GetCanteenUserApi } from '../AllGetApi';
-import { setCanteenDataSlice } from '../AllStoreSlice/CanteenIdSlice';
+import { useNavigate } from 'react-router-dom';
+
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -42,16 +42,18 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
 
 
 const UserPosList = ({ canteenId }: { canteenId: string }) => {
+    const navigate = useNavigate()
     const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
     const theme = useTheme()
     const [open, setOpen] = React.useState(true);
-    const [tableSlected, setTableSelected] = React.useState<boolean>(false);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const mobile = useMediaQuery('(min-width:800px)');
+    const { data: canteen } = useSelector((state: RootState) => state.Quantity)
     const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
-    const { data } = useSelector((state: RootState) => state.Quantity)
+  
+
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -119,7 +121,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                     fontFamily: "Poppins",
                                     letterSpacing: "1px"
                                 }}>
-                                    Magadh Canteen
+                                Magadh Canteen
                             </Typography>
                             <Typography
                                 noWrap
@@ -140,159 +142,29 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
 
                 {!mobile ? (
                     <>
-                        {tableSlected ? (
-                            <Box sx={{
-                                width: '100%',
-                                height: "100%",
+                        <AllProductCard canteenId={canteenId || ""} />
+                        <Box
+                            sx={{
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
-                                flexDirection: "column",
-                                bgcolor: "white"
-                            }}>
+                                position: "fixed",
+                                bottom: "0%",
+                                width: "100%"
+                            }}
+                        >
 
-                                <ItemQuantityDetails
-                                    tableSelected={tableSlected}
-                                    setTableSelected={setTableSelected}
-                                />
-                            </Box>
-                        ) : (
-                            <Box
+                            <Button
                                 sx={{
-                                    width: '100%',
-                                    height: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    bgcolor: colors.grey[50],
-                                    overflowY: 'auto',
+                                    width: "100%",
+                                    margin: "19px"
                                 }}
-                            >
-                                <Box
-                                    sx={{
-                                        flex: '1 1 auto',
-                                        overflow: 'hidden',
-                                    }}
-                                >
-                                    <AllProductCard canteenId={canteenId || ""} />
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            position: "fixed",
-                                            right: 0,
-                                            top: "50%",
-                                            transform: "translateY(-50%)",
-                                            zIndex: 1
-
-                                        }}
-                                    >
-                                        <Box position="relative" textAlign="center">
-                                            <Box
-                                                position="absolute"
-                                                top="-10px"
-                                                left="0%"
-                                                bgcolor={colors.blue[500]}
-                                                color="white"
-                                                borderRadius="4px"
-                                                padding="2px 5px"
-                                                fontSize="12px"
-                                                fontWeight="bold"
-                                                zIndex={2}
-                                            >
-                                                {data?.length}
-                                            </Box>
-
-
-                                            <Tooltip title="View List Product">
-                                                <span
-                                                    style={{
-                                                        cursor: "pointer",
-                                                        backgroundColor: colors.blue[300],
-                                                        width: "40px",
-                                                        padding: 3,
-                                                        height: "30px",
-                                                        display: "flex",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        borderRadius: "8px",
-                                                    }}
-                                                    onClick={() => setTableSelected(true)}
-                                                >
-                                                    <ViewListIcon
-                                                        sx={{
-                                                            color: "white",
-                                                            width: "30px",
-                                                            height: "30px",
-                                                        }}
-                                                    />
-                                                </span>
-                                            </Tooltip>
-                                        </Box>
-                                    </Box>
-
-                                </Box>
-
-                                <Box
-                                    sx={{
-                                        width: '100%',
-                                        bgcolor: colors.green[100],
-                                        height: '70px',
-                                        display: 'flex',
-                                        flexShrink: 0,
-                                    }}
-                                >
-                                    <Stack
-                                        sx={{
-                                            width: '300px',
-                                            height: '100%',
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            backgroundColor: colors.green[500],
-                                            alignItems: 'center'
-                                        }}
-                                    >
-                                        <span style={{
-                                            fontSize: '',
-                                            fontWeight: 'bold',
-                                            color: 'white',
-                                        }}>
-                                            Quantity : {quantity}
-                                        </span>
-                                    </Stack>
-                                    <Stack sx={{
-                                        width: '100%',
-                                        height: '100%',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        cursor: 'pointer',
-                                    }}
-                                    >
-
-                                        <UserPaymentMethod canteen_id={canteenId || ""} />
-                                    </Stack>
-                                    <Stack
-                                        sx={{
-                                            width: '300px',
-                                            height: '100%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            backgroundColor: colors.green[500],
-                                            textAlign: 'center'
-                                        }}
-                                    >
-                                        <span style={{
-                                            fontSize: '',
-                                            fontWeight: 'bold',
-                                            color: 'white',
-                                        }}>
-                                            Total Price &#8377;{price}
-                                        </span>
-                                    </Stack>
-                                </Box>
-                            </Box>
-                        )}
-
+                                variant='contained'
+                                color='success'
+                                onClick={() => navigate("/view_item?canteen_id=6780bb535e0b1d0fb1daadd9")}>
+                                View Cart  ({canteen.length})
+                            </Button>
+                        </Box>
 
                     </>
                 ) : (

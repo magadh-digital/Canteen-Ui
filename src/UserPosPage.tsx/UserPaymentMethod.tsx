@@ -84,9 +84,8 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
             >
 
                 <span style={{
-                    color: colors.green[800],
                     fontSize: mobile ? "" : 30,
-                    fontWeight: "bold"  
+                    fontWeight: "bold"
                 }}
                 >
                     &#8377; {price} PAY NOW

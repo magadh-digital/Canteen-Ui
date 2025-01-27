@@ -119,7 +119,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                         selectedUser={selectedUser || null}
                         setSelectedUser={setSelectedUser}
                     />
-                    <Box sx={{ display: 'flex', p: 2, justifyContent: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', p: 2, justifyContent: 'center', gap: 1,   }}>
                         <Button variant="contained" sx={{}}>
                             Print
                         </Button>

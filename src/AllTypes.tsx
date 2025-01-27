@@ -123,6 +123,8 @@ export interface GetOrderTypes {
   customer_type: string;
   id?: string;
   order_id?: string;
+  canteen: CanteenData;
+  user: CanteenUserDataType
 }
 
 export interface LoginType {
@@ -157,6 +159,7 @@ export interface AllUserType {
 }
 
 export interface CanteenUserDataType {
+  canteen_id?: string;
   id: string;
   name: string;
   description: string;
@@ -170,4 +173,32 @@ export interface CanteenUserDataType {
   role: string;
   cp_code: string
 
+}
+
+export interface GetSupplierApiType {
+  suppliers: SupplierType[]
+  total: number
+}
+
+export interface SupplierType {
+  ID?: string;
+  name: string;
+  description?: string;
+  contact: number;
+  address: string;
+}
+
+export interface AddPurcahseTypes {
+  _id?: string;
+  supplier_id: string;
+  purchase_date: string;
+  refrence_no: string;
+  notes: string;
+  sub_total: number;
+  shipping_charges: number;
+  discount: number;
+  total_amount: number;
+  paid_amount: number;
+  created_at?: string;
+  updated_at?: string
 }

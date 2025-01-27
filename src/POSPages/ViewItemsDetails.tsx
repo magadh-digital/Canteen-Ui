@@ -30,11 +30,14 @@ const ViewItemsDetails = ({ userData,
         }
     }, [userData?.vouchers])
 
-    const { orderData: data, price: totalPrice, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
+
+    const { data } = useSelector((state: RootState) => state.Quantity)
     const rateCheck = () => {
         const value = data.reduce((acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0), 0)
         return value
     }
+
+    const totalPrice = data?.reduce((acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0), 0)
     const totalPaybaleAmount = () => {
         if (voucherChecked) {
             const rate = totalPrice - (userData?.vouchers ?? 0)
@@ -72,7 +75,7 @@ const ViewItemsDetails = ({ userData,
             total_amount: totalPaybaleAmount(),
             voucher: voucherChecked
         }))
-    },[voucherChecked, userData?.vouchers, totalPrice])
+    }, [voucherChecked, userData?.vouchers, totalPrice])
 
     return (
         <Box sx={{
@@ -156,7 +159,7 @@ const ViewItemsDetails = ({ userData,
                             <TableRow>
                                 <TableCell rowSpan={4} sx={{ border: "none", padding: "6px" }}></TableCell>
                                 <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Quantity</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{quantity}</TableCell>
+                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{1}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Total Price</TableCell>

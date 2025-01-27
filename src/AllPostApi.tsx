@@ -1,6 +1,6 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import { CanteenUserType, CreateOrderType, LoginType, } from "./AllTypes"
+import { AddPurcahseTypes, CanteenUserType, CreateOrderType, LoginType, SupplierType, } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 
@@ -146,4 +146,34 @@ export const PostVerifyOtp = () => {
             queryClient.invalidateQueries({ queryKey: ['otp'] })
         }
     })
-}   
+}
+
+
+export const CreateSupplierApi = () => {
+    const queryClient = useQueryClient();
+    const supplier = async ({ data }: { data: SupplierType }) => {
+        const response = await axios.post(`${baseUrl}/supplier/create`, data)
+        return response
+    }
+    return useMutation({
+        mutationFn: supplier,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['supplier'] })
+        }
+    })
+}
+
+
+export const PostPurchaseApi = () => {
+    const queryClient = useQueryClient();
+    const purchaseApi = async ({ data }: { data: AddPurcahseTypes }) => {
+        const response = await axios.post(`${baseUrl}/purchase/create`, data)
+        return response
+    }
+    return useMutation({
+        mutationFn: purchaseApi,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['purchase'] })
+        }
+    })
+}

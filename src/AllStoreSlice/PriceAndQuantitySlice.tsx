@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {  MenuItemType } from "../AllTypes";
+import { MenuItemType } from "../AllTypes";
 
 export interface PriceAndQuantityStateType {
     price: number,
@@ -22,7 +22,6 @@ const PriceAndQuantitySlice = createSlice({
             state.quantity = action.payload
         },
         setOrderData: (state, action) => {
-            // console.log(state)
             state.orderData = action.payload
         }
     }

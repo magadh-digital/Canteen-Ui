@@ -37,6 +37,16 @@ export const NAVIGATION: PagesTypes[] = [
     ]
   },
   {
+    segment: 'supplier',
+    title: 'Supplier',
+    icon: <img src={"/public/supplier (1).png"} style={{ width: "25px", height: "30px" }} />,
+  },
+  {
+    segment: 'purchase',
+    title: 'Purchase',
+    icon: <img src={"/public/payment-method.png"} style={{ width: "25px", height: "30px" }} />,
+  },
+  {
     segment: 'reports',
     title: 'Reports',
     icon: <BarChartIcon sx={{ color: "#9FD675" }} />,

@@ -8,9 +8,9 @@ import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQu
 import { useEffect, useRef } from 'react';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-const ItemQuantityDetails = ({ setTableSelected }: any) => {
+import { DraggableData, DraggableEvent } from 'react-draggable';
+import { useNavigate } from 'react-router-dom';
+const ItemQuantityDetails = () => {
     const { data: data } = useSelector((state: RootState) => state.Quantity);
     const dispatch = useDispatch();
     const totalQuantity = data.reduce((sum, item) => sum + (item.quantity || 1), 0);
@@ -24,19 +24,8 @@ const ItemQuantityDetails = ({ setTableSelected }: any) => {
 
     const mobile = useMediaQuery("(min-width: 800px)");
     let wasDragged = useRef(false);
-    const handleDrag = (_: DraggableEvent, __: DraggableData) => {
-        // Mark drag as occurred
-        wasDragged.current = true;
-    };
+    const navigate = useNavigate()
 
-    const handleStop = (_: DraggableEvent, __: DraggableData) => {
-        
-        if (!wasDragged.current) {
-            setTableSelected(false);
-        }
-       
-        wasDragged.current = false;
-    };
     return (
         <Box sx={{
             width: "100%",
@@ -48,50 +37,6 @@ const ItemQuantityDetails = ({ setTableSelected }: any) => {
         }}>
 
             <TableContainer sx={{ height: "100%", overflowY: "auto" }}>
-                {!mobile && (
-                    <Draggable
-                        bounds="parent"
-                        onDrag={handleDrag}
-                        onStop={handleStop}
-
-                    >
-                        <Box
-                            display={"flex"}
-                            flexDirection={"column"}
-                            height={"90%"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            position={"absolute"}
-                            right={0}
-                            zIndex={1}
-                            style={{ cursor: "move" }}
-                        >
-                            <Tooltip title="Add Product">
-                                <span
-                                    style={{
-                                        cursor: "pointer",
-                                        backgroundColor: colors.deepOrange[300],
-                                        width: "50px",
-                                        height: "50px",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        borderRadius: "50%",
-                                        boxShadow: "0px 4px 6px rgba(0,0,0,0.2)",
-                                    }}
-                                >
-                                    <ShoppingCartIcon
-                                        sx={{
-                                            color: "white",
-                                            width: "30px",
-                                            height: "30px",
-                                        }}
-                                    />
-                                </span>
-                            </Tooltip>
-                        </Box>
-                    </Draggable>
-                )}
                 <Table sx={{ mt: 5 }}>
                     <TableHead>
                         <TableRow sx={{ bgcolor: colors.red[200] }}>

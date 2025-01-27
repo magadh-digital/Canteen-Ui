@@ -232,7 +232,7 @@ const PosList = () => {
                                 bgcolor: "white",
                             }}>
 
-                                <ItemQuantityDetails tableSelected={tableSlected} setTableSelected={setTableSelected} />
+                                <ItemQuantityDetails  />
                             </Box>
                         ) : (
                             <Box

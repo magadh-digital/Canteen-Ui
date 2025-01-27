@@ -1,6 +1,8 @@
-import { colors, Typography } from "@mui/material";
+import { Box, Button, colors, Dialog, DialogContent, Stack, Typography } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
+import { useState } from "react";
+import QRCode from "react-qr-code";
 
 export const CanteenUserColumn: GridColDef[] = [
     {
@@ -67,5 +69,61 @@ export const CanteenUserColumn: GridColDef[] = [
         field: 'location',
         headerName: 'Location',
         width: 150
+    },
+    {
+        field: "Action",
+        headerName: "URL",
+        width: 280,
+        renderCell: ({ row }) => {
+            const [open, setOpen] = useState(false);
+            const handleCopy = () => {
+                const url = `172.30.2.67:5173/user?canteen_id=${row.id}`;
+                navigator.clipboard.writeText(url)
+                    .then(() => {
+                        alert("URL copied to clipboard!");
+                    })
+                    .catch(err => {
+                        console.error("Failed to copy text: ", err);
+                    });
+            };
+
+            return (
+                <>
+                    <Stack direction="row" spacing={2} alignItems={"center"}>
+                        <div style={{ cursor: "pointer" }}
+                            onClick={handleCopy}>
+                            <Button variant="contained" size="small">Copy URL</Button>
+                        </div >
+                        <div>
+                            <Button
+                                variant="contained"
+                                size="small"
+                                color="secondary"
+                                onClick={() => setOpen(true)}
+                            > Show QrCode
+                            </Button>
+                        </div>
+                    </Stack>
+                    <Dialog open={open} onClose={() => setOpen(false)} sx={{
+                        "& .MuiDialog-paper": {
+                            minWidth: "auto",
+                            height: "auto",
+                            borderRadius: "20px",
+                            justifyContent: "center"
+                        }
+                    }}>
+                        <DialogContent>
+                            <Box sx={{ display: "flex", justifyContent: "center" }}>
+                                <QRCode
+                                    value={`172.30.2.67:5173/user?canteen_id=${row.id}`}
+                                    size={500}
+                                    style={{ height: "auto", width:"auto" }}
+                                />
+                            </Box>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            )
+        }
     },
 ]

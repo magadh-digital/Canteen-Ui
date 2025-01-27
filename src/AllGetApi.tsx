@@ -1,7 +1,7 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
-import { AllUserType, GetApiUserCanteens, GetMenuItemList, UpdateOrderType } from "./AllTypes"
+import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetSupplierApiType, UpdateOrderType } from "./AllTypes"
 import { toast } from "react-toastify"
 
 export const GetCanteenUserApi = () => {
@@ -100,4 +100,37 @@ export const GetReamainingVoucherApi = ({ user_id }: { user_id: string }) => {
         queryFn: reamainingVoucher,
         enabled: !!user_id
     })
+}
+
+export const GetSupplierApi = () => {
+    const supplier = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/supplier/`)
+            const data = response.data
+            return data as GetSupplierApiType
+        } catch (error) {
+            console.error('Error fetching data:', error)
+        }
+    }
+    return useQuery({
+        queryKey: ['supplier'],
+        queryFn: supplier
+    })
+}
+
+export const GetPurchaseApi = () => {
+    const purchase = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/purchase`)
+            const data = response.data
+            return data
+        } catch (error) {
+            console.error('Error fetching data:', error)
+        }
+    }
+    return useQuery({
+        queryKey: ['purchase'],
+        queryFn: purchase
+    })
+
 }

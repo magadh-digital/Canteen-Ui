@@ -17,25 +17,29 @@ import {
     useMediaQuery,
 } from '@mui/material';
 import { GetMenuItemListApi } from '../AllGetApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setData } from '../AllStoreSlice/AddQuantitySlice';
 import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
 import { GridSearchIcon } from '@mui/x-data-grid';
+import { RootState } from '../Store';
 
 const AllProductCard = ({ canteenId }: { canteenId: string }) => {
     const [Search, setSearch] = useState<string>('');
     const [Category, setCategory] = useState<string>('ALL');
 
+
     const { data, isLoading } = GetMenuItemListApi({
         canteen_id: canteenId,
     });
     const dispatch = useDispatch();
+
+
+    // console.log(canteen)
     const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCategory(event.target.value);
     }
-
 
     const filteredItems =
         data?.menuitems?.filter((item) => {
@@ -44,6 +48,12 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
             return filterSearch && filterCategory
         }) || []
     const mobile = useMediaQuery("(max-width:800px)")
+    const { data: canteen } = useSelector((state: RootState) => state.Quantity)
+
+    const handleAddToCart = (item: any) => {
+        dispatch(setData(item))
+    };
+
 
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -57,6 +67,7 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                     boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                 }}
             >
+
                 <Stack direction="row" spacing={1} alignItems="center" mt={mobile ? 7 : 8}>
                     <TextField
                         size="small"
@@ -156,10 +167,14 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                                         boxShadow: 'none',
                                         maxHeight: '250px',
                                         minHeight: '250px',
-                                        // maxWidth: '170px',
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        // minWidth: '170px',
+                                        filter: canteen.some((canteenItem) => canteenItem.id === item.id)
+                                            ? 'blur(0.4px)'
+                                            : 'none',
+                                        opacity: canteen.some((canteenItem) => canteenItem.id === item.id)
+                                            ? 0.7
+                                            : 1,
                                     }}
                                 >
                                     <CardMedia
@@ -194,7 +209,7 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                                     <CardActionArea>
                                         <Stack
                                             direction="row"
-                                            onClick={() => dispatch(setData(item))}
+                                            onClick={() => handleAddToCart(item)}
                                             sx={{
                                                 bgcolor: colors.red[400],
                                                 cursor: 'pointer',
@@ -206,13 +221,26 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                                                     margin: 'auto',
                                                     alignItems: 'center',
                                                     display: 'flex',
+                                                    color: 'white',
                                                 }}
                                             >
-                                                <span style={{ color: 'white' }}>Add To Cart</span>
-                                                <AddShoppingCartOutlined sx={{ color: 'white' }} />
+                                                Add To Cart
+                                                <AddShoppingCartOutlined sx={{ color: 'white', ml: 1 }} />
+                                                {canteen?.map((canteen) => (
+                                                    canteen?.id === item?.id && (
+                                                        <span key={canteen?.id} style={{
+                                                            color: 'white',
+                                                            fontSize: '12px',
+                                                            fontWeight: 'bold',
+                                                        }}>
+                                                            ({canteen?.quantity})
+                                                        </span>
+                                                    )
+                                                ))}
                                             </Typography>
                                         </Stack>
                                     </CardActionArea>
+
                                 </Card>
                             ))
                         ) : filteredItems.length === 0 || Search ? (
@@ -249,6 +277,7 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                     </Box>
                 )}
             </Box>
+
         </Box>
     );
 };
