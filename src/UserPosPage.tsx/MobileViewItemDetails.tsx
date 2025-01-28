@@ -18,45 +18,13 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { GridMenuIcon } from '@mui/x-data-grid';
 import moment from 'moment';
 import UserPaymentMethod from './UserPaymentMethod';
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-const drawerWidth = "100vw";
-
-
-const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
 
 
 export const MobileViewItemDetails = () => {
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(true);
-    const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
     const { data: data } = useSelector((state: RootState) => state.Quantity);
     const dispatch = useDispatch();
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    }
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentDate(moment().format("DD-MM-YYYY hh:mm:ss"));
-        }, 1000);
-
-        return () => clearInterval(intervalId);
-    }, []);
+ 
+   
 
     const totalQuantity = data.reduce((sum, item) => sum + (item.quantity || 1), 0);
     const totalPrice = data.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
@@ -68,15 +36,11 @@ export const MobileViewItemDetails = () => {
     }, [data]);
 
     const mobile = useMediaQuery("(min-width: 800px)");
-    let wasDragged = useRef(false);
+    
     const location = useLocation();
     const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search);
     const canteenId = queryParams.get("canteen_id");
-    // const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
-
-
-
     const [selectedItems, setSelectedItems] = useState<string[]>([])
     const handleCheckboxChange = (itemId: string) => {
         if (selectedItems.includes(itemId)) {
@@ -97,19 +61,9 @@ export const MobileViewItemDetails = () => {
 
     const handleBulkDelete = () => {
         const filteredData = data.filter((item: MenuItemType) => !selectedItems.includes(item.id));
-
-        console.log(filteredData)
-
         dispatch(setnewData(filteredData));
 
     };
-
- 
-
-
-
-
-
 
 
     return (
@@ -118,70 +72,6 @@ export const MobileViewItemDetails = () => {
             height: '100vh',
             bgcolor: 'grey',
         }}>
-            <AppBar
-                position="fixed"
-                open={open}
-                sx={{
-                    zIndex: theme.zIndex.drawer + 1,
-                    bgcolor: "#9FD675",
-                    border: "none",
-                    boxShadow: "none",
-                    borderBottom: "0.1px solid #E0E0E0",
-                }}>
-
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            color: 'black',
-                            ...(open && { display: 'none' })
-                        }}
-                    >
-                        <GridMenuIcon />
-                    </IconButton>
-                    {
-                        open ? null :
-                            <img src='public/2795550.png' alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
-                    }
-                    <Stack
-                        width={"100%"}
-                        direction="row"
-                        spacing={2}
-                        alignItems="center"
-                        justifyContent="space-between"
-                    >
-                        <div style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 12
-                        }}>
-                            <Typography
-                                noWrap
-                                component="div"
-                                sx={{
-                                    color: 'black',
-                                    fontWeight: "bold",
-                                    fontSize: mobile ? "20px" : "18px",
-                                    fontFamily: "Poppins",
-                                    letterSpacing: "1px"
-                                }}>
-                                Magadh Canteen
-                            </Typography>
-                            <Typography
-                                noWrap
-                                textAlign={"center"}
-                                sx={{ color: 'black' }}>
-                                ({currentDate})
-                            </Typography>
-                        </div>
-                    </Stack>
-                </Toolbar>
-            </AppBar>
             <Box sx={{
 
                 height: "100%",

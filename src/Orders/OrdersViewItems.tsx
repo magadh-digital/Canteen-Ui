@@ -7,7 +7,6 @@ import { RootState } from '../Store';
 
 const OrdersViewItems = () => {
     const { id, data, order } = useSelector((state: RootState) => state.ItemView)
-    console.log(data)
     const dispatch = useDispatch()
     return (
         <>

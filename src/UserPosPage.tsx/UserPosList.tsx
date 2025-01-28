@@ -1,124 +1,44 @@
-import { styled, useTheme, } from '@mui/material/styles';
+
 import {
     Box,
     Button,
     colors,
-    IconButton, ListItemIcon, ListItemIconProps, ListItemText, ListItemButton, Menu, MenuItem, Stack, Toolbar, Tooltip, Typography, useMediaQuery,
-    Popover,
-    List,
-    ListItem,
-    Divider,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material"
-import { GridMenuIcon, GridMoreVertIcon } from "@mui/x-data-grid";
-// import React, { useEffect } from "react";
+    Stack,
+    useMediaQuery,
 
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+} from "@mui/material"
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 
-import moment from 'moment';
 import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
 import AllProductCard from '../POSPages/AllProductCard';
 import UserPaymentMethod from './UserPaymentMethod';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AccountCircle, ListAlt, LogoutOutlined } from '@mui/icons-material';
-import { toast } from 'react-toastify';
-import { GetOrderDetailsApi } from '../AllGetApi';
-import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from '../AllStoreSlice/UserOrderListSlice';
+
 import { setUser } from '../AllStoreSlice/UserSaveSlice';
 
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-const drawerWidth = "100vw";
 
 
-const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
 
 
 
 
 const UserPosList = ({ canteenId }: { canteenId: string }) => {
     const navigate = useNavigate()
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
-    const { user } = useSelector((state: RootState) => state.user)
-    const theme = useTheme()
-    const open = Boolean(anchorEl);
-    const { data } = GetOrderDetailsApi({
-        user_id: user?.id || ""
-    })
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const { data: canteen } = useSelector((state: RootState) => state.Quantity)
+    const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
+    const mobile = useMediaQuery("(min-width:800px)");
+
     useEffect(() => {
         const userSlice = JSON.parse(localStorage.getItem('user') || "{}")
         dispatch(setUser(userSlice))
     }, [])
 
-    const handleLogout = () => {
-        if (user) {
-            const confirm = window.confirm('Are you sure you want to logout?');
-            if (confirm) {
-                localStorage.removeItem('user_token')
-                localStorage.removeItem('user')
-                toast.success("Logout Successfully")
-                dispatch(setUser({}))
-                handleClose()
-            } else {
-                return
-            }
-        } else {
-            alert("You are not logged in")
-        }
-    }
+
 
     const dispatch = useDispatch()
-    const handleOpenList = () => {
-        dispatch(setUserItemViewId(user?.id || ""))
-        dispatch(setuserOrderDetails(data?.orders[0] || []))
-        dispatch(setUserItemViewData(data?.orders))
-    }
-
-    const mobile = useMediaQuery('(min-width:800px)');
-    const { data: canteen } = useSelector((state: RootState) => state.Quantity)
-    const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
-
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentDate(moment().format("DD-MM-YYYY hh:mm:ss"));
-        }, 1000);
-
-        return () => clearInterval(intervalId);
-    }, []);
 
     return (
         <Box sx={{
@@ -126,159 +46,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
             height: '100vh',
             bgcolor: 'grey',
         }}>
-            <AppBar
-                position="fixed"
-                open={open}
-                sx={{
-                    zIndex: theme.zIndex.drawer + 1,
-                    bgcolor: "#9FD675",
-                    border: "none",
-                    boxShadow: "none",
-                    borderBottom: "0.1px solid #E0E0E0",
-                }}>
 
-                <Toolbar>
-                    <Stack
-                        width={"100%"}
-                        direction="row"
-                        spacing={2}
-                        alignItems="center"
-                        justifyContent="space-between"
-                    >
-                        <div style={{
-                            display: "flex",
-                            flexDirection: mobile ? "row" : "column",
-                            alignItems: "center",
-                            gap: mobile ? 12 : 1
-                        }}>
-                            <Typography
-                                noWrap
-                                component="div"
-                                sx={{
-                                    color: 'black',
-                                    fontWeight: "bold",
-                                    fontSize: mobile ? "20px" : "18px",
-                                    fontFamily: "Poppins",
-                                    letterSpacing: "1px"
-                                }}>
-                                Magadh Canteen
-                            </Typography>
-                            <Typography
-                                noWrap
-                                textAlign={"center"}
-                                sx={{ color: 'black', fontSize: mobile ? "16px" : "12px" }}>
-                                ({currentDate})
-                            </Typography>
-                        </div>
-
-                        <IconButton
-                            aria-label="more"
-                            id="long-button"
-                            aria-controls={open ? 'long-menu' : undefined}
-                            aria-expanded={open ? 'true' : undefined}
-                            aria-haspopup="true"
-                            onClick={handleClick}
-                        >
-                            <GridMenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="long-menu"
-                            MenuListProps={{
-                                "aria-labelledby": "long-button",
-                            }}
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-                            PaperProps={{
-                                elevation: 3,
-                                style: {
-                                    maxHeight: 90 * 4.5,
-                                    width: "200px",
-                                    borderRadius: "8px",
-                                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                                },
-                            }}
-                        >
-                            <MenuItem
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 0.5,
-                                    py: 0.8,
-                                    px: 1.5,
-                                    "&:hover": { bgcolor: "grey.100" },
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        color: "primary.main",
-                                        minWidth: "28px",
-                                    }}
-                                >
-                                    <AccountCircle fontSize="small" />
-                                </ListItemIcon>
-                                <div >
-                                    <Typography variant="body2" fontWeight="bold">
-                                        {user?.name || "No User"}
-                                    </Typography>
-                                    <Typography variant="body2" fontSize="10px">
-                                        {user?.phone || ""}
-                                    </Typography>
-                                </div>
-                            </MenuItem>
-                            <Divider />
-                            <MenuItem
-                                onClick={handleOpenList}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 0.5,
-                                    py: 0.8,
-                                    px: 1.5,
-                                    "&:hover": { bgcolor: "grey.100" },
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        color: "secondary.main",
-                                        minWidth: "28px",
-                                    }}
-                                >
-                                    <ListAlt fontSize="small" />
-                                </ListItemIcon>
-                                <Typography variant="body2" fontWeight="500">
-                                    My Order List
-                                </Typography>
-                            </MenuItem>
-                            <Divider />
-
-                            <MenuItem
-                                onClick={handleLogout}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 0.5,
-                                    py: 0.8,
-                                    px: 1.5,
-                                    "&:hover": { bgcolor: "grey.100" },
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        color: "error.main",
-                                        minWidth: "28px",
-                                    }}
-                                >
-                                    <LogoutOutlined fontSize="small" />
-                                </ListItemIcon>
-                                <Typography variant="body2" fontWeight="500">
-                                    Logout
-                                </Typography>
-                            </MenuItem>
-                        </Menu>
-                    </Stack>
-                </Toolbar>
-            </AppBar>
             <Box sx={{
                 display: "flex",
                 width: "100%",
@@ -311,8 +79,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                     if (canteen.length === 0) {
                                         alert("Please Select Item First")
                                     } else {
-
-                                        navigate("/view_item?canteen_id=6780bb535e0b1d0fb1daadd9")
+                                        navigate("/user/view_item?canteen_id=" + canteenId)
                                     }
                                 }}>
                                 View Cart  ({canteen.length})

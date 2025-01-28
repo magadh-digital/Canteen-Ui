@@ -7,10 +7,7 @@ import { setUserItemViewId } from '../AllStoreSlice/UserOrderListSlice';
 
 const UserOrdersViewItems = () => {
     const { id, data, order } = useSelector((state: RootState) => state.OrderViewList)
-    console.log(data)
-    console.log(id)
-    console.log(order)
-    const totalPrice = data.reduce((acc, item) => acc + item.total_amount, 0);
+
     const dispatch = useDispatch()
     const mobile = useMediaQuery('(max-width:600px)');
     return (
@@ -21,8 +18,6 @@ const UserOrdersViewItems = () => {
                 aria-labelledby="modal-modal-title"
             >
                 <Box >
-
-
                     <Container
                         maxWidth="xs"
                         style={{
@@ -33,6 +28,7 @@ const UserOrdersViewItems = () => {
                             height: "80vh",
                             overflowY: "auto",
                             overflowX: "hidden"
+
                         }}
                     >
                         {/* Header */}
@@ -64,13 +60,24 @@ const UserOrdersViewItems = () => {
                             {order?.canteen?.email || "Not Available"}
                         </Typography>
 
-                        <TableContainer sx={{ border: "1px solid #ccc", mt: "5px", }}>
-                            <Table size="small" sx={{
 
-                            }}>
+                        <TableContainer sx={{ border: "1px solid #ccc" }}>
+
+                            <Table size="small">
                                 <TableBody>
                                     <TableRow>
-
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Order ID:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px" }}>{order?.order_id}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Order Date:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px" }}>
+                                            {moment(order?.created_at).format("DD-MM-YYYY")}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
@@ -101,8 +108,9 @@ const UserOrdersViewItems = () => {
                             </Table>
                         </TableContainer>
 
-
                         <Divider style={{ marginBottom: "15px" }} />
+
+                        {/* Items Table */}
                         <Typography
                             variant="body2"
                             style={{
@@ -112,7 +120,7 @@ const UserOrdersViewItems = () => {
                                 color: "#333",
                             }}
                         >
-                            Orders
+                            Items
                         </Typography>
                         <TableContainer
                             component={Paper}
@@ -135,9 +143,9 @@ const UserOrdersViewItems = () => {
                                 <TableHead>
                                     <TableRow style={{ backgroundColor: "#f1f1f1" }}>
                                         <TableCell
-                                            style={{ fontSize: "12px", width: "20%", padding: "8px", color: "#555" }}
+                                            style={{ fontSize: "12px", padding: "8px", color: "#555" }}
                                         >
-                                            Canteen Name
+                                            Item
                                         </TableCell>
                                         <TableCell
                                             style={{
@@ -145,58 +153,37 @@ const UserOrdersViewItems = () => {
                                                 padding: "8px",
                                                 textAlign: "center",
                                                 color: "#555",
-                                                width: "30%",
                                             }}
                                         >
-                                            Order Id
+                                            Qty
                                         </TableCell>
                                         <TableCell
                                             style={{
                                                 fontSize: "12px",
                                                 padding: "8px",
-                                                // width: "10px",
                                                 textAlign: "right",
                                                 color: "#555",
-                                                width: "10%",
                                             }}
                                         >
-                                            Voucher Amt
+                                            Price
                                         </TableCell>
                                         <TableCell
                                             style={{
                                                 fontSize: "12px",
                                                 padding: "8px",
-                                                textAlign: "center",
+                                                textAlign: "right",
                                                 color: "#555",
                                             }}
                                         >
-                                            Payment Type
+                                            Total
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {data?.map((item) => (
-                                        <TableRow key={item.id}>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "left",
-                                                }}
-                                            >
-                                                {item.canteen?.name}
-                                            </TableCell>
-                                            <TableCell style={{ fontSize: "12px", padding: "8px", width:"30%", textAlign: "center" }}>
-                                                {item.order_id}
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                }}
-                                            >
-                                                ₹{Number(item.voucher_amt ?? 0) || ""}
+                                        <TableRow key={item?.item_id}>
+                                            <TableCell style={{ fontSize: "12px", padding: "8px" }}>
+                                                {item.name}
                                             </TableCell>
                                             <TableCell
                                                 style={{
@@ -205,7 +192,25 @@ const UserOrdersViewItems = () => {
                                                     textAlign: "center",
                                                 }}
                                             >
-                                                {item.payment_type}
+                                                {item.qty}
+                                            </TableCell>
+                                            <TableCell
+                                                style={{
+                                                    fontSize: "12px",
+                                                    padding: "8px",
+                                                    textAlign: "right",
+                                                }}
+                                            >
+                                                ₹{item.price}
+                                            </TableCell>
+                                            <TableCell
+                                                style={{
+                                                    fontSize: "12px",
+                                                    padding: "8px",
+                                                    textAlign: "right",
+                                                }}
+                                            >
+                                                ₹{item.total}
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -220,7 +225,7 @@ const UserOrdersViewItems = () => {
                                                 textAlign: "right",
                                             }}
                                         >
-                                            <strong>₹{totalPrice}</strong>
+                                            <strong>₹{order?.total_amount}</strong>
                                         </TableCell>
                                     </TableRow>
 
@@ -283,8 +288,8 @@ const UserOrdersViewItems = () => {
                         </Typography>
 
                         {/* Print Button */}
-                        <Grid container justifyContent="center" style={{ marginTop: "20px", gap: "10px" }}>
-                            <Grid item>
+                        <Grid container justifyContent="center" style={{ marginTop: "20px", gap: 2 }}>
+                            <Grid item spacing={2}>
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -297,13 +302,12 @@ const UserOrdersViewItems = () => {
                                 >
                                     Print Bill
                                 </Button>
-
                             </Grid>
                             <Grid item>
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={() => dispatch(setUserItemViewId(""))}
+                                    onClick={() => setUserItemViewId("")}
                                     style={{
                                         fontSize: "12px",
                                         textTransform: "none",

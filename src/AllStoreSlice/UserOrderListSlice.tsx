@@ -3,7 +3,7 @@ import { GetOrderTypes, QuantityType } from "../AllTypes";
 
 interface ItemViewType {
     id: string,
-    data: GetOrderTypes[],
+    data: QuantityType[],
     order: GetOrderTypes | null
 }
 

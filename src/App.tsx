@@ -11,7 +11,7 @@ import LoginCanteenPage from './LoginCanteenPage';
 import { OrderList } from './Orders/OrderList';
 import { baseUrl } from './ApiEndPoint';
 import { useDispatch } from 'react-redux';
-import { setLoginCanteenData, setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice';
+import { setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice';
 import axios from 'axios';
 import ProductList from './ProductList/ProductList';
 import SelectCanteen from './SelectCanteen';
@@ -20,8 +20,9 @@ import Qrcode from './Qrcode';
 import { setCanteenDataSlice } from './AllStoreSlice/CanteenIdSlice';
 import Supplier from './Supplier/supplier';
 import Purchases from './Purchase/Purchases';
-import ItemQuantityDetails from './POSPages/ItemQuantityDetails';
 import { MobileViewItemDetails } from './UserPosPage.tsx/MobileViewItemDetails';
+import MyOrderList from './UserPosPage.tsx/MyOrderList';
+import UserLayout from './UserPosPage.tsx/UserLayout';
 
 
 function PrivateRoute({ redirectTo }: any) {
@@ -52,10 +53,6 @@ function App() {
         <QueryClientProvider client={queryClient}>
             <Router>
                 <AppContent dispatch={dispatch} />
-                <Routes>
-                    <Route path="/user" element={<UserPosListWrapper />} />
-                    <Route path='/view_item' element={<MobileViewItemDetails />} />
-                </Routes>
             </Router>
         </QueryClientProvider>
     );
@@ -66,59 +63,71 @@ function AppContent({ dispatch }: { dispatch: any }) {
     const canteen_user_id = localStorage.getItem("canteen_user_id");
     const canteen_data = localStorage.getItem("canteen_name");
     const navigate = useNavigate();
+
     useEffect(() => {
         if (token) {
-            axios.get(`${baseUrl}/user/token/verify`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }).then((res: any) => {
-                if (canteen_user_id === null) {
-                    navigate("/selectCanteen");
-                }
-                dispatch(setLoginCanteenUser(res.data.user));
-                dispatch(setLoginCanteenUserToken(res.data.token));
-                dispatch(setCanteenDataSlice(JSON.parse(canteen_data as string)));
-            }).catch((error: any) => {
-                toast.error(error?.response?.data?.error);
-                localStorage.removeItem("canteen_token");
-                localStorage.removeItem("canteen_user_id");
-                localStorage.removeItem("canteen_data");
-                navigate("/login");
-            });
+            axios
+                .get(`${baseUrl}/user/token/verify`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((res: any) => {
+                    if (canteen_user_id === null) {
+                        navigate("/selectCanteen");
+                    }
+                    dispatch(setLoginCanteenUser(res.data.user));
+                    dispatch(setLoginCanteenUserToken(res.data.token));
+                    dispatch(setCanteenDataSlice(JSON.parse(canteen_data as string)));
+                })
+                .catch((error: any) => {
+                    toast.error(error?.response?.data?.error);
+                    localStorage.clear();
+                    navigate("/login");
+                });
         }
     }, []);
 
     return (
         <>
             <Routes>
+                {/* Public Routes */}
                 <Route element={<PublicRoute redirectTo="/dashboard" />}>
-                    <Route path='/login' element={<LoginCanteenPage />} />
+                    <Route path="/login" element={<LoginCanteenPage />} />
                 </Route>
+
+                {/* Private Routes */}
                 <Route element={<PrivateRoute redirectTo="/login" />}>
                     <Route element={<Layout />}>
-                        <Route path='/' element={<Navigate to="/dashboard" />} />
+                        <Route path="/" element={<Navigate to="/dashboard" />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/orders" element={<OrderList />} />
                         <Route path="/canteen" element={<CanteenList />} />
                         <Route path="/products" element={<ProductList />} />
                         <Route path="/selectCanteen" element={<SelectCanteen />} />
-                        <Route path='/products-items' element={<ProductList />} />
+                        <Route path="/products-items" element={<ProductList />} />
                         <Route path="/supplier" element={<Supplier />} />
                         <Route path="/purchase" element={<Purchases />} />
                     </Route>
                 </Route>
+
+                <Route path="/user" element={<UserLayout />}>
+                    <Route index element={<UserPosListWrapper />} />
+                    <Route path="/user/view_item" element={<MobileViewItemDetails />} />
+                    <Route path="/user/order/view" element={<MyOrderList />} />
+                </Route>
+
+
                 <Route element={<PrivateRoute redirectTo="/login" />}>
                     <Route path="/qrcode" element={<Qrcode />} />
                     <Route path="/pos" element={<PosList />} />
                 </Route>
-
             </Routes>
+
             <AllModalList />
             <ToastContainer />
         </>
     );
 }
+
 
 export default App;
 
@@ -127,6 +136,7 @@ function UserPosListWrapper() {
     const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search);
     const canteenId = queryParams.get("canteen_id");
+    console.log(canteenId);
     useEffect(() => {
         if (!canteenId) {
             toast.error("Canteen ID is missing!");
