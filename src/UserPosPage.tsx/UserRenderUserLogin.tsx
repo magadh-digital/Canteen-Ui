@@ -10,6 +10,8 @@ import AnimatedMessage from "../POSPages/AnimatedMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Store";
 import { setUser } from "../AllStoreSlice/UserSaveSlice";
+import { SetLoginModel } from "../AllStoreSlice/LoginSlice";
+import RenderUserLoginModal from "../Modal/RendeUserLoginModal";
 
 
 export interface UserDataType {
@@ -104,6 +106,12 @@ export const UserRenderUserLogin = ({
         }))
     }, [])
 
+
+    const { user: userLogin } = useSelector((state: RootState) => state.LoginSlice)
+    const handleOpenLoginModal = () => {
+        dispatch(SetLoginModel(true))
+    }
+
     return (
         <Box sx={{
             display: "flex",
@@ -118,6 +126,27 @@ export const UserRenderUserLogin = ({
                 justifyContent: "start",
                 bgcolor: colors.grey[50],
             }}>
+
+            { !user?.id &&
+             <Button
+                onClick={handleOpenLoginModal}
+                style={{
+                    backgroundColor: colors.green[800],
+                    color: "white",
+                    borderRadius: "5px",
+                    padding: "10px 20px",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    marginTop: "100px",
+                    marginLeft: "10px",
+
+                }} 
+            >
+                Login
+            </Button>
+
+            }
+
                 {!loginUser && !user && (
                     <Stack sx={{ mt: 10, }} spacing={2} width={"100%"}>
                         <Stack
@@ -281,6 +310,7 @@ export const UserRenderUserLogin = ({
                     createdOrderData={createOrderData}
                 />
             </Box>
+            <RenderUserLoginModal />
         </Box>
     );
 };

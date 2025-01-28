@@ -9,6 +9,7 @@ import AllMenuItemsSlice from "./AllStoreSlice/AllMenuItemsSlice";
 import canteenDataSlice from "./AllStoreSlice/CanteenIdSlice";
 import UserSaveSlice from "./AllStoreSlice/UserSaveSlice";
 import UserOrderListSlice from "./AllStoreSlice/UserOrderListSlice";
+import LoginSlice from "./AllStoreSlice/LoginSlice";
 
 
 export const store = configureStore({
@@ -22,7 +23,8 @@ export const store = configureStore({
         allMenuItems: AllMenuItemsSlice,
         canteenData: canteenDataSlice,
         user: UserSaveSlice,
-        OrderViewList: UserOrderListSlice
+        OrderViewList: UserOrderListSlice,
+        LoginSlice:LoginSlice
 
     }
 })
