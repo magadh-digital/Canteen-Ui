@@ -42,10 +42,12 @@ export const GetOrderDetailsApi = ({
     page,
     limit,
     canteen_id,
+    user_id,
 }: {
-    page: number,
-    limit: number,
-    canteen_id: string
+    page?: number,
+    limit?: number,
+    canteen_id?: string
+    user_id?: string
 }) => {
     const orderDetails = async () => {
         try {
@@ -53,9 +55,10 @@ export const GetOrderDetailsApi = ({
                 params: {
                     page,
                     limit,
-                    canteen_id
+                    canteen_id,
+                    user_id
                 }
-            })
+            })  
             const data = response.data as UpdateOrderType
             return data
         } catch (error) {
@@ -63,7 +66,7 @@ export const GetOrderDetailsApi = ({
         }
     }
     return useQuery({
-        queryKey: ['orderdetails', page, limit, canteen_id],
+        queryKey: ['orderdetails', page, limit, canteen_id, user_id],
         queryFn: orderDetails
     })
 }

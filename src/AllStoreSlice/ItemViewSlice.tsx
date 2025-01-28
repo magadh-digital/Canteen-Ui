@@ -4,7 +4,7 @@ import { setOrderData } from "./PriceAndQuantitySlice";
 
 interface ItemViewType {
     id: string,
-    data: QuantityType[],
+    data: GetOrderTypes[],
     order:GetOrderTypes | null
 }
 
@@ -28,8 +28,6 @@ const ItemViewSlice = createSlice({
         setOrderDetails: (state, action) => {
             state.order = action.payload
         }
-
-
     },
 });
 

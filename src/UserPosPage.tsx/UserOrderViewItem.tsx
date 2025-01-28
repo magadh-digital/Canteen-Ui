@@ -1,19 +1,23 @@
 
-import { Box, Button, Container, Divider, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Button, Container, Divider, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery } from '@mui/material';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { setItemViewId } from '../AllStoreSlice/ItemViewSlice';
 import { RootState } from '../Store';
+import { setUserItemViewId } from '../AllStoreSlice/UserOrderListSlice';
 
-const OrdersViewItems = () => {
-    const { id, data, order } = useSelector((state: RootState) => state.ItemView)
+const UserOrdersViewItems = () => {
+    const { id, data, order } = useSelector((state: RootState) => state.OrderViewList)
     console.log(data)
+    console.log(id)
+    console.log(order)
+    const totalPrice = data.reduce((acc, item) => acc + item.total_amount, 0);
     const dispatch = useDispatch()
+    const mobile = useMediaQuery('(max-width:600px)');
     return (
         <>
             <Modal
                 open={id !== ""}
-                onClose={() => dispatch(setItemViewId(""))}
+                onClose={() => dispatch(setUserItemViewId(""))}
                 aria-labelledby="modal-modal-title"
             >
                 <Box >
@@ -26,6 +30,9 @@ const OrdersViewItems = () => {
                             fontFamily: "Roboto, sans-serif",
                             fontSize: "12px",
                             backgroundColor: "#f9f9f9",
+                            height: "80vh",
+                            overflowY: "auto",
+                            overflowX: "hidden"
                         }}
                     >
                         {/* Header */}
@@ -57,62 +64,45 @@ const OrdersViewItems = () => {
                             {order?.canteen?.email || "Not Available"}
                         </Typography>
 
-                       
-                        <TableContainer  sx={{ border: "1px solid #ccc" }}>
+                        <TableContainer sx={{ border: "1px solid #ccc", mt: "5px", }}>
+                            <Table size="small" sx={{
 
-                        <Table size="small">
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px" }}>
-                                        Order ID:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right",padding:"8px" }}>{order?.order_id}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333" ,padding:"8px"}}>
-                                        Order Date:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right",padding:"8px" }}>
-                                        {moment(order?.created_at).format("DD-MM-YYYY")}
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px" }}>
-                                        Customer Name:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px", textAlign: "right" }}>{order?.customer_name}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333" ,padding:"8px"}}>
-                                        Customer Email:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px",
-                                        textAlign: "right"
-                                        , fontWeight: "bold", color: "#333" ,padding:"8px"}}>{order?.customer_email || 'N/A'}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px" }}>
-                                        Customer Phone:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px", textAlign: "right" }}>{order?.user?.phone}</TableCell>
-                                </TableRow>
-                               
+                            }}>
+                                <TableBody>
+                                    <TableRow>
 
-                            </TableBody>
-
-                            
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Customer Name:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", textAlign: "right" }}>{order?.customer_name}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Customer Email:
+                                        </TableCell>
+                                        <TableCell style={{
+                                            fontSize: "12px",
+                                            textAlign: "right"
+                                            , fontWeight: "bold", color: "#333", padding: "8px"
+                                        }}>{order?.user?.email || 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Customer Phone:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", textAlign: "right" }}>{order?.user?.phone}</TableCell>
+                                    </TableRow>
 
 
+                                </TableBody>
 
-
-
-                        
-                        </Table>
+                            </Table>
                         </TableContainer>
 
-                        <Divider style={{ marginBottom: "15px" }} />
 
-                        {/* Items Table */}
+                        <Divider style={{ marginBottom: "15px" }} />
                         <Typography
                             variant="body2"
                             style={{
@@ -122,7 +112,7 @@ const OrdersViewItems = () => {
                                 color: "#333",
                             }}
                         >
-                            Items
+                            Orders
                         </Typography>
                         <TableContainer
                             component={Paper}
@@ -130,15 +120,47 @@ const OrdersViewItems = () => {
                                 boxShadow: "none",
                                 border: "1px solid #e0e0e0",
                                 borderRadius: "5px",
+                                height: mobile ? "200px" : "340px",
+                            }}
+                            sx={{
+                                "&::-webkit-scrollbar": {
+                                    width: "4px",
+                                },
+                                "&::-webkit-scrollbar-track": {
+                                    backgroundColor: "#f1f1f1",
+                                },
                             }}
                         >
                             <Table size="small">
                                 <TableHead>
                                     <TableRow style={{ backgroundColor: "#f1f1f1" }}>
                                         <TableCell
-                                            style={{ fontSize: "12px", padding: "8px", color: "#555" }}
+                                            style={{ fontSize: "12px", width: "20%", padding: "8px", color: "#555" }}
                                         >
-                                            Item
+                                            Canteen Name
+                                        </TableCell>
+                                        <TableCell
+                                            style={{
+                                                fontSize: "12px",
+                                                padding: "8px",
+                                                textAlign: "center",
+                                                color: "#555",
+                                                width: "30%",
+                                            }}
+                                        >
+                                            Order Id
+                                        </TableCell>
+                                        <TableCell
+                                            style={{
+                                                fontSize: "12px",
+                                                padding: "8px",
+                                                // width: "10px",
+                                                textAlign: "right",
+                                                color: "#555",
+                                                width: "10%",
+                                            }}
+                                        >
+                                            Voucher Amt
                                         </TableCell>
                                         <TableCell
                                             style={{
@@ -148,41 +170,33 @@ const OrdersViewItems = () => {
                                                 color: "#555",
                                             }}
                                         >
-                                            Qty
-                                        </TableCell>
-                                        <TableCell
-                                            style={{
-                                                fontSize: "12px",
-                                                padding: "8px",
-                                                textAlign: "right",
-                                                color: "#555",
-                                            }}
-                                        >
-                                            Price
-                                        </TableCell>
-                                        <TableCell
-                                            style={{
-                                                fontSize: "12px",
-                                                padding: "8px",
-                                                textAlign: "right",
-                                                color: "#555",
-                                            }}
-                                        >
-                                            Total
+                                            Payment Type
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {order?.items.map((item: {
-                                        item_id: string;
-                                        name: string;
-                                        qty: number;
-                                        price: number;
-                                        total: number;
-                                    }) => (
-                                        <TableRow key={item.item_id}>
-                                            <TableCell style={{ fontSize: "12px", padding: "8px" }}>
-                                                {item.name}
+                                    {data?.map((item) => (
+                                        <TableRow key={item.id}>
+                                            <TableCell
+                                                style={{
+                                                    fontSize: "12px",
+                                                    padding: "8px",
+                                                    textAlign: "left",
+                                                }}
+                                            >
+                                                {item.canteen?.name}
+                                            </TableCell>
+                                            <TableCell style={{ fontSize: "12px", padding: "8px", width:"30%", textAlign: "center" }}>
+                                                {item.order_id}
+                                            </TableCell>
+                                            <TableCell
+                                                style={{
+                                                    fontSize: "12px",
+                                                    padding: "8px",
+                                                    textAlign: "right",
+                                                }}
+                                            >
+                                                ₹{Number(item.voucher_amt ?? 0) || ""}
                                             </TableCell>
                                             <TableCell
                                                 style={{
@@ -191,25 +205,7 @@ const OrdersViewItems = () => {
                                                     textAlign: "center",
                                                 }}
                                             >
-                                                {item.qty}
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                }}
-                                            >
-                                                ₹{item.price}
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                }}
-                                            >
-                                                ₹{item.total}
+                                                {item.payment_type}
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -224,31 +220,31 @@ const OrdersViewItems = () => {
                                                 textAlign: "right",
                                             }}
                                         >
-                                            <strong>₹{order?.total_amount}</strong>
+                                            <strong>₹{totalPrice}</strong>
                                         </TableCell>
                                     </TableRow>
 
                                     {
                                         order?.voucher && (
                                             <TableRow>
-                                            <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px" }}>
-                                                <strong>Voucher :</strong>
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                    color: "green"
-                                                }}
-                                            >
-                                                <strong>- ₹ {order?.voucher_amt?.toString()}</strong>
-                                            </TableCell>
-                                        </TableRow>
+                                                <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px" }}>
+                                                    <strong>Voucher :</strong>
+                                                </TableCell>
+                                                <TableCell
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        padding: "8px",
+                                                        textAlign: "right",
+                                                        color: "green"
+                                                    }}
+                                                >
+                                                    <strong>- ₹ {order?.voucher_amt?.toString()}</strong>
+                                                </TableCell>
+                                            </TableRow>
                                         )
                                     }
 
-<TableRow>
+                                    <TableRow>
                                         <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px" }}>
                                             <strong>Payable :</strong>
                                         </TableCell>
@@ -262,14 +258,14 @@ const OrdersViewItems = () => {
                                             <strong>₹{order?.payable_amt?.toString()}</strong>
                                         </TableCell>
                                     </TableRow>
-                                    
+
                                 </TableBody>
                             </Table>
                         </TableContainer>
 
                         <Divider style={{ margin: "15px 0" }} />
 
-                       
+
                         <Divider style={{ margin: "15px 0" }} />
 
                         {/* Footer */}
@@ -287,7 +283,7 @@ const OrdersViewItems = () => {
                         </Typography>
 
                         {/* Print Button */}
-                        <Grid container justifyContent="center" style={{ marginTop: "20px" }}>
+                        <Grid container justifyContent="center" style={{ marginTop: "20px", gap: "10px" }}>
                             <Grid item>
                                 <Button
                                     variant="contained"
@@ -301,6 +297,21 @@ const OrdersViewItems = () => {
                                 >
                                     Print Bill
                                 </Button>
+
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => dispatch(setUserItemViewId(""))}
+                                    style={{
+                                        fontSize: "12px",
+                                        textTransform: "none",
+                                        backgroundColor: "#007bff",
+                                    }}
+                                >
+                                    Close
+                                </Button>
                             </Grid>
                         </Grid>
                     </Container>
@@ -312,4 +323,4 @@ const OrdersViewItems = () => {
     )
 }
 
-export default OrdersViewItems
+export default UserOrdersViewItems

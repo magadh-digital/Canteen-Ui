@@ -7,8 +7,7 @@ import { Delete } from '@mui/icons-material';
 import { decrementQuantity, incrementQuantity, removeItem, resetData, setData, setnewData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQuantitySlice';
 import React, { useEffect, useRef, useState } from 'react';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -105,9 +104,7 @@ export const MobileViewItemDetails = () => {
 
     };
 
-    const handleSelectItem = () => {
-
-    }
+ 
 
 
 

@@ -11,7 +11,7 @@ import LoginCanteenPage from './LoginCanteenPage';
 import { OrderList } from './Orders/OrderList';
 import { baseUrl } from './ApiEndPoint';
 import { useDispatch } from 'react-redux';
-import { setLoginCanteenData, setLoginCanteenUser } from './AllStoreSlice/LoginCanteenUserSlice';
+import { setLoginCanteenData, setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice';
 import axios from 'axios';
 import ProductList from './ProductList/ProductList';
 import SelectCanteen from './SelectCanteen';
@@ -77,6 +77,7 @@ function AppContent({ dispatch }: { dispatch: any }) {
                     navigate("/selectCanteen");
                 }
                 dispatch(setLoginCanteenUser(res.data.user));
+                dispatch(setLoginCanteenUserToken(res.data.token));
                 dispatch(setCanteenDataSlice(JSON.parse(canteen_data as string)));
             }).catch((error: any) => {
                 toast.error(error?.response?.data?.error);

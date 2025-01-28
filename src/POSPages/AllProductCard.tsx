@@ -28,8 +28,7 @@ import { RootState } from '../Store';
 const AllProductCard = ({ canteenId }: { canteenId: string }) => {
     const [Search, setSearch] = useState<string>('');
     const [Category, setCategory] = useState<string>('ALL');
-
-
+    const { user } = useSelector((state: RootState) => state.LoginCanteenUser)
     const { data, isLoading } = GetMenuItemListApi({
         canteen_id: canteenId,
     });
@@ -246,37 +245,48 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
 
                                 </Card>
                             ))
-                        ) : filteredItems.length === 0 || Search ? (
-                            <Stack
-                                direction="row"
-                                sx={{
-                                    width: '70vw',
-                                    height: '70vh',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        color: colors.grey[600],
-                                        textAlign: 'center',
-                                        bgcolor: colors.grey[200],
-                                        p: 2,
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={() => dispatch(setAddProduct(canteenId))}
-                                >
-                                    <AddIcon
-                                        sx={{
-                                            fontSize: '80px',
-                                            color: colors.grey[600],
-                                            height: '50px',
-                                        }}
-                                    />
-                                </Typography>
-                            </Stack>
-                        ) : null}
+                        ) :
+
+                            filteredItems.length === 0 || Search ? (<>
+                                {user !== null && user?.role !== "ADMIN" ? (
+                                    null
+                                ) : (
+                                    <>
+                                        <Stack
+                                            direction="row"
+                                            sx={{
+                                                width: '70vw',
+                                                height: '70vh',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Typography
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    color: colors.grey[600],
+                                                    textAlign: 'center',
+                                                    bgcolor: colors.grey[200],
+                                                    p: 2,
+                                                    cursor: 'pointer',
+                                                }}
+                                                onClick={() => dispatch(setAddProduct(canteenId))}
+                                            >
+                                                <AddIcon
+                                                    sx={{
+                                                        fontSize: '80px',
+                                                        color: colors.grey[600],
+                                                        height: '50px',
+                                                    }}
+                                                />
+                                            </Typography>
+                                        </Stack>
+                                    </>
+                                )}
+                            </>
+
+
+                            ) : null}
                     </Box>
                 )}
             </Box>

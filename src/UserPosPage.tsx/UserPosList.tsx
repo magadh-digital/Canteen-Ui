@@ -7,15 +7,23 @@ import {
     Popover,
     List,
     ListItem,
-    Divider
+    Divider,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
 } from "@mui/material"
-import { GridMenuIcon } from "@mui/x-data-grid";
+import { GridMenuIcon, GridMoreVertIcon } from "@mui/x-data-grid";
 // import React, { useEffect } from "react";
 
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
-import ListIcon from '@mui/icons-material/List';
 
 import moment from 'moment';
 import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
@@ -23,6 +31,11 @@ import AllProductCard from '../POSPages/AllProductCard';
 import UserPaymentMethod from './UserPaymentMethod';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AccountCircle, ListAlt, LogoutOutlined } from '@mui/icons-material';
+import { toast } from 'react-toastify';
+import { GetOrderDetailsApi } from '../AllGetApi';
+import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from '../AllStoreSlice/UserOrderListSlice';
+import { setUser } from '../AllStoreSlice/UserSaveSlice';
 
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
@@ -53,20 +66,46 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
+    const { user } = useSelector((state: RootState) => state.user)
     const theme = useTheme()
-    const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+    const open = Boolean(anchorEl);
+    const { data } = GetOrderDetailsApi({
+        user_id: user?.id || ""
+    })
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const open = Boolean(anchorEl);
-    const id = open ? 'list-popover' : undefined;
-    const listItems = [
-        'Item 1',
-        'Item 2',
+    useEffect(() => {
+        const userSlice = JSON.parse(localStorage.getItem('user') || "{}")
+        dispatch(setUser(userSlice))
+    }, [])
 
-    ];
+    const handleLogout = () => {
+        if (user) {
+            const confirm = window.confirm('Are you sure you want to logout?');
+            if (confirm) {
+                localStorage.removeItem('user_token')
+                localStorage.removeItem('user')
+                toast.success("Logout Successfully")
+                dispatch(setUser({}))
+                handleClose()
+            } else {
+                return
+            }
+        } else {
+            alert("You are not logged in")
+        }
+    }
+
+    const dispatch = useDispatch()
+    const handleOpenList = () => {
+        dispatch(setUserItemViewId(user?.id || ""))
+        dispatch(setuserOrderDetails(data?.orders[0] || []))
+        dispatch(setUserItemViewData(data?.orders))
+    }
 
     const mobile = useMediaQuery('(min-width:800px)');
     const { data: canteen } = useSelector((state: RootState) => state.Quantity)
@@ -99,8 +138,6 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                 }}>
 
                 <Toolbar>
-
-
                     <Stack
                         width={"100%"}
                         direction="row"
@@ -133,51 +170,112 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                 ({currentDate})
                             </Typography>
                         </div>
+
                         <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleOpen}
-                            edge="start"
-                            sx={{
-                                marginRight: 5,
-                                color: 'black',
-                                ...(open && { display: 'none' })
-                            }}
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? 'long-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleClick}
                         >
                             <GridMenuIcon />
                         </IconButton>
-                        <Popover
-                            id={id}
-                            open={open}
+                        <Menu
+                            id="long-menu"
+                            MenuListProps={{
+                                "aria-labelledby": "long-button",
+                            }}
                             anchorEl={anchorEl}
+                            open={open}
                             onClose={handleClose}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
                             PaperProps={{
+                                elevation: 3,
                                 style: {
-                                    maxHeight: 200,
-                                    width: 200,
-                                    padding: '8px',
+                                    maxHeight: 90 * 4.5,
+                                    width: "200px",
+                                    borderRadius: "8px",
+                                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
                                 },
                             }}
                         >
-                            <List>
-                                {listItems.map((item, index) => (
-                                    <React.Fragment key={index}>
-                                        <ListItem button>
-                                            <ListItemText primary={item} />
-                                        </ListItem>
-                                        {index < listItems.length - 1 && <Divider />}
-                                    </React.Fragment>
-                                ))}
-                            </List>
-                        </Popover>
+                            <MenuItem
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 0.5,
+                                    py: 0.8,
+                                    px: 1.5,
+                                    "&:hover": { bgcolor: "grey.100" },
+                                }}
+                            >
+                                <ListItemIcon
+                                    sx={{
+                                        color: "primary.main",
+                                        minWidth: "28px",
+                                    }}
+                                >
+                                    <AccountCircle fontSize="small" />
+                                </ListItemIcon>
+                                <div >
+                                    <Typography variant="body2" fontWeight="bold">
+                                        {user?.name || "No User"}
+                                    </Typography>
+                                    <Typography variant="body2" fontSize="10px">
+                                        {user?.phone || ""}
+                                    </Typography>
+                                </div>
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem
+                                onClick={handleOpenList}
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 0.5,
+                                    py: 0.8,
+                                    px: 1.5,
+                                    "&:hover": { bgcolor: "grey.100" },
+                                }}
+                            >
+                                <ListItemIcon
+                                    sx={{
+                                        color: "secondary.main",
+                                        minWidth: "28px",
+                                    }}
+                                >
+                                    <ListAlt fontSize="small" />
+                                </ListItemIcon>
+                                <Typography variant="body2" fontWeight="500">
+                                    My Order List
+                                </Typography>
+                            </MenuItem>
+                            <Divider />
+
+                            <MenuItem
+                                onClick={handleLogout}
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 0.5,
+                                    py: 0.8,
+                                    px: 1.5,
+                                    "&:hover": { bgcolor: "grey.100" },
+                                }}
+                            >
+                                <ListItemIcon
+                                    sx={{
+                                        color: "error.main",
+                                        minWidth: "28px",
+                                    }}
+                                >
+                                    <LogoutOutlined fontSize="small" />
+                                </ListItemIcon>
+                                <Typography variant="body2" fontWeight="500">
+                                    Logout
+                                </Typography>
+                            </MenuItem>
+                        </Menu>
                     </Stack>
                 </Toolbar>
             </AppBar>
@@ -315,3 +413,5 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
 }
 
 export default UserPosList
+
+
