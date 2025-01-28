@@ -49,6 +49,7 @@ export const RenderUserLogin = ({
                 user: {
                     name: user.name,
                     phone: user.phone,
+                    
                     email: user.email,
                     role: user.role,
                     cp_code: user.cp_code,

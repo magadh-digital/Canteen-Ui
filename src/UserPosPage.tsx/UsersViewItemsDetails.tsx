@@ -9,6 +9,7 @@ import { setPrice } from '../AllStoreSlice/PriceAndQuantitySlice'
 import { UserDataType } from './UserRenderUserLogin'
 import { GetReamainingVoucherApi } from '../AllGetApi'
 import { toast } from 'react-toastify'
+import { SetLoginModel } from '../AllStoreSlice/LoginSlice'
 
 
 const UsersViewItemsDetails = ({ userData,
@@ -82,6 +83,17 @@ const UsersViewItemsDetails = ({ userData,
             refetch()
         }
     }, [])
+
+
+
+    const {user:loginUser} = useSelector((state:RootState) => state.LoginSlice)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if(!loginUser?.id){
+            dispatch(SetLoginModel(true))
+        }
+    }, [loginUser?.id])
 
 
     return (
@@ -372,7 +384,7 @@ const UsersViewItemsDetails = ({ userData,
                 }}
 
                 >
-                    <InputLabel id="demo-simple-select-label" >SELECT PAYMENT METHOD</InputLabel>
+                    <InputLabel id="demo-simple-select-label">SELECT PAYMENT METHOD</InputLabel>
                     <Select
                         size='small'
 

@@ -19,7 +19,7 @@ export const initialState: UserDataType = {
         email: "",
         role: "",
         cp_code: "",
-    }
+    },
 }
 
 

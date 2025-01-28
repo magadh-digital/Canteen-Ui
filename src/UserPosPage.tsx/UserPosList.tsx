@@ -1,41 +1,34 @@
-import { styled, useTheme, } from '@mui/material/styles';
 import {
     Box,
     Button,
-    colors,
-    IconButton, ListItemIcon, ListItemIconProps, ListItemText, ListItemButton, Menu, MenuItem, Stack, Toolbar, Tooltip, Typography, useMediaQuery,
-    Popover,
-    List,
-    ListItem,
     Divider,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material"
-import { GridMenuIcon, GridMoreVertIcon } from "@mui/x-data-grid";
+    IconButton, ListItemIcon,
+    Menu, MenuItem, Stack, Toolbar,
+    Typography,
+    colors,
+    useMediaQuery
+} from "@mui/material";
+import { styled, useTheme, } from '@mui/material/styles';
+import { GridMenuIcon } from "@mui/x-data-grid";
 // import React, { useEffect } from "react";
 
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 
+import { AccountCircle, ListAlt, Login, LogoutOutlined } from '@mui/icons-material';
 import moment from 'moment';
-import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
-import AllProductCard from '../POSPages/AllProductCard';
-import UserPaymentMethod from './UserPaymentMethod';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AccountCircle, ListAlt, LogoutOutlined } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { GetOrderDetailsApi } from '../AllGetApi';
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from '../AllStoreSlice/UserOrderListSlice';
 import { setUser } from '../AllStoreSlice/UserSaveSlice';
+import AllProductCard from '../POSPages/AllProductCard';
+import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
+import UserPaymentMethod from './UserPaymentMethod';
+import RenderUserLoginModal from "../Modal/RendeUserLoginModal";
+import { SetLogOut, SetLoginModel } from "../AllStoreSlice/LoginSlice";
 
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
@@ -66,12 +59,10 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
-    const { user } = useSelector((state: RootState) => state.user)
+    const { user }: any = useSelector((state: RootState) => state.LoginSlice)
     const theme = useTheme()
     const open = Boolean(anchorEl);
-    const { data } = GetOrderDetailsApi({
-        user_id: user?.id || ""
-    })
+    const { data } = GetOrderDetailsApi({ user_id: user?._id || "" })
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -90,7 +81,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                 localStorage.removeItem('user_token')
                 localStorage.removeItem('user')
                 toast.success("Logout Successfully")
-                dispatch(setUser({}))
+                dispatch(SetLogOut())
                 handleClose()
             } else {
                 return
@@ -102,7 +93,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
 
     const dispatch = useDispatch()
     const handleOpenList = () => {
-        dispatch(setUserItemViewId(user?.id || ""))
+        dispatch(setUserItemViewId(user?._id || ""))
         dispatch(setuserOrderDetails(data?.orders[0] || []))
         dispatch(setUserItemViewData(data?.orders))
     }
@@ -119,6 +110,14 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
 
         return () => clearInterval(intervalId);
     }, []);
+
+
+    const handleOpenLoginModal = () => {
+        dispatch(SetLoginModel(true))
+    }
+
+
+   
 
     return (
         <Box sx={{
@@ -181,6 +180,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                         >
                             <GridMenuIcon />
                         </IconButton>
+
                         <Menu
                             id="long-menu"
                             MenuListProps={{
@@ -199,7 +199,10 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                 },
                             }}
                         >
-                            <MenuItem
+
+                            {user?.id ? 
+
+                              <MenuItem
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
@@ -219,13 +222,48 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                 </ListItemIcon>
                                 <div >
                                     <Typography variant="body2" fontWeight="bold">
+
                                         {user?.name || "No User"}
                                     </Typography>
                                     <Typography variant="body2" fontSize="10px">
                                         {user?.phone || ""}
                                     </Typography>
                                 </div>
-                            </MenuItem>
+                            </MenuItem>: 
+                            <MenuItem
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 0.5,
+                                py: 0.8,
+                                px: 1.5,
+                                "&:hover": { bgcolor: "grey.100" },
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    color: "primary.main",
+                                    minWidth: "28px",
+                                }}
+                            >
+                                <Login fontSize="small" />
+                            </ListItemIcon>
+                            <div  
+                             onClick={handleOpenLoginModal}
+                             style={{
+                                cursor: "pointer"
+                             }}
+                            >
+                                <Typography  
+                                 
+                                variant="body2" fontWeight="bold">
+
+                                    LOGIN
+                                </Typography>
+                              
+                            </div>
+                        </MenuItem>
+                            }
                             <Divider />
                             <MenuItem
                                 onClick={handleOpenList}
@@ -271,7 +309,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                 >
                                     <LogoutOutlined fontSize="small" />
                                 </ListItemIcon>
-                                <Typography variant="body2" fontWeight="500">
+                                <Typography  variant="body2" fontWeight="500">
                                     Logout
                                 </Typography>
                             </MenuItem>
@@ -407,6 +445,7 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                     </>
                 )}
             </Box>
+            <RenderUserLoginModal />
 
         </Box >
     )
