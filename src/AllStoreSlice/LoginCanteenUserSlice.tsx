@@ -54,27 +54,3 @@ const LoginCanteenUserSlice = createSlice({
 export const { setLoginCanteenUser, setLoginCanteenUserToken, setLoginCanteenData } = LoginCanteenUserSlice.actions
 export default LoginCanteenUserSlice.reducer
 
-
-// useEffect(() => {
-//     const token = localStorage.getItem("canteen_token");
-//     const canteenData = localStorage.getItem("canteen_user");
-
-//     if (token) {
-//         // axios
-//         //     .get(`${baseUrl}/canteen/token/verify`, {
-//         //         headers: {
-//         //             Authorization: `Bearer ${token}`,
-//         //         },
-//         //     })
-//         //     .then((res: any) => {
-//         //         dispatch(setLoginCanteenUser(res.data.canteen));
-//         //     })
-//         //     .catch((error: any) => {
-//         //         toast.error(error?.response?.data?.error);
-//         //         localStorage.removeItem("token");
-//         //         navigate("/");
-//         //     });
-
-//         dispatch(setLoginCanteenUser(JSON.parse(canteenData as string)));
-//     }
-// }, [navigate]);

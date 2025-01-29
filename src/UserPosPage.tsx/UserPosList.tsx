@@ -8,21 +8,14 @@ import {
 
 } from "@mui/material"
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../Store';
 
 import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
 import AllProductCard from '../POSPages/AllProductCard';
 import UserPaymentMethod from './UserPaymentMethod';
-import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-
-import { setUser } from '../AllStoreSlice/UserSaveSlice';
-
-
-
-
-
 
 
 const UserPosList = ({ canteenId }: { canteenId: string }) => {
@@ -31,14 +24,6 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
     const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
     const mobile = useMediaQuery("(min-width:800px)");
 
-    useEffect(() => {
-        const userSlice = JSON.parse(localStorage.getItem('user') || "{}")
-        dispatch(setUser(userSlice))
-    }, [])
-
-
-
-    const dispatch = useDispatch()
 
     return (
         <Box sx={{

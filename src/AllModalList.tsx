@@ -1,4 +1,5 @@
 
+import RenderUserLoginModal from './Modal/RendeUserLoginModal'
 import OrdersViewItems from './Orders/OrdersViewItems'
 import AddMenuProduct from './POSPages/AddMenuProduct'
 import PrintPage from './POSPages/PrintPage'
@@ -13,6 +14,7 @@ const AllModalList = () => {
             <AddMenuProduct />
             <ProductItemsEdit />
             <UserOrdersViewItems />
+            <RenderUserLoginModal />
         </>
     )
 }

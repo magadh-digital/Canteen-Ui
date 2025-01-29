@@ -5,36 +5,27 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../Store'
 import { CreateOrderType, MenuItemType } from '../AllTypes'
 import { useEffect, useState } from 'react'
-import { setPrice } from '../AllStoreSlice/PriceAndQuantitySlice'
-import { UserDataType } from './UserRenderUserLogin'
 import { GetReamainingVoucherApi } from '../AllGetApi'
-import { toast } from 'react-toastify'
-import { SetLoginModel } from '../AllStoreSlice/LoginSlice'
+import { SetLoginModel, SetUser } from '../AllStoreSlice/LoginSlice'
 
 
-const UsersViewItemsDetails = ({ userData,
+const UsersViewItemsDetails = ({
     setCreatedOrderData,
     createdOrderData,
-    setUserData
 }: {
-    userData: UserDataType,
+
     setCreatedOrderData: React.Dispatch<React.SetStateAction<CreateOrderType>>,
     createdOrderData: CreateOrderType;
-    setUserData: React.Dispatch<React.SetStateAction<UserDataType>>
+
 
 }) => {
+    const { user: userData } = useSelector((state: RootState) => state.LoginSlice)
     const [voucherChecked, setVoucherChecked] = useState(false)
-    const { orderData: data, price: totalPrice, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
-    const rateCheck = () => {
-        const value = data.reduce((acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0), 0)
-        return value
-    }
+    const { orderData: data, price: totalPrice } = useSelector((state: RootState) => state.PriceAndQuantity)
     const [alertVouhcer, setAlertVoucher] = useState(false)
-    const { data: voucherData, isLoading, refetch } = GetReamainingVoucherApi({
-        user_id: userData?.user.id || ""
+    const { data: voucherData, refetch } = GetReamainingVoucherApi({
+        user_id: userData?.id || ""
     })
-    const {user} = useSelector((state:RootState) => state.user)
-
     useEffect(() => {
         if ((userData?.vouchers ?? 0) > 0) {
             setAlertVoucher(true)
@@ -42,12 +33,11 @@ const UsersViewItemsDetails = ({ userData,
             setAlertVoucher(false)
         }
     }, [userData?.vouchers])
+
+
     useEffect(() => {
         if (voucherData) {
-            setUserData((prevState) => ({
-                ...prevState,
-                vouchers: voucherData.vouchers,
-            }));
+            dispatch(SetUser({ ...userData, vouchers: voucherData?.vouchers }))
         }
     }, [voucherData]);
     const totalPayableAmount = () => {
@@ -77,23 +67,24 @@ const UsersViewItemsDetails = ({ userData,
             total_amount: totalPayableAmount(),
             voucher: voucherChecked,
         }));
-    }, [voucherChecked, userData.vouchers, totalPrice]);
+        refetch()
+    }, [voucherChecked, userData?.vouchers, totalPrice]);
+
+
     useEffect(() => {
-        if(user){
+        if (userData) {
             refetch()
         }
     }, [])
 
 
-
-    const {user:loginUser} = useSelector((state:RootState) => state.LoginSlice)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if(!loginUser?.id){
+        if (!userData?.id) {
             dispatch(SetLoginModel(true))
         }
-    }, [loginUser?.id])
+    }, [userData?.id])
 
 
     return (
@@ -323,35 +314,7 @@ const UsersViewItemsDetails = ({ userData,
                 justifyContent: "space-between",
                 width: "100%",
             }}>
-                {/* <TableContainer>
-                    <Table aria-label="spanning table" sx={{ border: "none" }}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center" colSpan={2} sx={{ border: "none", padding: "4px" }}></TableCell>
-                                <TableCell align="right" colSpan={3} sx={{ color: "blue", border: "none" }}>Price</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell rowSpan={4} sx={{ border: "none", padding: "6px" }}></TableCell>
-                                <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Quantity</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{quantity}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Total Price</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{rateCheck()}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell sx={{ border: "none", padding: "6px", }}>Voucher</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }} colSpan={2}>{userData?.vouchers}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Total Payable Amount</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{totalPayableAmount()}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer> */}
+
             </Box>
             {alertVouhcer === true && (
                 <div style={{

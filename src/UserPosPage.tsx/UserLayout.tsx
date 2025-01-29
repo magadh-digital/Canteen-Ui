@@ -8,22 +8,10 @@ import { GetOrderDetailsApi } from '../AllGetApi'
 import { styled, useTheme } from '@mui/material/styles';
 import {
     Box,
-    Button,
-    colors,
-    IconButton, ListItemIcon, ListItemIconProps, ListItemText, ListItemButton, Menu, MenuItem, Stack, Toolbar, Tooltip, Typography, useMediaQuery,
-    Popover,
-    List,
-    ListItem,
+    IconButton, ListItemIcon, Menu, MenuItem, Stack, Toolbar, Typography, useMediaQuery,
     Divider,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
+    Button,
+
 } from "@mui/material"
 import { GridMenuIcon, GridMoreVertIcon } from "@mui/x-data-grid";
 // import {  } from '@mui/x-data-grid';
@@ -32,6 +20,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { setUser } from '../AllStoreSlice/UserSaveSlice';
 import { toast } from 'react-toastify';
 import { AccountCircle, ListAlt, LogoutOutlined } from '@mui/icons-material';
+import { SetLoginModel, SetLogOut } from '../AllStoreSlice/LoginSlice';
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -58,7 +47,7 @@ const UserLayout = () => {
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
-    const { user } = useSelector((state: RootState) => state.user)
+    const { user } = useSelector((state: RootState) => state.LoginSlice)
     const theme = useTheme()
     const open = Boolean(anchorEl);
 
@@ -77,10 +66,7 @@ const UserLayout = () => {
         if (user) {
             const confirm = window.confirm('Are you sure you want to logout?');
             if (confirm) {
-                localStorage.removeItem('user_token')
-                localStorage.removeItem('user')
-                toast.success("Logout Successfully")
-                dispatch(setUser({}))
+                dispatch(SetLogOut())
                 handleClose()
             } else {
                 return
@@ -105,6 +91,13 @@ const UserLayout = () => {
 
         return () => clearInterval(intervalId);
     }, []);
+
+    const handleOpenLogin = () => {
+        handleClose()
+        dispatch(SetLoginModel(true))
+    }
+
+
     return (
         <>
             <AppBar
@@ -151,17 +144,29 @@ const UserLayout = () => {
                                 ({currentDate})
                             </Typography>
                         </div>
+                        
 
-                        <IconButton
-                            aria-label="more"
-                            id="long-button"
-                            aria-controls={open ? 'long-menu' : undefined}
-                            aria-expanded={open ? 'true' : undefined}
-                            aria-haspopup="true"
-                            onClick={handleClick}
-                        >
-                            <GridMenuIcon />
-                        </IconButton>
+                        {user?.id ? (
+                            <>
+                                <IconButton
+                                    aria-label="more"
+                                    id="long-button"
+                                    aria-controls={open ? 'long-menu' : undefined}
+                                    aria-expanded={open ? 'true' : undefined}
+                                    aria-haspopup="true"
+                                    onClick={handleClick}
+                                >
+                                    <GridMenuIcon />
+                                </IconButton>
+                            </>
+                        ) : (
+                            <>
+                                <Button variant='outlined' onClick={handleOpenLogin}>Login</Button>
+                            </>
+                        )}
+
+
+
                         <Menu
                             id="long-menu"
                             MenuListProps={{

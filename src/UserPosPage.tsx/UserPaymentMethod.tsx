@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { CreateOrderType, MenuItemType } from '../AllTypes';
 import { resetData } from '../AllStoreSlice/AddQuantitySlice';
 import { UserDataType, UserRenderUserLogin } from './UserRenderUserLogin';
+import { SetUser } from '../AllStoreSlice/LoginSlice';
 
 const initialState: CreateOrderType = {
     total_amount: 0,
@@ -29,13 +30,7 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
     const [loginUser, setLoginUser] = React.useState(false);
     const mobile = useMediaQuery("(max-width:800px)")
     const { orderData, price, } = useSelector((state: RootState) => state.PriceAndQuantity)
-    const [userData, setUserData] = React.useState<UserDataType>(() => {
-        return {
-            user: {
-            },
-            voucher: 0
-        };
-    });
+    const { user: userData } = useSelector((state: RootState) => state.LoginSlice)
     const handleCreate = async () => {
         const changeItemData = orderData.map((item: MenuItemType) => ({
             qty: item.quantity ?? 0,
@@ -46,12 +41,13 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
         }))
         const data = {
             ...createOrderData,
+            user_id: userData?.id || "",
+            customer_name: userData?.name || "WALKING",
+            customer_type: "USER" ,
             canteen_id: canteen_id,
             items: changeItemData,
         }
-        if(!loginUser){
-            return alert("Please Login First")
-        }
+
         try {
             const res = await orderCreate({ data })
             if (res.status === 201) {
@@ -60,10 +56,6 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                 dispatch(resetData())
                 setLoginUser(false)
                 setCreateOrderData(initialState)
-                setUserData({
-                    user: {},
-                    vouchers: 0,
-                });
             }
         }
         catch (error: any) {
@@ -114,10 +106,6 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                 <UserRenderUserLogin
                     setCreateOrderData={setCreateOrderData}
                     createOrderData={createOrderData}
-                    setUserData={setUserData}
-                    userData={userData as UserDataType}
-                    loginUser={loginUser}
-                    setLoginUser={setLoginUser}
                 />
                 <Box sx={{ display: 'flex', p: 2, justifyContent: 'center', gap: 1 }}>
                     <Button variant="contained" sx={{}}>

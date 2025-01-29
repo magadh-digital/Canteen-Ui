@@ -33,7 +33,7 @@ export default function RenderUserLoginModal() {
   const [errors, setErrors] = React.useState({ phone: '', otp: '' });
   const dispatch = useDispatch();
 
-  const {LoginModel:open,user} = useSelector((state: RootState) => state.LoginSlice);
+  const { LoginModel: open, user } = useSelector((state: RootState) => state.LoginSlice);
 
   const validatePhone = () => {
     if (!/^\d{10}$/.test(phone)) {
@@ -89,11 +89,11 @@ export default function RenderUserLoginModal() {
     dispatch(SetUser(res?.data?.user))
     dispatch(SetToken(res?.data?.user?.token))
     dispatch(setLoginType("USER"))
-    
-    
-    
+
+
+
     setLoading(false);
-   
+
     handleClose();
   };
 
@@ -107,9 +107,7 @@ export default function RenderUserLoginModal() {
     if (user?.id) {
       handleClose();
     }
-
   }, [open]);
-
 
   return (
     <Dialog
@@ -178,7 +176,18 @@ export default function RenderUserLoginModal() {
                   'Send OTP'
                 )}
               </Button>
+              <Box sx={{
+                width:"100%",display:"flex",justifyContent: 'end'
+              }}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={handleClose}
+                  sx={{ mt: 2, }}>Close</Button>
+              </Box>
             </Box>
+
           </Fade>
         ) : (
           <Fade in={step === 2}>
@@ -226,10 +235,21 @@ export default function RenderUserLoginModal() {
                   Resend OTP
                 </Link>
               </Box>
+              <Box sx={{
+                width:"100%",display:"flex",justifyContent: 'end'
+              }}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={handleClose}
+                  sx={{ mt: 2, }}>Close</Button>
+              </Box>
             </Box>
+
           </Fade>
         )}
       </Box>
-    </Dialog>
+    </Dialog >
   );
 }

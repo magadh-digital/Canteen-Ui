@@ -5,9 +5,9 @@ import { GetOrderDetailsApi } from '../AllGetApi';
 import { Box, Card, Typography, Stack, Divider } from '@mui/material';
 import moment from 'moment';
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from '../AllStoreSlice/UserOrderListSlice';
-import { GetMenuItemList, GetOrderTypes, MenuItemType, QuantityType } from '../AllTypes';
-import { DataArray } from '@mui/icons-material';
-import ItemQuantityDetails from '../POSPages/ItemQuantityDetails';
+import { GetOrderTypes, QuantityType } from '../AllTypes';
+import { ArrowLeft } from '@mui/icons-material';
+
 
 const MyOrderList = () => {
     const { user } = useSelector((state: RootState) => state.user);
@@ -32,8 +32,15 @@ const MyOrderList = () => {
                 mt: 8,
             }}
         >
-            <Typography variant="h6" sx={{ mb: 1, fontWeight: 'bold' }}>
-                My Orders
+            <Typography variant="h6" sx={{ mb: 1, fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
+                My Orders <span><ArrowLeft sx={{
+                    cursor: 'pointer',
+                    color: 'blue',
+                    width: "30px",
+                    height: "30px",
+                }}
+                onClick={() => window.history.back()}
+                /></span>
             </Typography>
             {(data?.orders?.length || 0) > 0 ? (
                 <Stack spacing={2}>
