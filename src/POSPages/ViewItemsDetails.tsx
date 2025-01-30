@@ -24,7 +24,6 @@ const ViewItemsDetails = ({ userData,
     useEffect(() => {
         if ((userData?.vouchers ?? 0) > 0) {
             setAlertVoucher(true)
-            toast.success("Great You Have Voucher")
         } else {
             setAlertVoucher(false)
         }
@@ -77,290 +76,268 @@ const ViewItemsDetails = ({ userData,
         }))
     }, [voucherChecked, userData?.vouchers, totalPrice])
 
+    const voucherAmountRender = () => {
+        if (alertVouhcer) {
+            if (rateCheck() < (userData?.vouchers ?? 0)) {
+                return rateCheck()
+
+            }
+            if (rateCheck() > (userData?.vouchers ?? 0)) {
+                return (userData?.vouchers ?? 0)
+            }
+
+        } else {
+            return 0
+        }
+    }
+
     return (
         <Box sx={{
-            mt: 2
+            padding: mobile ? 1 : 0
         }}>
-            {/* <TableContainer
+
+            <TableContainer
+                component={Paper}
                 sx={{
-                    height: "auto",
-                    maxHeight: "200px",
+                    boxShadow: "none",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "5px",
                     overflowY: "auto",
+                    maxHeight: "300px",
+                    minHeight: "100px",
                     width: "100%",
                     "&::-webkit-scrollbar": {
                         width: "4px",
-                        backgroundColor: "#F5F5F5"
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                        backgroundColor: colors.grey[400],
+                        borderRadius: "4px",
+                    },
+                    "&::-webkit-scrollbar-thumb:hover": {
+                        backgroundColor: colors.grey[600],
+                    },
+                    "&::-webkit-scrollbar-track": {
+                        backgroundColor: colors.grey[200],
                     }
-                }}>
-                <Table stickyHeader>
-                    <TableHead >
+                }}
+            >
+                <Table size="small" stickyHeader >
+                    <TableHead>
                         <TableRow>
-                            <TableCell sx={{
-                                backgroundColor: colors.grey[100]
-                            }}>
-                                S No
+                            <TableCell
+                                style={{
+                                    fontSize: "12px",
+                                    padding: "8px",
+                                    color: "#555",
+                                    backgroundColor: colors.grey[100],
+                                    width: "20%"
+                                }}
+                            >
+                                Item
                             </TableCell>
-                            <TableCell sx={{
-                                backgroundColor: colors.grey[100]
-                            }}>
-                                Item Name
+                            <TableCell
+                                style={{
+                                    fontSize: "12px",
+                                    padding: "8px",
+                                    textAlign: "center",
+                                    color: "#555",
+                                    backgroundColor: colors.grey[100],
+                                    width: "20%"
+                                }}
+                            >
+                                Qty
                             </TableCell>
-                            <TableCell sx={{
-                                backgroundColor: colors.grey[100]
-                            }}>
-                                Quantity
-                            </TableCell>
-                            <TableCell sx={{
-                                backgroundColor: colors.grey[100]
-                            }}
-                                align='right'
+                            <TableCell
+                                style={{
+                                    fontSize: "12px",
+                                    padding: "8px",
+                                    textAlign: "right",
+                                    color: "#555",
+                                    backgroundColor: colors.grey[100],
+                                    width: "20%"
+                                }}
                             >
                                 Price
                             </TableCell>
-                            <TableCell sx={{
-                                backgroundColor: colors.grey[100]
-                            }}
-                                align='right'
+                            <TableCell
+                                style={{
+                                    fontSize: "12px",
+                                    padding: "8px",
+                                    textAlign: "right",
+                                    color: "#555",
+                                    backgroundColor: colors.grey[100],
+                                    width: "20%"
+                                }}
                             >
-                                Total Amount
+                                Total
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    {
-                        data.map((item: MenuItemType, index) => (
-                            <TableBody key={index}>
-                                <TableRow>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{item.name}</TableCell>
-                                    <TableCell>{item.quantity}</TableCell>
-                                    <TableCell align='right'>{item.price}</TableCell>
-                                    <TableCell align='right'>{item.price * (item.quantity ?? 0)}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        ))
-                    }
+                    <TableBody>
 
-                </Table>
-            </TableContainer> */}
-            <TableContainer
-                            component={Paper}
-                            style={{
-                                boxShadow: "none",
-                                border: "1px solid #e0e0e0",
-                                borderRadius: "5px",
-                                overflowY: "auto",
-                                
-                            }}
-                        >
-                            <Table size="small" 
-                            stickyHeader
-                                sx={{ minWidth: 650,
-                                    
-                                 }}
+                        {data?.map((item: MenuItemType) => (
 
-                            >
-                                <TableHead 
-                               
+                            <TableRow key={item.id}>
+                                <TableCell style={{ fontSize: "12px", padding: "8px" }}>
+                                    <Stack
+                                        direction="row"
+                                        spacing={1}
+                                        alignItems={"center"}
+
+                                    >
+
+                                        <img
+                                            src={item.image_url}
+                                            alt="logo"
+                                            style={{
+
+                                                width: "30px",
+                                                height: "30px"
+                                            }}
+                                        />
+                                        <Typography sx={{ color: colors.grey[800], fontSize: "13px" }}>{item.name}</Typography>
+
+
+                                    </Stack>
+
+                                </TableCell>
+                                <TableCell
+                                    style={{
+                                        fontSize: "12px",
+                                        padding: "8px",
+                                        textAlign: "center",
+                                        width: "20%"
+                                    }}
                                 >
-                                    <TableRow>
-                                        <TableCell
-                                            style={{ fontSize: "12px", padding: "8px", color: "#555",backgroundColor: colors.grey[100] }}
-                                        >
-                                           
-                                           
-                                            Item
-                                        </TableCell>
-                                        <TableCell
-                                            style={{
-                                                fontSize: "12px",
-                                                padding: "8px",
-                                                textAlign: "center",
-                                                color: "#555",
-                                                backgroundColor: colors.grey[100]
-                                            }}
-                                        >
-                                            Qty
-                                        </TableCell>
-                                        <TableCell
-                                            style={{
-                                                fontSize: "12px",
-                                                padding: "8px",
-                                                textAlign: "right",
-                                                color: "#555",
-                                                backgroundColor: colors.grey[100]
-                                            }}
-                                        >
-                                            Price
-                                        </TableCell>
-                                        <TableCell
-                                            style={{
-                                                fontSize: "12px",
-                                                padding: "8px",
-                                                textAlign: "right",
-                                                color: "#555",
-                                                backgroundColor: colors.grey[100]
-                                            }}
-                                        >
-                                            Total
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                   
-                                    {data?.map((item: MenuItemType) => (
-                                        
-                                        <TableRow key={item.id}>
-                                            <TableCell style={{ fontSize: "12px", padding: "8px" }}>
-                                                <Stack 
-                                                    direction="row"
-                                                    spacing={1}
-                                                    alignItems={"center"}
+                                    {item.quantity}
+                                </TableCell>
+                                <TableCell
+                                    style={{
+                                        fontSize: "12px",
+                                        padding: "8px",
+                                        textAlign: "right",
+                                        width: "20%"
+                                    }}
+                                >
+                                    ₹{item.price}
+                                </TableCell>
+                                <TableCell
+                                    style={{
+                                        fontSize: "12px",
+                                        padding: "8px",
+                                        textAlign: "right",
+                                        width: "10%"
+                                    }}
+                                >
+                                    ₹{item.price * (item.quantity ?? 0)}
+                                </TableCell>
+                            </TableRow>
+                        ))}
 
-                                                >
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TableContainer
+                component={Paper}
+                sx={{
+                    boxShadow: "none",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "5px",
+                    width: "100%",
+                    mt: 0
+                }}
+            >
+                <Table>
+                    <TableBody>
+                        <TableRow sx={{
+                            width: "100%"
+                        }}>
+                            <TableCell sx={{
+                                fontSize: "12px",
+                                padding: "8px",
+                                backgroundColor: colors.grey[100],
+                                width: "50%"
+                            }}>
+                                Sub Total
+                            </TableCell>
+                            <TableCell sx={{
+                                fontSize: "12px",
+                                padding: "8px",
+                                bgcolor: colors.grey[100]
+                            }}></TableCell>
+                            <TableCell
+                                colSpan={3}
+                                style={{
+                                    fontSize: "12px",
+                                    padding: "8px",
+                                    textAlign: "right",
+                                }}
+                            >
+                                <strong>₹{
+                                    rateCheck()
+                                }</strong>
+                            </TableCell>
+                        </TableRow>
+                        {(userData?.vouchers ?? 0) > 0 && (
 
-                                            <img
-                                                src={item.image_url}
-                                                alt="logo"
-                                                style={{
-                                                    
-                                                    width: "30px",
-                                                    height: "30px"
-                                                }}
-                                            />
-                                            <Typography sx={{ color: colors.grey[800], fontSize: "13px" }}>{item.name}</Typography>
+                            <TableRow>
+                                <TableCell colSpan={3} style={{
+                                    fontSize: "12px", padding: "8px",
+                                    backgroundColor: colors.grey[100],
+                                    width: "50%"
 
-                                                
-                                                </Stack>
+                                }}>
+                                    <strong>Voucher :</strong>
+                                </TableCell>
+                                <TableCell
+                                    style={{
+                                        fontSize: "12px",
+                                        padding: "8px",
+                                        textAlign: "right",
+                                        color: "green"
+                                    }}
+                                >
+                                    <strong> ₹ {
+                                        voucherAmountRender() || ""
+                                    }</strong>
+                                </TableCell>
+                            </TableRow>
 
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "center",
-                                                }}
-                                            >
-                                                {item.quantity}
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                }}
-                                            >
-                                                ₹{item.price}
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                }}
-                                            >
-                                                ₹{item.price * (item.quantity ?? 0)}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                    <TableRow>
-                                        <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px", 
-                                     backgroundColor: colors.grey[100]
 
-                                         }}>
-                                            <strong>Subtotal :</strong>
-                                        </TableCell>
-                                        <TableCell
-                                            style={{
-                                                fontSize: "12px",
-                                                padding: "8px",
-                                                textAlign: "right",
-                                            }}
-                                        >
-                                            <strong>₹{
-                                                data?.reduce((sum, item : MenuItemType) => sum + (item.price * (item.quantity ?? 0)), 0).toString()
-                                                }</strong>
-                                        </TableCell>
-                                    </TableRow>
 
-                                   
-                                            <TableRow>
-                                            <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px",
-       backgroundColor: colors.grey[100]
+                        )}
+                        <TableRow>
+                            <TableCell colSpan={3} style={{
+                                fontSize: "12px", padding: "8px",
+                                backgroundColor: colors.grey[100],
+                                width: "50%"
 
-                                             }}>
-                                                <strong>Voucher :</strong>
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                    color: "green"
-                                                }}
-                                            >
-                                                <strong>- ₹ {"100"}</strong>
-                                            </TableCell>
-                                        </TableRow>
-                                      
+                            }}>
+                                <strong>Payable :</strong>
+                            </TableCell>
+                            <TableCell
+                                style={{
+                                    fontSize: "12px",
+                                    padding: "8px",
+                                    textAlign: "right",
+                                }}
+                            >
+                                <strong>-₹{totalPaybaleAmount().toString()}</strong>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
 
-<TableRow>
-                                        <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px" ,
-                                        backgroundColor: colors.grey[100]
+            </TableContainer>
 
-                                         }}>
-                                            <strong>Payable :</strong>
-                                        </TableCell>
-                                        <TableCell
-                                            style={{
-                                                fontSize: "12px",
-                                                padding: "8px",
-                                                textAlign: "right",
-                                            }}
-                                        >
-                                            <strong>₹{totalPaybaleAmount().toString()}</strong>
-                                        </TableCell>
-                                    </TableRow>
-                                    
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-
-                        <Divider style={{ margin: "15px 0" }} />
-            {/* <Box sx={{
+            <Box sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 width: "100%",
             }}>
-                <TableContainer>
-                    <Table aria-label="spanning table" sx={{ border: "none" }}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center" colSpan={2} sx={{ border: "none", padding: "4px" }}></TableCell>
-                                <TableCell align="right" colSpan={3} sx={{ color: "blue", border: "none" }}>Price</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell rowSpan={4} sx={{ border: "none", padding: "6px" }}></TableCell>
-                                <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Quantity</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{1}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Total Price</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{rateCheck()}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell sx={{ border: "none", padding: "6px", }}>Voucher</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }} colSpan={2}>{userData?.vouchers}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan={2} sx={{ border: "none", padding: "6px" }}>Total Payable Amount</TableCell>
-                                <TableCell align="right" sx={{ border: "none", padding: "6px" }}>{totalPaybaleAmount()}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Box> */}
+
+            </Box>
+
             {alertVouhcer === true && (
                 <div style={{
                     backgroundColor: colors.amber[200]

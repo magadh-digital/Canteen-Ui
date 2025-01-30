@@ -23,6 +23,8 @@ import Purchases from './Purchase/Purchases';
 import { MobileViewItemDetails } from './UserPosPage.tsx/MobileViewItemDetails';
 import MyOrderList from './UserPosPage.tsx/MyOrderList';
 import UserLayout from './UserPosPage.tsx/UserLayout';
+import CanteenLayout from './POSPages/CanteenLayout';
+import { MobilePosViewItemList } from './POSPages/MobilePosViewList';
 
 
 function PrivateRoute({ redirectTo }: any) {
@@ -118,7 +120,10 @@ function AppContent({ dispatch }: { dispatch: any }) {
 
                 <Route element={<PrivateRoute redirectTo="/login" />}>
                     <Route path="/qrcode" element={<Qrcode />} />
-                    <Route path="/pos" element={<PosList />} />
+                    <Route path='/pos' element={<CanteenLayout />}>
+                        <Route path="/pos" element={<PosList />} />
+                        <Route path='/pos/view_item' element={<MobilePosViewItemList />} />
+                    </Route>
                 </Route>
             </Routes>
 
@@ -136,7 +141,6 @@ function UserPosListWrapper() {
     const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search);
     const canteenId = queryParams.get("canteen_id");
-    console.log(canteenId);
     useEffect(() => {
         if (!canteenId) {
             toast.error("Canteen ID is missing!");

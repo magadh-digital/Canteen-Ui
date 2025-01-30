@@ -9,6 +9,7 @@ import { CreateOrderType, MenuItemType } from '../AllTypes';
 import { resetData } from '../AllStoreSlice/AddQuantitySlice';
 import { UserDataType, UserRenderUserLogin } from './UserRenderUserLogin';
 import { SetUser } from '../AllStoreSlice/LoginSlice';
+import { useNavigate } from 'react-router-dom';
 
 const initialState: CreateOrderType = {
     total_amount: 0,
@@ -24,6 +25,7 @@ const initialState: CreateOrderType = {
 
 export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }) {
     const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [createOrderData, setCreateOrderData] = React.useState(initialState)
     const { mutateAsync: orderCreate } = PostOrderCreateApi()
@@ -56,6 +58,8 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                 dispatch(resetData())
                 setLoginUser(false)
                 setCreateOrderData(initialState)
+                navigate('/user?canteen_id=' + canteen_id)
+                
             }
         }
         catch (error: any) {

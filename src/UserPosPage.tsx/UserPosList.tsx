@@ -23,8 +23,6 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
     const { data: canteen } = useSelector((state: RootState) => state.Quantity)
     const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
     const mobile = useMediaQuery("(min-width:800px)");
-
-
     return (
         <Box sx={{
             width: '100vw',

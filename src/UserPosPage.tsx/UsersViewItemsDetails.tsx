@@ -50,6 +50,9 @@ const UsersViewItemsDetails = ({
             0
         );
     };
+    const rateCheck = () => {
+        return data.reduce((acc, item: MenuItemType) => acc + item.price * (item.quantity ?? 0), 0) || 0
+    }
     const [selectPyment, setSelectPyment] = useState("CASH")
     const mobile = useMediaQuery('(max-width: 800px)')
     const checkedVoucher = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +88,21 @@ const UsersViewItemsDetails = ({
             dispatch(SetLoginModel(true))
         }
     }, [userData?.id])
+
+    const voucherAmountRender = () => {
+        if (alertVouhcer) {
+            if (rateCheck() < (userData?.vouchers ?? 0)) {
+                return rateCheck()
+
+            }
+            if (rateCheck() > (userData?.vouchers ?? 0)) {
+                return (userData?.vouchers ?? 0)
+            }
+
+        } else {
+            return 0
+        }
+    }
 
 
     return (
@@ -242,12 +260,16 @@ const UsersViewItemsDetails = ({
                     mt: 0
                 }}
             >
-                <TableRow>
+                <Table>
+                    <TableBody>
+                <TableRow sx={{
+                    width: "100%"
+                }}>
                     <TableCell sx={{
-                        width: "700px",
                         fontSize: "12px",
                         padding: "8px",
-                        backgroundColor: colors.grey[100]
+                        backgroundColor: colors.grey[100],
+                        width: "50%"
                     }}>
                         Sub Total
                     </TableCell>
@@ -265,33 +287,43 @@ const UsersViewItemsDetails = ({
                         }}
                     >
                         <strong>₹{
-                            data?.reduce((sum, item: MenuItemType) => sum + (item.price * (item.quantity ?? 0)), 0).toString()
+                            rateCheck()
                         }</strong>
                     </TableCell>
                 </TableRow>
-                <TableRow>
-                    <TableCell colSpan={3} style={{
-                        fontSize: "12px", padding: "8px",
-                        backgroundColor: colors.grey[100]
+                {(userData?.vouchers ?? 0) > 0 && (
+                    
+                        <TableRow>
+                            <TableCell colSpan={3} style={{
+                                fontSize: "12px", padding: "8px",
+                                backgroundColor: colors.grey[100],
+                                width: "50%"
 
-                    }}>
-                        <strong>Voucher :</strong>
-                    </TableCell>
-                    <TableCell
-                        style={{
-                            fontSize: "12px",
-                            padding: "8px",
-                            textAlign: "right",
-                            color: "green"
-                        }}
-                    >
-                        <strong>- ₹ {userData?.vouchers}</strong>
-                    </TableCell>
-                </TableRow>
+                            }}>
+                                <strong>Voucher :</strong>
+                            </TableCell>
+                            <TableCell
+                                style={{
+                                    fontSize: "12px",
+                                    padding: "8px",
+                                    textAlign: "right",
+                                    color: "green"
+                                }}
+                            >
+                                <strong> ₹ {
+                                    voucherAmountRender() || ""
+                                }</strong>
+                            </TableCell>
+                        </TableRow>
+                    
+
+
+                )}
                 <TableRow>
                     <TableCell colSpan={3} style={{
                         fontSize: "12px", padding: "8px",
-                        backgroundColor: colors.grey[100]
+                        backgroundColor: colors.grey[100],
+                        width: "50%"
 
                     }}>
                         <strong>Payable :</strong>
@@ -303,9 +335,12 @@ const UsersViewItemsDetails = ({
                             textAlign: "right",
                         }}
                     >
-                        <strong>₹{totalPayableAmount().toString()}</strong>
+                        <strong>-₹{totalPayableAmount().toString()}</strong>
                     </TableCell>
                 </TableRow>
+                </TableBody>
+                </Table>
+
             </TableContainer>
 
 

@@ -9,6 +9,7 @@ import { PostOrderCreateApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
 import { CreateOrderType, MenuItemType } from '../AllTypes';
 import { resetData } from '../AllStoreSlice/AddQuantitySlice';
+import { useNavigate } from 'react-router-dom';
 
 const initialState: CreateOrderType = {
     total_amount: 0,
@@ -24,6 +25,7 @@ const initialState: CreateOrderType = {
 }
 
 export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
+    const navigate = useNavigate()
     const [open, setOpen] = React.useState(false);
     const dispatch = useDispatch()
     const [createOrderData, setCreateOrderData] = React.useState(initialState)
@@ -55,9 +57,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
         }
         try {
             const res = await orderCreate({ data })
-            toast.success("Order Created Successfully")
             if (res.status === 201) {
-                toast.success("Order Created Successfully")
                 setOpen(false)
                 localStorage.removeItem('user')
                 localStorage.removeItem('user_token')
@@ -68,6 +68,8 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                     user: {},
                     vouchers: 0,
                 });
+                navigate('/pos?canteen_id=' + canteen_id)
+
             }
         }
         catch (error: any) {
@@ -110,7 +112,8 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                     '& .MuiDrawer-paper': { height: mobile ? '100%' : '80%', overflow: "auto" },
                 }}
             >
-                <Box >
+                <Box>
+
                     <RenderUserLogin
                         setCreateOrderData={setCreateOrderData}
                         createOrderData={createOrderData}
@@ -119,7 +122,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                         selectedUser={selectedUser || null}
                         setSelectedUser={setSelectedUser}
                     />
-                    <Box sx={{ display: 'flex', p: 2, justifyContent: 'center', gap: 1,   }}>
+                    <Box sx={{ display: 'flex', p: 2, justifyContent: 'center', gap: 1, }}>
                         <Button variant="contained" sx={{}}>
                             Print
                         </Button>
@@ -129,6 +132,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                         <Button onClick={() => handleCreate()} variant="contained" sx={{}} color='success'>
                             Create Order
                         </Button>
+
                     </Box>
                 </Box>
             </SwipeableDrawer>

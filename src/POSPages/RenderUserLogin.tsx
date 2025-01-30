@@ -49,7 +49,6 @@ export const RenderUserLogin = ({
                 user: {
                     name: user.name,
                     phone: user.phone,
-                    
                     email: user.email,
                     role: user.role,
                     cp_code: user.cp_code,
@@ -70,21 +69,26 @@ export const RenderUserLogin = ({
     };
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", width: "100%", height: "100%" }} 
-        
-        >
-            <Box component={Paper} 
-             p={2}
-            sx={{ width: mobile ? "100%" : "40%", display: "flex", flexDirection: "column", justifyContent: "start"}}>
+        <Box sx={{ display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
+            <Box component={Paper}
+                p={2}
+                sx={{
+                    width: mobile ? "100%" : "40%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "start",
+                    bgcolor: colors.grey[50],
+                }}
+            >
                 <Stack direction={mobile ? "column" : "row"} sx={{ mt: 10, width: "100%", justifyContent: "space-between", }} spacing={2} >
                     <Stack>
                         <FormGroup row sx={{
                             ml: !mobile ? 0 : 5
                         }}>
                             <FormControlLabel
-                             sx={{
-                                 fontSize: 12
-                             }}
+                                sx={{
+                                    fontSize: 12
+                                }}
                                 control={
                                     <Checkbox
                                         checked={
@@ -145,46 +149,49 @@ export const RenderUserLogin = ({
                     </Stack>
 
                 </Stack>
-                {userData?.user?.name && (
-                    <TableContainer sx={{ border: "0.5px solid #ccc", mt: 2 }}>
-
-                        <Table size="small">
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    mt: 1
+                }}>
+                    <TableContainer sx={{ border: "0.5px solid #ccc", }}>
+                        <Table size="small" sx={{}}>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px",
-
+                                    <TableCell style={{
+                                        fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px",
                                         backgroundColor: colors.grey[200],
-                                     }}>
+                                    }}>
                                         Name :
                                     </TableCell>
                                     <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px", }}>{
-                                        userData?.user?.name
+                                        userData?.user?.name || 'N/A'
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell style={{ fontSize: "12px",backgroundColor: colors.grey[200], fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                    <TableCell style={{ fontSize: "12px", backgroundColor: colors.grey[200], fontWeight: "bold", color: "#333", padding: "8px" }}>
                                         Email     :                               </TableCell>
                                     <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px" }}>
                                         {userData?.user?.email || 'N/A'}
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px",backgroundColor: colors.grey[200], }}>
+                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", backgroundColor: colors.grey[200], }}>
                                         Phone     :
                                     </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", textAlign: "right" }}>{userData?.user?.phone}</TableCell>
+                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", textAlign: "right" }}>
+                                        {userData?.user?.phone || 'N/A'}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
                     </TableContainer>
-                )}
+                </Box>
 
-{
-    (userData?.vouchers || 0 )> 0 && (
-        <AnimatedMessage userData={userData}/>
-      
-    )
-}
+                {
+                    (userData?.vouchers || 0) > 0 && (
+                        <AnimatedMessage userData={userData} />
+                    )
+                }
 
 
                 <ViewItemsDetails userData={userData}

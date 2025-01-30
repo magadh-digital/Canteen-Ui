@@ -63,7 +63,6 @@ export default function RenderUserLoginModal() {
       const res = await sendOtp({ data: Number(phone) });
       const otp = res.data.otp;
       setOtp(otp);
-      toast.success("OTP sent successfully!");
       setLoading(false);
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to send OTP");

@@ -120,7 +120,7 @@ export const UserRenderUserLogin = ({
                     )
                 }
 
-                <UsersViewItemsDetails 
+                <UsersViewItemsDetails
                     setCreatedOrderData={setCreateOrderData}
                     createdOrderData={createOrderData}
                 />

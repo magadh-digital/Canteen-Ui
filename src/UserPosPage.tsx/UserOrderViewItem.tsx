@@ -290,7 +290,7 @@ const UserOrdersViewItems = () => {
                         {/* Print Button */}
                         <Grid container justifyContent="center" style={{ marginTop: "20px", gap: 2 }}>
                             <Grid item spacing={2}>
-                                <Button
+                                {/* <Button
                                     variant="contained"
                                     color="primary"
                                     onClick={() => window.print()}
@@ -301,13 +301,13 @@ const UserOrdersViewItems = () => {
                                     }}
                                 >
                                     Print Bill
-                                </Button>
+                                </Button> */}
                             </Grid>
                             <Grid item>
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={() => setUserItemViewId("")}
+                                    onClick={() => dispatch(setUserItemViewId(""))}
                                     style={{
                                         fontSize: "12px",
                                         textTransform: "none",

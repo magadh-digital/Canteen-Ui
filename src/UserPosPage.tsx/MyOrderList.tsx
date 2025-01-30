@@ -6,7 +6,7 @@ import { Box, Card, Typography, Stack, Divider } from '@mui/material';
 import moment from 'moment';
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from '../AllStoreSlice/UserOrderListSlice';
 import { GetOrderTypes, QuantityType } from '../AllTypes';
-import { ArrowLeft } from '@mui/icons-material';
+import { ArrowBack, ArrowLeft } from '@mui/icons-material';
 
 
 const MyOrderList = () => {
@@ -26,26 +26,26 @@ const MyOrderList = () => {
     return (
         <Box
             sx={{
-                width: '95vw',
+                width: '100vw',
                 height: '100%',
                 bgcolor: 'white',
                 mt: 8,
             }}
         >
             <Typography variant="h6" sx={{ mb: 1, fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
-                My Orders <span><ArrowLeft sx={{
+                My Orders <span><ArrowBack sx={{
                     cursor: 'pointer',
-                    color: 'blue',
+                    color: 'black',
                     width: "30px",
                     height: "30px",
                 }}
-                onClick={() => window.history.back()}
+                    onClick={() => window.history.back()}
                 /></span>
             </Typography>
             {(data?.orders?.length || 0) > 0 ? (
                 <Stack spacing={2}>
                     {data?.orders.map((order, idx) => (
-                        <Card key={idx} sx={{ p: 1, boxShadow: 3, width: '100%' }}>
+                        <Card key={idx} sx={{ p: 1, boxShadow: 3, }}>
                             <Typography fontSize={"14px"}
                                 sx={{
                                     display: 'flex',
