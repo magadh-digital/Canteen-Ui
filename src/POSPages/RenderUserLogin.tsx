@@ -70,8 +70,7 @@ export const RenderUserLogin = ({
 
     return (
         <Box sx={{ display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
-            <Box component={Paper}
-                p={2}
+            <Box 
                 sx={{
                     width: mobile ? "100%" : "40%",
                     display: "flex",
@@ -80,7 +79,7 @@ export const RenderUserLogin = ({
                     bgcolor: colors.grey[50],
                 }}
             >
-                <Stack direction={mobile ? "column" : "row"} sx={{ mt: 10, width: "100%", justifyContent: "space-between", }} spacing={2} >
+                <Stack direction={mobile ? "column" : "row"} sx={{ mt:9, width: "100%", justifyContent: "space-between", }} spacing={2} >
                     <Stack>
                         <FormGroup row sx={{
                             ml: !mobile ? 0 : 5

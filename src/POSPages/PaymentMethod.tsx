@@ -112,7 +112,11 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                     '& .MuiDrawer-paper': { height: mobile ? '100%' : '80%', overflow: "auto" },
                 }}
             >
-                <Box>
+                <Box sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column"
+                }}>
 
                     <RenderUserLogin
                         setCreateOrderData={setCreateOrderData}
