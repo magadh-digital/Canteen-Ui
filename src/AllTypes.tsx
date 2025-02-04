@@ -1,3 +1,5 @@
+import { GetPurchaseApi } from "./AllGetApi";
+
 export interface PagesTypes {
   kind?: string;
   title: string;
@@ -200,14 +202,125 @@ export interface SupplierType {
 export interface AddPurcahseTypes {
   _id?: string;
   supplier_id: string;
-  purchase_date: string;
+  purchase_date?: string;
   refrence_no: string;
   notes: string;
-  sub_total: number;
-  shipping_charges: number;
-  discount: number;
-  total_amount: number;
-  paid_amount: number;
+  sub_total: string | number;
+  shipping_charges: string | number;
+  discount: string | number;
+  total_amount: string | number;
+  paid_amount: string | number;
   created_at?: string;
-  updated_at?: string
+  updated_at?: string;
+  canteen_id?: string;
+  stock_items: GetStockTypes[]
+  other_charges?: string | number
+}
+
+export interface UpdatePurcahseTypes {
+  _id?: string;
+  supplier_id: string;
+  purchase_date?: string;
+  refrence_no: string;
+  notes: string;
+  sub_total: string | number;
+  shipping_charges: string | number;
+  discount: string | number;
+  total_amount: string | number;
+  paid_amount: string | number;
+  created_at?: string;
+  updated_at?: string;
+  canteen_id?: string;
+  stocks_items: GetStockTypes[]
+}
+
+export interface AddStockItemType {
+  _id?: string;
+  name: string;
+  description: string;
+}
+
+export interface GetStockTypes {
+  ID?: string;
+  name?: string;
+  description?: string;
+  quantity?: number;
+  unit?: string;
+  price?: number;
+  total?: number;
+  remaining?: number;
+  type?: string
+  remarks?: string
+}
+
+export interface GetStockDataTypes {
+  data: GetStockTypes[]
+  remaining: GetStockTypes[]
+}
+
+export interface GetPurchaseApiTypes {
+  purchases: GetPurchaseApi[]
+  total: number
+}
+
+export interface GetPurchaseApi {
+  ID: string
+  supplier_id: string
+  canteen_id: string
+  stocks_items: StocksItem[]
+  purchase_date: string
+  refrence_no: string
+  notes: string
+  attachment: any
+  sub_total: number
+  shipping_charges: number
+  discount: number
+  total_amount: number
+  paid_amount: number
+  created_at: string
+  updated_at: string
+}
+
+export interface StocksItem {
+  item_id: string
+  name: string
+  quantity: number
+  unit: string
+  price: number
+  total: number
+}
+
+export interface StockDetails {
+  data: StockDetailsType[]
+  total: number
+}
+export interface StockDetailsType {
+  _id: string
+  created_at: string
+  item_details: ItemDetail[]
+  item_id: string
+  quantity: number
+  remarks: string
+  type: string
+  unit: string
+}
+
+export interface ItemDetail {
+  _id: string
+  "description ": string
+  name: string
+}
+
+export interface ReportDashboard {
+  data: {
+    _id: string
+    monthlyOrders: number
+    monthlySales: number
+    monthlyVouchers: number
+    todayOrders: number
+    todaySales: number
+    todayVouchers: number
+  }
+  message: string
+
 }

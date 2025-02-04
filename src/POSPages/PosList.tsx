@@ -1,24 +1,25 @@
-import { styled, } from '@mui/material/styles';
 import { Box, Button, colors, Stack, Tooltip, useMediaQuery } from "@mui/material"
-import React from "react";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+
 import AllProductCard from './AllProductCard';
 import ItemQuantityDetails from './ItemQuantityDetails';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
-import ViewListIcon from '@mui/icons-material/ViewList';
+
 import PaymentMethod from './PaymentMethod';
 import { useNavigate } from 'react-router-dom';
+import { setAddProduct } from "../AllStoreSlice/AddProductCanteenSlice";
+import { GridAddIcon } from "@mui/x-data-grid";
+import UpdateStocks from "../Stocks/UpdateStocks";
+import MinusStocks from "../Stocks/MinusStock";
 
 
 const PosList = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const mobile = useMediaQuery('(min-width:800px)');
     const { price, quantity } = useSelector((state: RootState) => state.PriceAndQuantity)
     const { data: canteen } = useSelector((state: RootState) => state.Quantity)
-
     const { canteenData } = useSelector((state: RootState) => state.canteenData)
-
     const canteenId = canteenData?.id
 
     return (
@@ -76,9 +77,35 @@ const PosList = () => {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            flexDirection: "column",
+                            flexDirection: "row",
                             bgcolor: "white"
                         }}>
+                            <div style={{
+                                width: "10%",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                backgroundColor: colors.grey[100],
+                            }}>
+                                <Tooltip title="Add Product">
+                                    <span onClick={() =>
+                                        dispatch(setAddProduct(canteenId))}
+                                        style={{
+                                            cursor: "pointer",
+                                            marginTop: "65px",
+                                            backgroundColor: colors.grey[300],
+                                            borderRadius: "10%",
+                                        }}>
+                                        <GridAddIcon sx={{
+                                            width: "200px",
+                                            height: "40px",
+                                            color: colors.green[500]
+                                        }} />
+                                    </span>
+                                </Tooltip>
+                                <UpdateStocks  />
+                            </div>
                             <ItemQuantityDetails />
 
                         </Box>
@@ -132,10 +159,10 @@ const PosList = () => {
                                         Quantity : {quantity}
                                     </span>
                                 </Stack>
-                               
 
-                                    <PaymentMethod canteen_id={canteenId || ""} />
-                                
+
+                                <PaymentMethod canteen_id={canteenId || ""} />
+
                                 <Stack
                                     sx={{
                                         width: '300px',

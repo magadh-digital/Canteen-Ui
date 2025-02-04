@@ -1,7 +1,7 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
-import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetSupplierApiType, UpdateOrderType } from "./AllTypes"
+import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetStockTypes, GetSupplierApiType, ReportDashboard, StockDetails, UpdateOrderType } from "./AllTypes"
 import { toast } from "react-toastify"
 
 export const GetCanteenUserApi = () => {
@@ -10,8 +10,8 @@ export const GetCanteenUserApi = () => {
             const response = await axios.get(`${baseUrl}/canteen/`)
             const data = response.data
             return data as GetApiUserCanteens
-        } catch (error) {
-            console.error('Error fetching data:', error)
+        } catch (error: any) {
+            toast.error(error.response.data.message)
         }
     }
     return useQuery({
@@ -27,8 +27,8 @@ export const GetMenuItemListApi = ({ canteen_id }: { canteen_id: string }) => {
             const response = await axios.get(`${baseUrl}/menu/?canteen_id=${canteen_id}`)
             const data = response.data
             return data as GetMenuItemList
-        } catch (error) {
-            console.error('Error fetching data:', error)
+        } catch (error: any) {
+            toast.error(error.response.data.message)
         }
     }
     return useQuery({
@@ -58,11 +58,11 @@ export const GetOrderDetailsApi = ({
                     canteen_id,
                     user_id
                 }
-            })  
+            })
             const data = response.data as UpdateOrderType
             return data
-        } catch (error) {
-            console.error('Error fetching data:', error)
+        } catch (error: any) {
+            toast.error(error.response.data.message)
         }
     }
     return useQuery({
@@ -78,8 +78,8 @@ export const GetAllUserApi = () => {
             const response = await axios.get(`${baseUrl}/user/`)
             const data = response.data
             return data as AllUserType
-        } catch (error) {
-            toast.error('Error fetching data:')
+        } catch (error: any) {
+            toast.error(error.response.data.message)
         }
     }
     return useQuery({
@@ -94,8 +94,8 @@ export const GetReamainingVoucherApi = ({ user_id }: { user_id: string }) => {
             const response = await axios.get(`${baseUrl}/voucher/remaining?user_id=${user_id}`,)
             const data = response.data
             return data
-        } catch (error) {
-            console.error('Error fetching data:', error)
+        } catch (error: any) {
+            toast.error(error.response.data.message)
         }
     }
     return useQuery({
@@ -111,8 +111,8 @@ export const GetSupplierApi = () => {
             const response = await axios.get(`${baseUrl}/supplier/`)
             const data = response.data
             return data as GetSupplierApiType
-        } catch (error) {
-            console.error('Error fetching data:', error)
+        } catch (error: any) {
+            toast.error(error.response.data.message)
         }
     }
     return useQuery({
@@ -124,11 +124,11 @@ export const GetSupplierApi = () => {
 export const GetPurchaseApi = () => {
     const purchase = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/purchase`)
+            const response = await axios.get(`${baseUrl}/purchase/`)
             const data = response.data
-            return data
-        } catch (error) {
-            console.error('Error fetching data:', error)
+            return data as GetPurchaseApiTypes
+        } catch (error: any) {
+            toast.error(error.response.data.message)
         }
     }
     return useQuery({
@@ -136,4 +136,54 @@ export const GetPurchaseApi = () => {
         queryFn: purchase
     })
 
+}
+
+export const GetStocksApi = () => {
+    const stocks = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/stock-item/`)
+            const data = response.data
+            return data as GetStockDataTypes
+        } catch (error: any) {
+            toast.error(error.response.data.message)
+        }
+    }
+    return useQuery({
+        queryKey: ['stock-item`'],
+        queryFn: stocks
+    })
+}
+
+export const GetStockDetailsApi = ({ id }: { id: string }) => {
+    const stockDetails = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/stock/?item_id=${id}`)
+            const data = response.data
+            return data as StockDetails
+        } catch (error: any) {
+            toast.error(error.response.data.message)
+        }
+    }
+    return useQuery({
+        queryKey: ['stock', id],
+        enabled: !!id,
+        queryFn: stockDetails
+    })
+}
+
+
+export const GetReportOrderApi = () => {
+    const reportOrder = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/canteen/reports`)
+            const data = response.data
+            return data as ReportDashboard
+        } catch (error: any) {
+            toast.error(error.response.data.message)
+        }
+    }
+    return useQuery({
+        queryKey: ['reportorder'],
+        queryFn: reportOrder
+    })
 }

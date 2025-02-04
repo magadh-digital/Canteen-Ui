@@ -1,4 +1,5 @@
 
+import { ViewStocksDetails } from './DataGridColumn/StockItemColumn'
 import RenderUserLoginModal from './Modal/RendeUserLoginModal'
 import OrdersViewItems from './Orders/OrdersViewItems'
 import AddMenuProduct from './POSPages/AddMenuProduct'
@@ -15,6 +16,7 @@ const AllModalList = () => {
             <ProductItemsEdit />
             <UserOrdersViewItems />
             <RenderUserLoginModal />
+            <ViewStocksDetails />
         </>
     )
 }

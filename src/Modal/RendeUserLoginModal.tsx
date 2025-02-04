@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  colors,
   Dialog,
   Fade,
   IconButton,
@@ -138,7 +139,7 @@ export default function RenderUserLoginModal() {
         p: 3,
         mt: 8
       }}>
-        <Lock sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
+        <Lock sx={{ fontSize: 40, color: colors.green[200], mb: 2 }} />
 
         {step === 1 ? (
           <Fade in={step === 1}>
@@ -168,6 +169,9 @@ export default function RenderUserLoginModal() {
                 type="submit"
                 disabled={loading}
                 size="large"
+                sx={{
+                  bgcolor: colors.green[400],
+                }}
               >
                 {loading ? (
                   <CircularProgress size={24} color="inherit" />
@@ -176,14 +180,15 @@ export default function RenderUserLoginModal() {
                 )}
               </Button>
               <Box sx={{
-                width:"100%",display:"flex",justifyContent: 'end'
+                width: "100%", display: "flex", justifyContent: 'end'
               }}>
                 <Button
                   variant="contained"
-                  color="error"
                   size="small"
                   onClick={handleClose}
-                  sx={{ mt: 2, }}>Close</Button>
+                  sx={{ mt: 2,
+                    bgcolor: colors.red[200],
+                   }}>Close</Button>
               </Box>
             </Box>
 
@@ -194,7 +199,7 @@ export default function RenderUserLoginModal() {
               <Button
                 startIcon={<ArrowBack />}
                 onClick={() => setStep(1)}
-                sx={{ mb: 2 }}
+                sx={{ mb: 2, color: colors.green[400], }}
               >
                 Change Number
               </Button>
@@ -221,34 +226,40 @@ export default function RenderUserLoginModal() {
                 type="submit"
                 disabled={loading}
                 size="large"
+                sx={{
+                  bgcolor: colors.green[400],
+                }}
               >
-                {loading ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  'Verify OTP'
-                )}
-              </Button>
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                'Verify OTP'
+              )}
+            </Button>
 
-              <Box sx={{ textAlign: 'center', mt: 2 }}>
-                <Link href="#" variant="body2">
+            <Box sx={{ textAlign: 'center', mt: 2, }}>
+              <Link href="#" variant="body2" >
+                <span style={{ color: colors.green[400], cursor: "pointer" }}>
                   Resend OTP
-                </Link>
-              </Box>
-              <Box sx={{
-                width:"100%",display:"flex",justifyContent: 'end'
-              }}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  size="small"
-                  onClick={handleClose}
-                  sx={{ mt: 2, }}>Close</Button>
-              </Box>
+                </span>
+              </Link>
             </Box>
+            <Box sx={{
+              width: "100%", display: "flex", justifyContent: 'end'
+            }}>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handleClose}
+                sx={{ mt: 2, 
+                  bgcolor: colors.red[200],
+                }}>Close</Button>
+            </Box>
+          </Box>
 
           </Fade>
         )}
-      </Box>
+    </Box>
     </Dialog >
   );
 }

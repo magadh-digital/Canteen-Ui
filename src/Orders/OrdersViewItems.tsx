@@ -56,57 +56,59 @@ const OrdersViewItems = () => {
                             {order?.canteen?.email || "Not Available"}
                         </Typography>
 
-                       
-                        <TableContainer  sx={{ border: "1px solid #ccc" }}>
 
-                        <Table size="small">
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px" }}>
-                                        Order ID:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right",padding:"8px" }}>{order?.order_id}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333" ,padding:"8px"}}>
-                                        Order Date:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right",padding:"8px" }}>
-                                        {moment(order?.created_at).format("DD-MM-YYYY")}
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px" }}>
-                                        Customer Name:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px", textAlign: "right" }}>{order?.customer_name}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333" ,padding:"8px"}}>
-                                        Customer Email:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px",
-                                        textAlign: "right"
-                                        , fontWeight: "bold", color: "#333" ,padding:"8px"}}>{order?.customer_email || 'N/A'}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px" }}>
-                                        Customer Phone:
-                                    </TableCell>
-                                    <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333",padding:"8px", textAlign: "right" }}>{order?.user?.phone}</TableCell>
-                                </TableRow>
-                               
+                        <TableContainer sx={{ border: "1px solid #ccc" }}>
 
-                            </TableBody>
-
-                            
+                            <Table size="small">
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Order ID:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px" }}>{order?.order_id}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Order Date:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px" }}>
+                                            {moment(order?.created_at).format("DD-MM-YYYY")}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Customer Name:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", textAlign: "right" }}>{order?.customer_name}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Customer Email:
+                                        </TableCell>
+                                        <TableCell style={{
+                                            fontSize: "12px",
+                                            textAlign: "right"
+                                            , fontWeight: "bold", color: "#333", padding: "8px"
+                                        }}>{order?.customer_email || 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px" }}>
+                                            Customer Phone:
+                                        </TableCell>
+                                        <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", padding: "8px", textAlign: "right" }}>{order?.user?.phone}</TableCell>
+                                    </TableRow>
 
 
+                                </TableBody>
 
 
 
-                        
-                        </Table>
+
+
+
+
+
+                            </Table>
                         </TableContainer>
 
                         <Divider style={{ marginBottom: "15px" }} />
@@ -230,24 +232,24 @@ const OrdersViewItems = () => {
                                     {
                                         order?.voucher && (
                                             <TableRow>
-                                            <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px" }}>
-                                                <strong>Voucher :</strong>
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "8px",
-                                                    textAlign: "right",
-                                                    color: "green"
-                                                }}
-                                            >
-                                                <strong>- ₹ {order?.voucher_amt?.toString()}</strong>
-                                            </TableCell>
-                                        </TableRow>
+                                                <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px" }}>
+                                                    <strong>Voucher :</strong>
+                                                </TableCell>
+                                                <TableCell
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        padding: "8px",
+                                                        textAlign: "right",
+                                                        color: "green"
+                                                    }}
+                                                >
+                                                    <strong>- ₹ {order?.voucher_amt?.toString()}</strong>
+                                                </TableCell>
+                                            </TableRow>
                                         )
                                     }
 
-<TableRow>
+                                    <TableRow>
                                         <TableCell colSpan={3} style={{ fontSize: "12px", padding: "8px" }}>
                                             <strong>Payable :</strong>
                                         </TableCell>
@@ -261,14 +263,14 @@ const OrdersViewItems = () => {
                                             <strong>₹{order?.payable_amt?.toString()}</strong>
                                         </TableCell>
                                     </TableRow>
-                                    
+
                                 </TableBody>
                             </Table>
                         </TableContainer>
 
                         <Divider style={{ margin: "15px 0" }} />
 
-                       
+
                         <Divider style={{ margin: "15px 0" }} />
 
                         {/* Footer */}
@@ -285,20 +287,19 @@ const OrdersViewItems = () => {
                             Thank you for visiting {order?.canteen?.name}!
                         </Typography>
 
-                        {/* Print Button */}
                         <Grid container justifyContent="center" style={{ marginTop: "20px" }}>
                             <Grid item>
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={() => window.print()}
+                                    onClick={() => dispatch(setItemViewId(""))}
                                     style={{
                                         fontSize: "12px",
                                         textTransform: "none",
                                         backgroundColor: "#007bff",
                                     }}
                                 >
-                                    Print Bill
+                                    Close
                                 </Button>
                             </Grid>
                         </Grid>

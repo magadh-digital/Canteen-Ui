@@ -16,7 +16,7 @@ export const NAVIGATION: PagesTypes[] = [
   },
   {
     segment: 'orders',
-    title: 'Orders',
+    title: 'Invoice',
     icon: <ShoppingCartIcon sx={{ color: "#9FD675" }} />,
   },
   {
@@ -42,6 +42,11 @@ export const NAVIGATION: PagesTypes[] = [
     icon: <img src={"/public/supplier (1).png"} style={{ width: "25px", height: "30px" }} />,
   },
   {
+    segment: "stocks",
+    title: "Stocks",
+    icon: <img src={"public/5166961.png"} style={{ color: '#9FD675', width: "25px", height: "30px" }} />,
+  },
+  {
     segment: 'purchase',
     title: 'Purchase',
     icon: <img src={"/public/payment-method.png"} style={{ width: "25px", height: "30px" }} />,
@@ -52,8 +57,8 @@ export const NAVIGATION: PagesTypes[] = [
     icon: <BarChartIcon sx={{ color: "#9FD675" }} />,
     children: [
       {
-        segment: 'sales',
-        title: 'Sales',
+        segment: 'order-reports',
+        title: 'Order Reports',
         icon: <DescriptionIcon sx={{ color: "#9FD675" }} />,
       },
       {

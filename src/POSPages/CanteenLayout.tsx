@@ -24,7 +24,7 @@ import moment from 'moment';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { setUser } from '../AllStoreSlice/UserSaveSlice';
 
-import { AccountCircle, ListAlt, LogoutOutlined } from '@mui/icons-material';
+import { AccountCircle, ArrowBack, ExitToApp, ListAlt, LogoutOutlined } from '@mui/icons-material';
 import { SetLoginModel, SetLogOut } from '../AllStoreSlice/LoginSlice';
 import { setCanteenDataSlice } from '../AllStoreSlice/CanteenIdSlice';
 import { resetData } from '../AllStoreSlice/AddQuantitySlice';
@@ -59,6 +59,8 @@ const CanteenLayout = () => {
     const theme = useTheme()
     const open = Boolean(anchorEl);
     const mobile = useMediaQuery('(min-width:800px)');
+    const { data: canteenList, refetch } = GetCanteenUserApi()
+
 
     const handleChange = (event: SelectChangeEvent) => {
         const selectedId = event.target.value;
@@ -70,21 +72,27 @@ const CanteenLayout = () => {
         }
     };
     const dispatch = useDispatch()
-    const { data: canteenList } = GetCanteenUserApi()
-
-
-
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const canteenIdParam = queryParams.get("canteen_id");
 
         if (canteenIdParam && canteenIdParam !== canteenId) {
-            setCanteenID(canteenIdParam); // Set the canteenId based on URL parameter
+            setCanteenID(canteenIdParam);
             dispatch(setCanteenDataSlice(canteenList?.canteens?.find((canteen: any) => canteen.id === canteenIdParam)));
-            dispatch(resetData()); // Refetch data
+            dispatch(resetData());
         }
-    }, [location.search, canteenList?.canteens])
+    }, [location.search])
+
+    useEffect(() => {
+        if (canteenId && canteenList?.canteens) {
+            const selectedCanteen = canteenList.canteens.find((canteen: any) => canteen.id === canteenId);
+            if (selectedCanteen) {
+                dispatch(setCanteenDataSlice(selectedCanteen));
+                dispatch(resetData());
+            }
+        }
+    }, [canteenId, canteenList?.canteens]);
 
 
 
@@ -117,26 +125,6 @@ const CanteenLayout = () => {
                 }}>
 
                 <Toolbar>
-                    {/* <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ marginRight: 5, color: 'black', ...(open && { display: 'none' }) }}
-                    >
-                        <GridMenuIcon />
-                    </IconButton> */}
-                    {
-                        open ? null :
-                            <img src='public/2795550.png'
-                                alt='"no img'
-                                width={"48px"}
-                                height={"48px"}
-                                style={{
-                                    borderRadius: "30%",
-                                    marginRight: "10px"
-                                }} />
-                    }
                     <Stack
                         width={"100%"}
                         direction="row"
@@ -172,7 +160,7 @@ const CanteenLayout = () => {
                             </Typography>
                         </div>
                         <Stack direction="row" spacing={0} alignItems="center">
-                            <Tooltip title="Add Product">
+                            {/* <Tooltip title="Add Product">
                                 <span onClick={() =>
                                     dispatch(setAddProduct(canteenId))}
                                     style={{
@@ -183,7 +171,7 @@ const CanteenLayout = () => {
                                         width={"50px"}
                                     />
                                 </span>
-                            </Tooltip>
+                            </Tooltip> */}
                             <FormControl size='small' sx={{
                                 m: 1,
                                 minWidth: !mobile ? "100px" : "300px",
@@ -213,16 +201,16 @@ const CanteenLayout = () => {
                             </FormControl>
 
                             <div>
-                                <img src="public/618729-200.png"
-                                    width={mobile ? "60px" : "30px"}
-                                    height={mobile ? "50px" : "30px"}
-                                    style={{
-                                        backgroundColor: "white",
-                                        borderRadius: "50%",
-                                        cursor: "pointer"
+                                <ExitToApp
+                                    sx={{
+                                        cursor: "pointer",
+                                        color: "green",
+                                        width: "40px",
+                                        height: mobile ? "40px" : "30px"
                                     }}
                                     onClick={() => navigate("/dashboard")}
                                 />
+
                             </div>
 
 

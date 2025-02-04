@@ -10,6 +10,7 @@ import canteenDataSlice from "./AllStoreSlice/CanteenIdSlice";
 import UserSaveSlice from "./AllStoreSlice/UserSaveSlice";
 import UserOrderListSlice from "./AllStoreSlice/UserOrderListSlice";
 import LoginSlice from "./AllStoreSlice/LoginSlice";
+import StocksItemViewSlice from "./AllStoreSlice/StocksItemViewSlice";
 
 
 export const store = configureStore({
@@ -24,7 +25,8 @@ export const store = configureStore({
         canteenData: canteenDataSlice,
         user: UserSaveSlice,
         OrderViewList: UserOrderListSlice,
-        LoginSlice:LoginSlice
+        LoginSlice: LoginSlice,
+        stocksItemView: StocksItemViewSlice,
 
     }
 })

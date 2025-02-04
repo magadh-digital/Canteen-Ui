@@ -1,15 +1,16 @@
 
 import React, { useMemo, useState } from 'react'
-import { GetPurchaseApi, GetSupplierApi } from '../AllGetApi'
-import { Box, Button, colors, Stack, TextField, Typography } from '@mui/material'
+import { GetStocksApi, } from '../AllGetApi'
+import { Box, colors, Stack, TextField, Typography } from '@mui/material'
 import RefecthButton from '../RefecthButton'
 import { DataGrid, GridPaginationModel } from '@mui/x-data-grid'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { PurchasesColumn } from '../DataGridColumn/PurchaseColumn'
+import CreateStocks from './CreateStocks'
+import { StockItemColumn } from '../DataGridColumn/StockItemColumn'
+// import CreatePurchase from './CreatePurchase'
 
-const Purchases = () => {
-    const navigate = useNavigate()
-    const { data, isLoading, isRefetching, refetch } = GetPurchaseApi()
+const StocksList = () => {
+    const { data, isLoading, isRefetching, refetch } = GetStocksApi()
+    console.log(data)   
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: 20,
@@ -18,16 +19,20 @@ const Purchases = () => {
         setPaginationModel(newPaginationModel)
     }
 
-    const DataPurchase = useMemo(() => {
+    const StockItem = useMemo(() => {
         if (!data) return []
-        const purchaseData = data?.purchases
-        if (purchaseData) {
-            return purchaseData?.map((item: any, index: number) => {
+        const stockData = data?.remaining
+        if (stockData) {
+            return stockData?.map((item, index: number) => {
                 return {
                     ...item,
                     id: item?.ID,
                     idx: index + 1 * (paginationModel.page * paginationModel.pageSize + 1),
-                    address: item?.address
+                    address: item?.description,
+                    remaining : {
+                        remaining : item?.remaining,
+                        unit : item?.unit
+                    }
                 }
             })
         }
@@ -42,25 +47,21 @@ const Purchases = () => {
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
-                    color: colors.grey[600],
+                    color: colors.red[500],
                     fontWeight: 'bold',
                     letterSpacing: '1px',
                     fontFamily: 'monospace'
                 }}>
-                    Purchase
+                    Stock Item
                 </Typography>
                 <Stack spacing={2} direction='row' alignItems={'center'}>
-                    <Button variant="contained" onClick={() => navigate('/add-purchase')} sx={{
-                       fontWeight: 'bold'
-                    }} color= 'primary' size='small'>
-                        Create Purchase
-                    </Button>
+                    <CreateStocks />
                     <RefecthButton refetch={refetch} isRefetching={isRefetching} />
                     <TextField
                         size='small'
                         sx={{
-                            width: '10vw',
-                            bgcolor: "#fff",
+                            width: '15vw',
+                            bgcolor: colors.grey[200],
                             borderRadius: '5px',
 
                         }}
@@ -69,8 +70,8 @@ const Purchases = () => {
             </Stack>
             <Box mt={2}>
                 <DataGrid
-                    rows={DataPurchase || []}
-                    columns={PurchasesColumn}
+                    rows={StockItem || []}
+                    columns={StockItemColumn}
                     loading={isLoading || isRefetching}
                     paginationMode='client'
                     paginationModel={{
@@ -89,4 +90,4 @@ const Purchases = () => {
     )
 }
 
-export default Purchases
+export default StocksList

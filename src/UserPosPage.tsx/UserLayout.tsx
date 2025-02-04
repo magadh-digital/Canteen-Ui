@@ -4,7 +4,7 @@ import { RootState } from '../Store'
 
 
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { GetOrderDetailsApi } from '../AllGetApi'
+
 import { styled, useTheme } from '@mui/material/styles';
 import {
     Box,
@@ -18,7 +18,7 @@ import { GridMenuIcon, GridMoreVertIcon } from "@mui/x-data-grid";
 import moment from 'moment';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { setUser } from '../AllStoreSlice/UserSaveSlice';
-import { toast } from 'react-toastify';
+
 import { AccountCircle, ListAlt, LogoutOutlined } from '@mui/icons-material';
 import { SetLoginModel, SetLogOut } from '../AllStoreSlice/LoginSlice';
 interface AppBarProps extends MuiAppBarProps {
@@ -144,7 +144,7 @@ const UserLayout = () => {
                                 ({currentDate})
                             </Typography>
                         </div>
-                        
+
 
                         {user?.id ? (
                             <>
@@ -161,7 +161,12 @@ const UserLayout = () => {
                             </>
                         ) : (
                             <>
-                                <Button variant='outlined' onClick={handleOpenLogin}>Login</Button>
+                                <Button
+                                    color='success'
+                                    variant='contained'
+                                    onClick={handleOpenLogin}>
+                                    Login
+                                </Button>
                             </>
                         )}
 

@@ -1,7 +1,8 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import { AddPurcahseTypes, CanteenUserType, CreateOrderType, LoginType, SupplierType, } from "./AllTypes"
+import { AddPurcahseTypes, AddStockItemType, CanteenUserType, CreateOrderType, GetStockTypes, LoginType, SupplierType, UpdatePurcahseTypes, } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { StockItemType } from "./Stocks/UpdateStocks"
 
 
 export const PostCanteenUserApi = () => {
@@ -166,7 +167,7 @@ export const CreateSupplierApi = () => {
 
 export const PostPurchaseApi = () => {
     const queryClient = useQueryClient();
-    const purchaseApi = async ({ data }: { data: AddPurcahseTypes }) => {
+    const purchaseApi = async ({ data }: { data: UpdatePurcahseTypes }) => {
         const response = await axios.post(`${baseUrl}/purchase/create`, data)
         return response
     }
@@ -174,6 +175,34 @@ export const PostPurchaseApi = () => {
         mutationFn: purchaseApi,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['purchase'] })
+        }
+    })
+}
+
+export const CreateStockItemApi = () => {
+    const queryClient = useQueryClient();
+    const stocksApi = async ({ data }: { data: AddStockItemType }) => {
+        const response = await axios.post(`${baseUrl}/stock-item/create`, data)
+        return response
+    }
+    return useMutation({
+        mutationFn: stocksApi,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['stock-item'] })
+        }
+    })
+}
+
+export const UpdateStockItemApi = () => {
+    const queryClient = useQueryClient();
+    const stocksApi = async ({ data }: { data: StockItemType[], }) => {
+        const response = await axios.post(`${baseUrl}/stock/update`, data)
+        return response
+    }
+    return useMutation({
+        mutationFn: stocksApi,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['stock-item'] })
         }
     })
 }

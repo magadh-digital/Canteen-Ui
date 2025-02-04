@@ -25,6 +25,9 @@ import MyOrderList from './UserPosPage.tsx/MyOrderList';
 import UserLayout from './UserPosPage.tsx/UserLayout';
 import CanteenLayout from './POSPages/CanteenLayout';
 import { MobilePosViewItemList } from './POSPages/MobilePosViewList';
+import StocksList from './Stocks/StocksList';
+import CreatePurchase from './Purchase/CreatePurchase';
+import OrderReports from './Report/OrderReports';
 
 
 function PrivateRoute({ redirectTo }: any) {
@@ -108,6 +111,9 @@ function AppContent({ dispatch }: { dispatch: any }) {
                         <Route path="/products-items" element={<ProductList />} />
                         <Route path="/supplier" element={<Supplier />} />
                         <Route path="/purchase" element={<Purchases />} />
+                        <Route path='/stocks' element={<StocksList />} />
+                        <Route path='/add-purchase' element={<CreatePurchase />} />
+                        <Route path='/order-reports' element={<OrderReports />} />
                     </Route>
                 </Route>
 
