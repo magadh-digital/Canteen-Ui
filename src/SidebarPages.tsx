@@ -4,9 +4,10 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
 import { PagesTypes } from './AllTypes';
-import { FoodBank } from '@mui/icons-material';
+import { FoodBank, Person } from '@mui/icons-material';
 // import { PagesTypes } from './AllTypes';
 import CategoryIcon from '@mui/icons-material/Category';
+import { Avatar } from '@mui/material';
 export const NAVIGATION: PagesTypes[] = [
 
   {
@@ -18,6 +19,11 @@ export const NAVIGATION: PagesTypes[] = [
     segment: 'orders',
     title: 'Invoice',
     icon: <ShoppingCartIcon sx={{ color: "#9FD675" }} />,
+  },
+  {
+    segment: 'users',
+    title: 'Users',
+    icon: <Person sx={{ color: "#9FD675",  }} />
   },
   {
     segment: 'Canteen',
@@ -36,6 +42,7 @@ export const NAVIGATION: PagesTypes[] = [
       }
     ]
   },
+  
   {
     segment: 'supplier',
     title: 'Supplier',

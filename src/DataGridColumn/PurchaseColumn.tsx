@@ -1,6 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { GetStockTypes } from "../AllTypes";
-import { Stack } from "@mui/material";
+import { colors, Stack } from "@mui/material";
 import moment from "moment";
 // {
 //     "ID": "679cb9201b5998c9e63d379f",
@@ -41,7 +41,7 @@ export const PurchasesColumn: GridColDef[] = [
         width: 180,
         renderCell: ({ value }) => {
             return (
-                <Stack>
+                <Stack color={colors.blue[500]}>
                     {value?.name}
                 </Stack>
             )
@@ -51,11 +51,26 @@ export const PurchasesColumn: GridColDef[] = [
         field: "refrence_no",
         headerName: "Ref No",
         width: 180,
+        renderCell: ({ value }) => {
+            return (
+                <Stack color={colors.red[500]}>
+                    {value}
+                </Stack>
+            )
+        }
+
     },
     {
         field: "total_amount",
         headerName: "Total",
         width: 180,
+        renderCell: ({ value }) => {
+            return (
+                <Stack color={colors.green[500]}>
+                    {value}
+                </Stack>
+            )
+        }
     },
     {
         field: "purchase_date",
@@ -72,22 +87,50 @@ export const PurchasesColumn: GridColDef[] = [
     {
         field: "sub_total",
         headerName: "Sub Total",
-        width: 180
+        width: 180,
+        renderCell: ({ value }) => {
+            return (
+                <Stack color={colors.green[500]}>
+                    {value}
+                </Stack>
+            )
+        }
     },
     {
         field: "shipping_charges",
         headerName: "Shipping Charges",
-        width: 180
+        width: 180,
+        renderCell: ({ value }) => {
+            return (
+                <Stack color={colors.red[500]}>
+                    {value}
+                </Stack>
+            )
+        }
     },
     {
         field: "discount",
         headerName: "Discount",
-        width: 180
+        width: 180,
+        renderCell: ({ value }) => {
+            return (
+                <Stack color={colors.green[500]}>
+                    {value}
+                </Stack>
+            )
+        }
     },
     {
         field: "paid_amount",
         headerName: "Paid Amount",
-        width: 180
+        width: 180,
+        renderCell: ({ value }) => {
+            return (
+                <Stack color={colors.blue[500]}>
+                    {value}
+                </Stack>
+            )
+        }
     },
     {
         field: "notes",

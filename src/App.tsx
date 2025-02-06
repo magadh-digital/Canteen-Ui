@@ -28,6 +28,8 @@ import { MobilePosViewItemList } from './POSPages/MobilePosViewList';
 import StocksList from './Stocks/StocksList';
 import CreatePurchase from './Purchase/CreatePurchase';
 import OrderReports from './Report/OrderReports';
+import { createTheme, ThemeProvider } from '@mui/material';
+import AllUserList from './Users/AllUserList';
 
 
 function PrivateRoute({ redirectTo }: any) {
@@ -41,6 +43,23 @@ function PublicRoute({ redirectTo }: any) {
     return userToken ? <Navigate to={redirectTo} /> : <Outlet />;
 }
 
+axios.interceptors.request.use(
+    function (config) {
+        const token = localStorage.getItem("canteen_token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+            config.headers["Device"] = "web".toString()
+            config.params = {
+                ...config.params,
+            }
+        }
+        return config;
+    },
+    function (error) {
+        return Promise.reject(error);
+    }
+)
+
 function App() {
     const dispatch = useDispatch();
 
@@ -53,12 +72,15 @@ function App() {
             },
         },
     });
+    const theme = createTheme()
 
     return (
         <QueryClientProvider client={queryClient}>
-            <Router>
-                <AppContent dispatch={dispatch} />
-            </Router>
+            <ThemeProvider theme={theme}>
+                <Router>
+                    <AppContent dispatch={dispatch} />
+                </Router>
+            </ThemeProvider>
         </QueryClientProvider>
     );
 }
@@ -114,6 +136,7 @@ function AppContent({ dispatch }: { dispatch: any }) {
                         <Route path='/stocks' element={<StocksList />} />
                         <Route path='/add-purchase' element={<CreatePurchase />} />
                         <Route path='/order-reports' element={<OrderReports />} />
+                        <Route path='/users' element={<AllUserList />} />
                     </Route>
                 </Route>
 
@@ -124,13 +147,13 @@ function AppContent({ dispatch }: { dispatch: any }) {
                 </Route>
 
 
-                <Route element={<PrivateRoute redirectTo="/login" />}>
-                    <Route path="/qrcode" element={<Qrcode />} />
-                    <Route path='/pos' element={<CanteenLayout />}>
-                        <Route path="/pos" element={<PosList />} />
-                        <Route path='/pos/view_item' element={<MobilePosViewItemList />} />
-                    </Route>
+                {/* <Route element={<PrivateRoute redirectTo="/login" />}> */}
+                <Route path="/qrcode" element={<Qrcode />} />
+                <Route path='/pos' element={<CanteenLayout />}>
+                    <Route path="/pos" element={<PosList />} />
+                    <Route path='/pos/view_item' element={<MobilePosViewItemList />} />
                 </Route>
+                {/* </Route> */}
             </Routes>
 
             <AllModalList />

@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { GridDeleteIcon } from '@mui/x-data-grid';
 
 
 const CreatePurchase = () => {
@@ -137,7 +138,7 @@ const CreatePurchase = () => {
                 navigate('/purchase')
                 toast.success("Purchase Created Successfully")
             }
-        } catch (error : any) {
+        } catch (error: any) {
             toast.error(error.response.data.message);
         }
     };
@@ -306,7 +307,9 @@ const CreatePurchase = () => {
                                     <th>Unit </th>
                                     <th>Item Tax</th>
                                     <th style={{ textAlign: "right" }}>Total</th>
-                                    <th style={{ width: "5px", textAlign: "right" }}>D</th>
+                                    <th style={{ width: "5px", textAlign: "right", }}><GridDeleteIcon sx={{
+                                        fontSize: "12px"
+                                    }} /></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -351,14 +354,15 @@ const CreatePurchase = () => {
                                             style={{
                                                 width: "5px",
                                                 textAlign: "right",
+                                                fontSize: "12px",
 
                                             }}>
-                                            <button
+                                            <span
                                                 className="delete-btn"
                                                 onClick={() =>
                                                     handleRemoveStockItem(item?.ID || "")}>
                                                 ❌
-                                            </button></td>
+                                            </span></td>
                                     </tr>
                                 ))}
                                 <tr style={{
@@ -489,7 +493,7 @@ const CreatePurchase = () => {
                                             textAlign: "center",
                                             padding: "10px",
                                             fontWeight: "bold",
-                                            color: "white",
+                                            color: "black",
                                             fontSize: "16px"
                                         }}
                                     >

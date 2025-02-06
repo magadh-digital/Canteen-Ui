@@ -34,11 +34,10 @@ const Purchases = () => {
     }, [data])
     return (
         <Box sx={{
-            m: 2,
             p: 2,
-            width: '85vw',
             height: '100vh',
-            bgcolor: colors.grey[100],
+            mt: 2,
+            width: "87vw"
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
@@ -51,15 +50,14 @@ const Purchases = () => {
                 </Typography>
                 <Stack spacing={2} direction='row' alignItems={'center'}>
                     <Button variant="contained" onClick={() => navigate('/add-purchase')} sx={{
-                       fontWeight: 'bold'
-                    }} color= 'primary' size='small'>
+                        fontWeight: 'bold'
+                    }} color='primary' size='small'>
                         Create Purchase
                     </Button>
                     <RefecthButton refetch={refetch} isRefetching={isRefetching} />
                     <TextField
                         size='small'
                         sx={{
-                            width: '10vw',
                             bgcolor: "#fff",
                             borderRadius: '5px',
 
@@ -67,7 +65,14 @@ const Purchases = () => {
                     />
                 </Stack>
             </Stack>
-            <Box mt={2}>
+            <Box sx={{
+                height: "80vh",
+                backgroundColor: "#E0E0E0",
+                p: 2,
+                borderRadius: "10px",
+                mt: 2
+            }}>
+
                 <DataGrid
                     rows={DataPurchase || []}
                     columns={PurchasesColumn}
@@ -78,7 +83,8 @@ const Purchases = () => {
                         pageSize: 10
                     }}
                     style={{
-                        height: '75vh'
+                        height: '75vh',
+                        backgroundColor: "white"
                     }}
                     onPaginationModelChange={handlePaginationModelChange}
 

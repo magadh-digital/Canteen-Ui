@@ -187,3 +187,23 @@ export const GetReportOrderApi = () => {
         queryFn: reportOrder
     })
 }
+
+export const GetAllUserApiSearch = ({
+    search,
+}: {
+    search: string
+}) => {
+    const allUser = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/user/?search=${search}`)
+            const data = response.data
+            return data as AllUserType
+        } catch (error: any) {
+            toast.error(error.response.data.message)
+        }
+    }
+    return useQuery({
+        queryKey: ['alluser', search],
+        queryFn: allUser
+    })
+}

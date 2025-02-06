@@ -33,11 +33,9 @@ const Supplier = () => {
     }, [data])
     return (
         <Box sx={{
-            m: 2,
             p: 2,
-            width: '85vw',
             height: '100vh',
-            bgcolor: colors.grey[100],
+            mt:2
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
@@ -57,12 +55,18 @@ const Supplier = () => {
                             width: '15vw',
                             bgcolor: colors.grey[200],
                             borderRadius: '5px',
-                            
+
                         }}
                     />
                 </Stack>
             </Stack>
-            <Box mt={2}>
+            <Box
+                mt={2}
+                sx={{
+                    backgroundColor: colors.grey[200],
+                    p: 2
+                }}
+            >
                 <DataGrid
                     rows={DataSupplier || []}
                     columns={SupplierColumn}
@@ -72,13 +76,12 @@ const Supplier = () => {
                         page: 0,
                         pageSize: 10
                     }}
-                    style={{ 
-                        height: '75vh'
+                    style={{
+                        height: '75vh',
+                        backgroundColor: "white"
                     }}
                     onPaginationModelChange={handlePaginationModelChange}
-
                 />
-
             </Box>
         </Box>
     )

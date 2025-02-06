@@ -132,6 +132,10 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   return (
     <Box sx={{
       display: 'flex',
+      height: '90vh',
+      // overflow: 'hidden',
+      width: '100vw',
+      
     }}
 
     >
@@ -332,12 +336,12 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           flexGrow: 1,
           marginLeft: open ? 0 : 0,
           transition: 'margin 0.3s',
-          height: 'calc(100vh - 64px)',
-          paddingTop: 3,
-          paddingBottom: 3,
-          overflow: 'auto',
+          paddingTop: 0,
+          paddingBottom: 0,
           display: 'flex',
           flexDirection: 'column',
+          width: "100%",
+          height: "100%"
         }}
       >
         {isPOSPage ? children : <Outlet />}

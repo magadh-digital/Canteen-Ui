@@ -1,188 +1,156 @@
-
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Slide, Stack, TextField, Typography } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../Store'
-import { setMenuItemId } from '../AllStoreSlice/AllMenuItemsSlice'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Slide, Stack, TextField, Typography, Paper, SelectChangeEvent } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Store';
+import { setMenuItemId } from '../AllStoreSlice/AllMenuItemsSlice';
 import React, { useEffect, useState } from 'react';
 import { TransitionProps } from '@mui/material/transitions';
 import { UpdateProductItem } from '../AllPostApi';
 import { toast } from 'react-toastify';
 
 const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement<any, any>;
-    },
-    ref: React.Ref<unknown>,
+    props: TransitionProps & { children: React.ReactElement<any, any> },
+    ref: React.Ref<unknown>
 ) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-export const ProductItemsEdit = () => {
-    const { menuItemId, menuItemsData } = useSelector((state: RootState) => state.allMenuItems)
-    const canteen_id = localStorage.getItem('canteen_user_id')
-    const dispatch = useDispatch()
-    const { mutateAsync: updateMenuItem } = UpdateProductItem()
 
-    const [EditData, setEditData] = useState({
-        name: menuItemsData?.name,
-        price: menuItemsData?.price,
-        description: menuItemsData?.description,
-        category: menuItemsData?.category,
-        unit: menuItemsData?.unit,
-        available: menuItemsData?.available,
-        image_url: menuItemsData?.image_url,
+export const ProductItemsEdit = () => {
+    const { menuItemId, menuItemsData } = useSelector((state: RootState) => state.allMenuItems);
+    const canteen_id = localStorage.getItem('canteen_user_id');
+    const dispatch = useDispatch();
+    const { mutateAsync: updateMenuItem } = UpdateProductItem();
+    const [EditData, setEditData] = useState<{
+        name: string;
+        price: number;
+        description: string;
+        category: string;
+        unit: string;
+        available: boolean;
+        image_url: string | File;
+        canteen_id: string | null;
+    }>({
+        name: menuItemsData?.name || "",
+        price: menuItemsData?.price || 0,
+        description: menuItemsData?.description || "",
+        category: menuItemsData?.category || "",
+        unit: menuItemsData?.unit || "",
+        available: menuItemsData?.available || false,
+        image_url: menuItemsData?.image_url || "",
         canteen_id: canteen_id
-    })
+    });
 
     useEffect(() => {
-        setEditData({
-            name: menuItemsData?.name,
-            price: menuItemsData?.price,
-            description: menuItemsData?.description,
-            category: menuItemsData?.category,
-            unit: menuItemsData?.unit,
-            available: menuItemsData?.available,
-            image_url: menuItemsData?.image_url,
-            canteen_id: canteen_id
-        })
-    }, [menuItemsData, menuItemId])
-    const handleClose = () => {
+        if (menuItemsData) {
+            setEditData({
+                name: menuItemsData.name || '',
+                price: menuItemsData.price || 0,
+                description: menuItemsData.description || '',
+                category: menuItemsData.category || '',
+                unit: menuItemsData.unit || '',
+                available: menuItemsData.available || true,
+                image_url: menuItemsData.image_url || '',
+                canteen_id: canteen_id,
+            });
+        }
+    }, [menuItemsData, menuItemId]);
 
-        dispatch(setMenuItemId(''));
+    const handleClose = () => dispatch(setMenuItemId(''));
 
-    }
+    const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setEditData({ ...EditData, [event.target.name]: event.target.value });
+    };
 
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEditData({ ...EditData, unit: e.target.value })
-    }
-
-    // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const file = event.target.files?.[0];
-    //     if (file) {
-    //         setEditData((prevState: any) => ({
-    //             ...prevState,
-    //             image_url: file
-    //         }));
-    //     }
-    // }
-
+    const handleSelectChange = (event: SelectChangeEvent) => {
+        setEditData({ ...EditData, [event.target.name]: event.target.value });
+    };
     const handleUpdate = async () => {
         try {
 
-            await updateMenuItem({
-                id: menuItemId,
-                data: EditData,
-            })
-            toast.success("Product Updated Successfully")
-            handleClose()
+            const priceValue = Number(EditData.price);
+            if (isNaN(priceValue)) {
+                toast.error('Invalid price value');
+                return;
+            }
 
+            const formData = new FormData();
+            formData.append('name', EditData.name);
+            formData.append('price', priceValue.toString());
+            formData.append('description', EditData.description);
+            formData.append('category', EditData.category);
+            formData.append('unit', EditData.unit);
+            formData.append('available', EditData.available.toString());
+            formData.append('canteen_id', canteen_id || '');
+
+            if (EditData.image_url instanceof File) {
+                formData.append('image_url', EditData.image_url);
+            }
+            await updateMenuItem({ id: menuItemId, data: formData });
+            toast.success('Product Updated Successfully');
+            handleClose();
         } catch (error: any) {
-            toast.error(error.response.data.error)
+            toast.error(error.response?.data?.error || 'Update failed');
         }
-    }
+    };
+
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setEditData((prevState) => ({
+                ...prevState,
+                image_url: file,
+            }));
+        }
+    };
 
     return (
-        <>
-            <Dialog
-                open={menuItemId !== ""}
-                TransitionComponent={Transition}
-                onClose={() => dispatch(setMenuItemId(""))}
-                sx={{
-                    '& .MuiDialog-paper': {
-                        width: '50%',
-                        maxWidth: '50%',
-                        height: '50%',
-                    },
-                }}>
-                <DialogTitle>
-                    <Typography sx={{
-                        fontSize: 25,
-                        color: "blue",
-                        fontWeight: "bold",
-                        fontStyle: "italic"
-                    }}>
-                        Update Product
-                    </Typography>
-                </DialogTitle>
-                <DialogContent>
-                    <Stack spacing={4}>
-                        <Stack direction="row" justifyContent={"space-between"}>
-                            <Typography>Name:</Typography>
+        <Dialog
+            open={menuItemId !== ''}
+            TransitionComponent={Transition}
+            onClose={handleClose}
+            sx={{ '& .MuiDialog-paper': { width: '40%', maxWidth: '500px', borderRadius: 3, p: 2, bgcolor: "#f5f5f5" } }}
+        >
+            <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center', color: 'primary.main' }}>Update Product</DialogTitle>
+            <DialogContent>
+                <Paper elevation={3} sx={{ p: 2, borderRadius: 2, }}>
+                    <Stack spacing={2}>
+                        <TextField size="small" label="Name" name="name" fullWidth value={EditData.name} onChange={handleTextFieldChange} />
+                        <TextField size="small" label="Price" name="price" fullWidth type="number" value={EditData.price} onChange={handleTextFieldChange} />
+                        <TextField size="small" label="Description" name="description" fullWidth multiline rows={2} value={EditData.description} onChange={handleTextFieldChange} />
+
+                        <FormControl fullWidth>
+                            <InputLabel>Category</InputLabel>
+                            <Select size="small" label="category" name="category" value={EditData.category} onChange={handleSelectChange}>
+                                <MenuItem value="SNACKS">Snacks</MenuItem>
+                                <MenuItem value="BEVERAGES">Beverages</MenuItem>
+                                <MenuItem value="MEALS">Meals</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl fullWidth>
+                            <InputLabel>Unit</InputLabel>
+                            <Select size="small" label="Unit" name="unit" value={EditData.unit} onChange={handleSelectChange}>
+                                <MenuItem value="PIECE">Piece</MenuItem>
+                                <MenuItem value="KG">Kg</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl fullWidth>
                             <TextField
-                                name="name"
-                                size='small'
-                                value={EditData.name}
-                                onChange={(e) => setEditData({ ...EditData, name: e.target.value })}
-                            />
-                        </Stack>
-                        <Stack direction="row" justifyContent={"space-between"}>
-                            <Typography>Price:</Typography>
-                            <TextField
-                                name="price"
-                                size='small'
-                                value={EditData.price}
-                                onChange={(e) => setEditData({ ...EditData, price: +e.target.value })}
-                            />
-                        </Stack>
-                        <Stack direction="row" justifyContent={"space-between"}>
-                            <Typography>Description:</Typography>
-                            <TextField
-                                name="description"
                                 size="small"
-                                value={EditData.description}
-                                onChange={(e) => setEditData({ ...EditData, description: e.target.value })}
+                                type="file"
+                                name="image_url"
+                                fullWidth
+                                onChange={handleFileChange}
                             />
-                        </Stack>
-                        <Stack direction="row" justifyContent={"space-between"}>
-                            <Typography>Category:</Typography>
-                            <FormControl size="small" sx={{ bgcolor: "white" }}>
-                                <InputLabel id="demo-simple-select-label">Category</InputLabel>
-                                <Select
-                                    sx={{
-                                        width: "250px"
-                                    }}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={EditData.category}
-                                    label="Category"
-                                    name="category"
-                                    onChange={(event: any) => handleInputChange(event)}
-                                >
-                                    <MenuItem value="SNACKS">Snacks</MenuItem>
-                                    <MenuItem value="BEVERAGES">Beverages</MenuItem>
-                                    <MenuItem value="MEALS">Meals</MenuItem>
-                                </Select>
-                            </FormControl>
-
-                        </Stack>
-                        <Stack direction="row" justifyContent={"space-between"}>
-                            <Typography>Unit:</Typography>
-                            <FormControl size="small" sx={{ bgcolor: "white" }}>
-                                <InputLabel id="demo-simple-select-label">UNIT</InputLabel>
-                                <Select
-                                    sx={{
-                                        width: "250px"
-                                    }}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={EditData.unit}
-                                    label="Unit"
-                                    name="unit"
-                                    onChange={(event: any) => handleInputChange(event)}
-                                >
-                                    <MenuItem value="PIECE">Piece</MenuItem>
-                                    <MenuItem value="KG">Kg</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Stack>
+                        </FormControl>
                     </Stack>
-
-                </DialogContent>
-                <DialogActions>
-                    <Button variant='outlined' size='small' onClick={() => dispatch(setMenuItemId(""))}>Cancel</Button>
-                    <Button size='small' variant='contained' onClick={handleUpdate}>Update</Button>
-                </DialogActions>
-            </Dialog>
-        </>
-    )
-}
+                </Paper>
+            </DialogContent>
+            <DialogActions sx={{ justifyContent: 'center', gap: 2, pb: 2 }}>
+                <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+                <Button variant="contained" onClick={handleUpdate}>Update</Button>
+            </DialogActions>
+        </Dialog>
+    );
+};

@@ -6,7 +6,7 @@ import RefecthButton from "../RefecthButton"
 import { OrderDetailsColumn } from "../DataGridColumn/OrderDetailsColumn"
 
 export const OrderList = () => {
-   const canteen_id = localStorage.getItem("canteen_user_id")
+    const canteen_id = localStorage.getItem("canteen_user_id")
     const [search, setSearch] = useState<string>("")
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
@@ -40,11 +40,9 @@ export const OrderList = () => {
     return (
         <Box
             sx={{
-                m: 1,
-                p: 2,
-                width: "85vw",
+                p:4,
                 height: "100vh",
-                overflow: "hidden"
+                width: "100%",
             }}
         >
             <Stack direction="row" spacing={2} justifyContent={"space-between"}>
@@ -63,7 +61,7 @@ export const OrderList = () => {
             <Box sx={{
                 height: "80vh",
                 width: "100%",
-                backgroundColor: colors.grey[100],
+                backgroundColor: colors.grey[200],
                 p: 2,
                 borderRadius: "10px",
                 mt: 2
@@ -78,6 +76,9 @@ export const OrderList = () => {
                     paginationModel={paginationModel}
                     onPaginationModelChange={handlePaginationModelChange}
                     pageSizeOptions={[10, 20, 50, 100]}
+                    sx={{
+                        bgcolor: "white"
+                    }}
                 />
 
             </Box>

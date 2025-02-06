@@ -238,6 +238,7 @@ export interface AddStockItemType {
   _id?: string;
   name: string;
   description: string;
+  unit?: string
 }
 
 export interface GetStockTypes {
@@ -319,8 +320,65 @@ export interface ReportDashboard {
     monthlyVouchers: number
     todayOrders: number
     todaySales: number
-    todayVouchers: number
+    todayVouchers: number;
+    yearlyOrders: number
+    yearlySales: number
+    yearlyVouchers: number
   }
   message: string
+  last20orders: Last20OrdersType[]
 
+}
+
+export interface Last20OrdersType {
+  id: string
+  order_id: string
+  canteen_id: string
+  user_id: string
+  customer_name: string
+  items: Item[]
+  total_amount: number
+  status: string
+  customer_type: string
+  created_at: string
+  updated_at: string
+  voucher: boolean
+  voucher_amt: number
+  payable_amt: number
+  payment_type: string
+  canteen: Canteen
+  user: User
+}
+
+export interface Item {
+  item_id: string
+  name: string
+  qty: number
+  price: number
+  total: number
+}
+
+export interface Canteen {
+  id: string
+  name: string
+  location: string
+  description: string
+  contact: number
+  image_url: string
+  created_at: string
+  updated_at: string
+  email: string
+  password: string
+}
+
+export interface User {
+  id: string
+  name: string
+  phone: number
+  role: string
+  email: string
+  cp_code: string
+  created_at: string
+  updated_at: string
+  canteen_id: any
 }

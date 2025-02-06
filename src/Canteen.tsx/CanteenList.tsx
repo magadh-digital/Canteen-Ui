@@ -37,10 +37,10 @@ const CanteenList = () => {
 
     return (
         <Box sx={{
-            m: 2,
             p: 2,
-            width: "85vw",
+            width: "100%",
             height: "80vh",
+            mt:2
         }}>
             <Stack direction={"row"} justifyContent={"space-between"} >
                 <Typography variant='h5' sx={{
@@ -65,14 +65,22 @@ const CanteenList = () => {
                 <CreateCanteen />
             )}
             {value === "0" && (
-                <Box sx={{ height: "80vh", mt: 5, width: "100%", backgroundColor: colors.grey[100], p: 2, borderRadius: "10px" }}>
+                <Box sx={{
+                    height: "80vh",
+                    mt: 5,
+                    width: "100%",
+                    backgroundColor: "#E0E0E0",
+                    p: 2,
+                    borderRadius: "10px"
+                }}>
 
                     <DataGrid
                         rows={CanteenDataRows}
                         columns={CanteenUserColumn}
                         pageSizeOptions={[10, 20, 50, 100]}
                         sx={{
-                            width: "100%"
+                            width: "100%",
+                            bgcolor: "white"
                         }}
                     />
 

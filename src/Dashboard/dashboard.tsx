@@ -1,139 +1,208 @@
-
-import { Box, colors, Grid, Paper, Stack, styled, Typography } from "@mui/material"
+import { Avatar, Box, Card, CardContent, Checkbox, colors, FormControlLabel, Grid, LinearProgress, Paper, Slider, Stack, styled, Typography, useMediaQuery } from "@mui/material";
 import { BarChart, LineChart, PieChart, ScatterChart } from "@mui/x-charts";
 import { GetReportOrderApi } from "../AllGetApi";
+import React from "react";
+import { AttachMoney, ShoppingCart, Today, CalendarToday, LocalOffer } from "@mui/icons-material";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from "../AllStoreSlice/UserOrderListSlice";
+import { GetOrderTypes, QuantityType, User } from "../AllTypes";
 
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    boxShadow: theme.shadows[3],
-    backgroundColor: colors.grey[100],
-}));
 export const Dashboard = () => {
-    const { data } = GetReportOrderApi()
-    const Level = [{
-        title: "Level 1",
-        value: "1.0",
-        date: "1/1/2022",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-    },
-    {
-        title: "Level 2",
-        value: "1.0",
-        date: "1/1/2022",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-    },
-    {
-        title: "Level 3",
-        value: "1.0",
-        date: "1/1/2022",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-    },
-    {
-        title: "Level 4",
-        value: "1.0",
-        date: "1/1/2022",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-    },
-    {
-        title: "Level 5",
-        value: "1.0",
-        date: "1/1/2022",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-    },
-    {
-        title: "Level 6",
-        value: "1.0",
-        date: "1/1/2022",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-    }
-
-    ]
-
-    const backgroundColors = [
-        colors.blue[100],
-        colors.green[100],
-        colors.orange[100],
-        colors.purple[100],
-        colors.red[100],
-        colors.teal[100],
+    const { data, isLoading } = GetReportOrderApi();
+    const metrics = [
+        {
+            title: "Monthly Orders / Sales",
+            value: `${data?.data?.monthlyOrders ?? 0} / ${data?.data?.monthlySales ?? 0}`,
+            color: "primary.main",
+            icon: <ShoppingCart fontSize="large" />
+        },
+        {
+            title: "Today's Orders / Sales",
+            value: `${data?.data?.todayOrders ?? 0} / ${data?.data?.todaySales ?? 0}`,
+            color: "error.main",
+            icon: <ShoppingCart fontSize="large" />
+        },
+        {
+            title: "Yearly Orders / Sales",
+            value: `${data?.data?.yearlyOrders ?? 0} / ${data?.data?.yearlySales ?? 0}`,
+            color: "primary.dark", icon: <ShoppingCart fontSize="large" />
+        },
+        {
+            title: "Monthly Vouchers",
+            value: data?.data?.monthlyVouchers ?? 0,
+            color: "info.main",
+            icon: <LocalOffer fontSize="large" />
+        },
+        {
+            title: "Today's Vouchers",
+            value: data?.data?.todayVouchers ?? 0,
+            color: "warning.main",
+            icon: <LocalOffer fontSize="large" />
+        },
+        {
+            title: "Yearly Vouchers",
+            value: data?.data?.yearlyVouchers ?? 0,
+            color: "info.dark",
+            icon: <LocalOffer fontSize="large" />
+        },
     ];
+    const dispatch = useDispatch()
+    const handleOpenViewItems = ({ user, data, details }: { user: User, data: QuantityType[], details: any }) => {
+        dispatch(setUserItemViewId(user?.id))
+        dispatch(setUserItemViewData(data))
+        dispatch(setuserOrderDetails(details))
+    }
 
 
     return (
-        <Box sx={{
-            margin: 2
-        }}>
-            <Box>
-                <Typography variant="h4">Dashboard</Typography>
-            </Box>
-            <Grid container spacing={2}>
-                {Level?.map((level, index) => (
-                    <Grid item xs={6} sm={2} md={2} key={index}>
-                        <StyledPaper sx={{
-                            backgroundColor: backgroundColors[index % backgroundColors.length],
+        <Box sx={{ height: '100%', p: 2, bgcolor: colors.grey[100], overflowX: "hidden" }}>
+            <Typography variant="h4" align="left" sx={{ marginBottom: 3, fontWeight: 600 }}>Dashboard</Typography>
+            {isLoading ? (
+                <LinearProgress />
+            ) : (
+                <Grid container spacing={3} sx={{ padding: 0 }}>
+                    {metrics.map((metric, index) => (
+                        <Grid item xs={16} sm={6} md={3} key={index}>
+                            <Card sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                padding: 2,
+                                boxShadow: 3,
+                                borderLeft: `5px solid`,
+                                borderColor: metric.color
+                            }}>
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        {metric.title}
+                                    </Typography>
+                                    <Typography variant="h4" fontWeight="bold">
+                                        {metric.value}
+                                    </Typography>
+                                </CardContent>
+                                {metric.icon}
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
+
+
+
+
+            <Grid container spacing={3} sx={{ mt: 5 }}>
+                <Grid item xs={8} md={6}>
+                    <Card sx={{ p: 2, boxShadow: 3, borderRadius: "15px", height: "400px", width: "100%" }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                            Latest 20 Orders
+                        </Typography>
+                        <div className="table-dashboard">
+                            <table style={{ width: "100%", }}>
+                                <tbody>
+                                    {data?.last20orders?.map((item, index) => (
+                                        <tr key={index}>
+                                            <td style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                                                <Avatar alt={item?.canteen?.name} src={item?.canteen?.name} sx={{ bgcolor: "#1976d2", color: "#fff" }} />
+                                                <span style={{ fontWeight: "bold" }}>{item?.canteen?.name}</span>
+                                            </td>
+                                            <td>{moment(item?.created_at).format("MM-DD-YYYY")}</td>
+                                            <td>{item?.order_id}</td>
+                                            <td style={{ textAlign: "right", fontWeight: "bold", color: "green" }}>
+                                                &#8377; {item?.total_amount}
+                                            </td>
+                                            <td style={{ textAlign: "right" }}>
+                                                <span
+                                                    style={{ textDecoration: "underline", color: "#2196f3", cursor: "pointer" }}
+                                                    onClick={() => handleOpenViewItems({ data: item?.items, details: item, user: item?.user })}
+                                                >
+                                                    View
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </Card>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                    <Card sx={{
+                        p: 2,
+                        boxShadow: 3,
+                        borderRadius: "15px",
+                        height: "400px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}>
+                        <PieChart
+                            sx={{
+                            }}
+                            height={300}
+                            series={[
+                                {
+                                    data:
+                                        data?.last20orders?.map((item) => ({
+                                            name: item?.canteen?.name,
+                                            value: item?.total_amount
+                                        })) || [],
+                                    innerRadius: 90,
+                                    arcLabel: (params) => params.label ?? "",
+                                    arcLabelMinAngle: 20,
+                                    valueFormatter: (value) => `${value} %`,
+                                },
+                            ]}
+                            skipAnimation={false}
+                        />
+                        <Box sx={{
+                            width: "100%",
+                            height: "200px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "1.5rem",
+                            fontWeight: "bold",
+                            color: "primary.main",
+                            bgcolor: colors.grey[100],
                         }}>
-                            <Typography variant="h6">{level.title}</Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Value: {data?.data.monthlyOrders}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Date: {level.date}
-                            </Typography>
-                            <Typography variant="body2">{level?.description}</Typography>
-                        </StyledPaper>
-                    </Grid>
-                ))}
+
+                        </Box>
+                    </Card>
+                </Grid>
             </Grid>
-            <Box sx={{ marginTop: 5, width: "100%", p: 2, bgcolor: colors.grey[500], }}>
-                <Stack spacing={2} direction="row" alignItems="center">
+
+
+            {/* <Stack spacing={2} direction={isSmallScreen ? "column" : "row"} alignItems="center">
                     <PieChart
-                        sx={{}}
-                        series={[
-                            {
-                                data: [
-                                    { id: 0, value: 10, label: 'series A' },
-                                    { id: 1, value: 15, label: 'series B' },
-                                    { id: 2, value: 20, label: 'series C' },
-                                ],
-                            },
-                        ]}
-                        width={400}
-                        height={200}
+                        series={[{ data: [] }]}
+                        width={isSmallScreen ? 300 : 400}
+                        height={isSmallScreen ? 150 : 200}
                     />
                     <ScatterChart
-                        width={600}
-                        height={300}
+                        width={isSmallScreen ? 300 : 600}
+                        height={isSmallScreen ? 200 : 300}
                         sx={{ bgcolor: colors.grey[100] }}
-                        series={[
-                           
-                        ]}
+                        series={[]}
                     />
-                </Stack>
-                <Stack spacing={2} direction="row" alignItems="center">
+                </Stack> */}
+
+            {/* <Stack spacing={2} direction={isSmallScreen ? "column" : "row"} alignItems="center" sx={{ marginTop: 2, overflowX: "auto" }}>
                     <BarChart
-                        xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C', 'group D', 'group E'] }]}
-                        series={[{ data: [4, 3, 5, 7, 8] }, { data: [1, 6, 3, 6, 8] },]}
-                        width={500}
-                        height={300}
+                        xAxis={[{ scaleType: 'band', data: ['Group A', 'Group B', 'Group C', 'Group D', 'Group E'] }]}
+                        series={[{ data: [4, 3, 5, 7, 8] }, { data: [1, 6, 3, 6, 8] }]}
+                        width={isSmallScreen ? 300 : 500}
+                        height={isSmallScreen ? 200 : 300}
                     />
-
                     <LineChart
-                        sx={{ bgcolor: colors.grey[100], mt: 2, width: "100%" }}
+                        sx={{ bgcolor: colors.grey[100] }}
                         xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                        series={[
-                            {
-                                data: [2, 5.5, 2, 8.5, 1.5, 5],
-                            },
-                        ]}
-                        width={700}
-                        height={300}
+                        series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
+                        width={isSmallScreen ? 300 : 700}
+                        height={isSmallScreen ? 200 : 300}
                     />
+                </Stack> */}
 
-                </Stack>
-            </Box>
-        </Box>
-    )
-}
+        </Box >
+    );
+};

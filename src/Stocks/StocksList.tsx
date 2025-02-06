@@ -10,7 +10,6 @@ import { StockItemColumn } from '../DataGridColumn/StockItemColumn'
 
 const StocksList = () => {
     const { data, isLoading, isRefetching, refetch } = GetStocksApi()
-    console.log(data)   
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: 20,
@@ -29,9 +28,9 @@ const StocksList = () => {
                     id: item?.ID,
                     idx: index + 1 * (paginationModel.page * paginationModel.pageSize + 1),
                     address: item?.description,
-                    remaining : {
-                        remaining : item?.remaining,
-                        unit : item?.unit
+                    remaining: {
+                        remaining: item?.remaining,
+                        unit: item?.unit
                     }
                 }
             })
@@ -39,11 +38,10 @@ const StocksList = () => {
     }, [data])
     return (
         <Box sx={{
-            m: 2,
             p: 2,
-            width: '85vw',
+            // width: '85vw',
             height: '100vh',
-            bgcolor: colors.grey[100],
+            mt:2
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
@@ -68,7 +66,7 @@ const StocksList = () => {
                     />
                 </Stack>
             </Stack>
-            <Box mt={2}>
+            <Box mt={2} bgcolor={colors.grey[200]} p={2}>
                 <DataGrid
                     rows={StockItem || []}
                     columns={StockItemColumn}
@@ -79,7 +77,8 @@ const StocksList = () => {
                         pageSize: 10
                     }}
                     style={{
-                        height: '75vh'
+                        height: '75vh',
+                        backgroundColor: 'white'
                     }}
                     onPaginationModelChange={handlePaginationModelChange}
 
