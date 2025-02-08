@@ -1,30 +1,31 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
-import { styled, useTheme, } from '@mui/material/styles';
-import { Box, Button, colors, IconButton, Stack, Table, Checkbox, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Tooltip, Typography, useMediaQuery, ButtonGroup } from '@mui/material';
+import {
+    Box,
+    Button,
+    colors,
+    IconButton,
+    Stack,
+    Table, Checkbox,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead, TableRow, Typography, useMediaQuery, ButtonGroup
+} from '@mui/material';
 import { MenuItemType } from '../AllTypes';
-import { Delete } from '@mui/icons-material';
-import { decrementQuantity, incrementQuantity, removeItem, resetData, setData, setnewData, } from '../AllStoreSlice/AddQuantitySlice';
+import { decrementQuantity, incrementQuantity, setnewData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQuantitySlice';
-import React, { useEffect, useRef, useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { GridMenuIcon } from '@mui/x-data-grid';
-import moment from 'moment';
 import UserPaymentMethod from './UserPaymentMethod';
-
-
 export const MobileViewItemDetails = () => {
     const { data: data } = useSelector((state: RootState) => state.Quantity);
     const dispatch = useDispatch();
- 
-   
+
+
 
     const totalQuantity = data.reduce((sum, item) => sum + (item.quantity || 1), 0);
     const totalPrice = data.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
@@ -36,7 +37,7 @@ export const MobileViewItemDetails = () => {
     }, [data]);
 
     const mobile = useMediaQuery("(min-width: 800px)");
-    
+
     const location = useLocation();
     const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search);

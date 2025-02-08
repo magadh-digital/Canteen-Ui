@@ -43,7 +43,7 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme, open }) => ({
 
 const CanteenLayout = () => {
     const navigate = useNavigate()
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, _] = React.useState<null | HTMLElement>(null);
     const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
     const [canteenId, setCanteenID] = React.useState<string | null>('');
     const theme = useTheme()

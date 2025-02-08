@@ -1,9 +1,8 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import { AddPurcahseTypes, AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UpdatePurcahseTypes, UpdateUserType, User, } from "./AllTypes"
+import {  AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UpdatePurcahseTypes,  } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StockItemType } from "./Stocks/UpdateStocks"
-import { AddNewUserListProps } from "./Users/AddNewUserList"
 
 
 export const PostCanteenUserApi = () => {
