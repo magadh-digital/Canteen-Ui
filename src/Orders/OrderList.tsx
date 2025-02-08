@@ -1,10 +1,10 @@
 import { Box, colors, Stack, TextField, Typography } from "@mui/material"
-import { DataGrid, GridPaginationModel, } from "@mui/x-data-grid"
+import { DataGrid,  } from "@mui/x-data-grid"
 import { GetOrderDetailsApi } from "../AllGetApi"
 import { useEffect, useMemo, useState } from "react"
 import RefecthButton from "../RefecthButton"
 import { OrderDetailsColumn } from "../DataGridColumn/OrderDetailsColumn"
-import { CustomPagination, UsePageHook } from "../Utils"
+import {  UsePageHook } from "../Utils"
 
 export const OrderList = () => {
     const canteen_id = localStorage.getItem("canteen_user_id")

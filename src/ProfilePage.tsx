@@ -111,7 +111,7 @@ export const ProfilePage = () => {
                             spacing={1}
                             p={2}
                         >
-                            <Typography component="div"
+                            <Typography component="div"                                                                                             
                                 style={{
                                     fontWeight: "bold",
                                     color: "black",
