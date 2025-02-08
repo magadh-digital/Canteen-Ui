@@ -6,7 +6,7 @@ import { setItemViewId } from '../AllStoreSlice/ItemViewSlice';
 import { RootState } from '../Store';
 
 const OrdersViewItems = () => {
-    const { id, data, order } = useSelector((state: RootState) => state.ItemView)
+    const { id, order } = useSelector((state: RootState) => state.ItemView)
     const dispatch = useDispatch()
     return (
         <>

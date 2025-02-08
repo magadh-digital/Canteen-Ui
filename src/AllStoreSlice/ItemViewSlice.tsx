@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GetOrderTypes, QuantityType } from "../AllTypes";
-import { setOrderData } from "./PriceAndQuantitySlice";
+import { GetOrderTypes,  } from "../AllTypes";
 
 interface ItemViewType {
     id: string,

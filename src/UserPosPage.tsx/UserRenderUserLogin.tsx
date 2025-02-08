@@ -1,7 +1,4 @@
-import { Box, Button, colors, Stack, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography, useMediaQuery } from "@mui/material";
-import { useEffect, useState } from "react";
-import { PostOtpSender, PostVerifyOtp } from "../AllPostApi";
-import { toast } from "react-toastify";
+import { Box, Button, colors,  Table, TableBody, TableCell, TableContainer, TableRow,  useMediaQuery } from "@mui/material";
 
 import { CreateOrderType } from "../AllTypes";
 
@@ -9,7 +6,6 @@ import UsersViewItemsDetails from "./UsersViewItemsDetails";
 import AnimatedMessage from "../POSPages/AnimatedMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Store";
-import { setUser } from "../AllStoreSlice/UserSaveSlice";
 import { SetLoginModel } from "../AllStoreSlice/LoginSlice";
 import RenderUserLoginModal from "../Modal/RendeUserLoginModal";
 

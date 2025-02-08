@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
-import { Box, Button, colors, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, useMediaQuery } from '@mui/material';
+import { Box, Button, colors, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery } from '@mui/material';
 import { MenuItemType } from '../AllTypes';
 import { Delete } from '@mui/icons-material';
 import { decrementQuantity, incrementQuantity, removeItem, resetData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQuantitySlice';
-import { useEffect, useRef } from 'react';
+import { useEffect,  } from 'react';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { DraggableData, DraggableEvent } from 'react-draggable';
-import { useNavigate } from 'react-router-dom';
 const ItemQuantityDetails = () => {
     const { data: data } = useSelector((state: RootState) => state.Quantity);
     const dispatch = useDispatch();
@@ -23,8 +21,6 @@ const ItemQuantityDetails = () => {
     }, [data]);
 
     const mobile = useMediaQuery("(min-width: 800px)");
-    let wasDragged = useRef(false);
-    const navigate = useNavigate()
 
     return (
         <Box sx={{

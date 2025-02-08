@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { GetStocksApi, } from '../AllGetApi'
 import { Box, colors, Stack, TextField, Typography } from '@mui/material'
 import RefecthButton from '../RefecthButton'
@@ -41,7 +41,7 @@ const StocksList = () => {
             p: 2,
             // width: '85vw',
             height: '100vh',
-            mt:2
+            mt: 2
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{

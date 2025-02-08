@@ -1,5 +1,5 @@
 import { Delete, Edit } from '@mui/icons-material';
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, MenuItem, Select, Stack, TextField, } from '@mui/material';
 import React, { useEffect } from 'react';
 import { CanteenUserDataType } from '../AllTypes';
 import { UpdateUserData } from '../AllPostApi';
@@ -11,7 +11,7 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const { mutateAsync, isPending } = UpdateUserData();
-    const { data: canteenUser, refetch } = GetCanteenUserApi();
+    const { data: canteenUser } = GetCanteenUserApi();
 
     const [updateUserData, setUpdateUserData] = React.useState<CanteenUserDataType>({
         name: "", email: "", role: "", profile_url: "", phone: "", canteen_id: []

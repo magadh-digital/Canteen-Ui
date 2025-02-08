@@ -1,14 +1,13 @@
 import * as React from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { Box, Button, colors, Stack, useMediaQuery, } from '@mui/material';
+import { Box, Button, Stack, useMediaQuery, } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import { PostOrderCreateApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
 import { CreateOrderType, MenuItemType } from '../AllTypes';
 import { resetData } from '../AllStoreSlice/AddQuantitySlice';
-import { UserDataType, UserRenderUserLogin } from './UserRenderUserLogin';
-import { SetUser } from '../AllStoreSlice/LoginSlice';
+import { UserRenderUserLogin } from './UserRenderUserLogin';
 import { useNavigate } from 'react-router-dom';
 
 const initialState: CreateOrderType = {
@@ -29,7 +28,6 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
     const dispatch = useDispatch()
     const [createOrderData, setCreateOrderData] = React.useState(initialState)
     const { mutateAsync: orderCreate } = PostOrderCreateApi()
-    const [loginUser, setLoginUser] = React.useState(false);
     const mobile = useMediaQuery("(max-width:800px)")
     const { orderData, price, } = useSelector((state: RootState) => state.PriceAndQuantity)
     const { user: userData } = useSelector((state: RootState) => state.LoginSlice)
@@ -45,7 +43,7 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
             ...createOrderData,
             user_id: userData?.id || "",
             customer_name: userData?.name || "WALKING",
-            customer_type: "USER" ,
+            customer_type: "USER",
             canteen_id: canteen_id,
             items: changeItemData,
         }
@@ -56,10 +54,9 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                 toast.success("Order Created Successfully")
                 setOpen(false)
                 dispatch(resetData())
-                setLoginUser(false)
                 setCreateOrderData(initialState)
                 navigate('/user?canteen_id=' + canteen_id)
-                
+
             }
         }
         catch (error: any) {

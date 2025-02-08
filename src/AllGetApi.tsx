@@ -1,7 +1,7 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
-import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetStockTypes, GetSupplierApiType, ReportDashboard, StockDetails, UpdateOrderType } from "./AllTypes"
+import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, ReportDashboard, StockDetails, UpdateOrderType } from "./AllTypes"
 import { toast } from "react-toastify"
 
 export const GetCanteenUserApi = () => {

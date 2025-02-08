@@ -136,7 +136,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       height: '90vh',
       // overflow: 'hidden',
       width: '100vw',
-      
+
     }}
 
     >
@@ -163,7 +163,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           </IconButton>
           {
             open ? null :
-              <img src='public/2795550.png' alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
+              <img src="public/vintage-restaurant-menu_23-2147491098.avif" alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
           }
           <Stack width={"100%"} direction="row" spacing={2} alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="center" spacing={2}>
@@ -211,26 +211,33 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           },
         }}
       >
-        <DrawerHeader>
+        <DrawerHeader sx={{ position: 'relative', padding: 0 }}>
           <img
-            src="public/2795550.png"
+            src="public/vintage-restaurant-menu_23-2147491098.avif"
             alt="no img"
-            width="40px"
-            height="40px"
-
+            width="100%"
+            height="70px"
             style={{
-              borderRadius: '50%',
-              marginRight: open ? '20px' : '0',
-              transition: 'margin-right 0.3s',
+              objectFit: 'cover',
               backgroundColor: 'white',
-              
             }}
           />
-          <IconButton onClick={handleDrawerClose} sx={{ color: 'green' }}>
+          <IconButton
+            onClick={handleDrawerClose}
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              right: '5px',
+              transform: 'translateY(-50%)',
+              color: 'green',
+              // backgroundColor: 'rgba(255, 255, 255, 0.7)',   
+              '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.9)' }
+            }}
+          >
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider  />
+        <Divider />
         <List >
           {NAVIGATION.map((item: PagesTypes, index) => (
             <React.Fragment key={index}>

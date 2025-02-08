@@ -1,13 +1,13 @@
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { Add, Delete, Edit } from '@mui/icons-material'
+import { Add, Delete, } from '@mui/icons-material'
 import { AddVoucherAndUpdate } from '../AllPostApi'
 import EditAndUpdateUsers from './EditAndUpdateUsers'
-import { CanteenUserDataType, User } from '../AllTypes'
+import { CanteenUserDataType, } from '../AllTypes'
 
 
-export const AddVoucher = ({ user_id, data }: { user_id: string, data : CanteenUserDataType }) => {
+export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUserDataType }) => {
     const [open, setOpen] = useState(false)
     const [voucherData, setVoucherData] = useState({
         description: "",

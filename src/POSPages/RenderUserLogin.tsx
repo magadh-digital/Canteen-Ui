@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Checkbox, colors, FormControlLabel, FormGroup, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Autocomplete, Box, Checkbox, colors, FormControlLabel, FormGroup, Stack, Table, TableBody, TableCell, TableContainer, TableRow, TextField, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CreateOrderType } from "../AllTypes";
 import ViewItemsDetails from "./ViewItemsDetails";
@@ -39,7 +39,7 @@ export const RenderUserLogin = ({
 }) => {
 
     const mobile = useMediaQuery("(max-width:800px)");
-    const { data, isLoading, refetch, isRefetching } = GetAllUserApi()
+    const { data, isLoading, isRefetching } = GetAllUserApi()
     const [userType, setUserType] = useState("WALKING")
 
     const handleChangeSelectUser = async (user: any) => {

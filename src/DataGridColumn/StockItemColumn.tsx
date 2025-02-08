@@ -1,13 +1,8 @@
-import { Box, Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, Modal, Pagination, Stack, TableContainer, Typography } from "@mui/material";
+import { Box, Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Stack, TableContainer, Typography } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import React, { useState } from "react";
-import { GetStockTypes } from "../AllTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { setStocksItemView } from "../AllStoreSlice/StocksItemViewSlice";
 import { RootState } from "../Store";
-import { baseUrl } from "../ApiEndPoint";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { GetStockDetailsApi } from "../AllGetApi";
 import moment from "moment";
 
@@ -177,7 +172,7 @@ export const ViewStocksDetails = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        marginTop:"10px"
+                        marginTop: "10px"
                     }}>
                         <Pagination
                             sx={{

@@ -1,12 +1,14 @@
-import { Avatar, Box, Card, CardContent, Checkbox, colors, FormControlLabel, Grid, LinearProgress, Paper, Slider, Stack, styled, Typography, useMediaQuery } from "@mui/material";
-import { BarChart, LineChart, PieChart, ScatterChart } from "@mui/x-charts";
+import {
+    Avatar, Box, Card, CardContent,
+    colors, Grid, LinearProgress, Typography,
+} from "@mui/material";
+import { PieChart, } from "@mui/x-charts";
 import { GetReportOrderApi } from "../AllGetApi";
-import React from "react";
-import { AttachMoney, ShoppingCart, Today, CalendarToday, LocalOffer } from "@mui/icons-material";
+import { ShoppingCart, LocalOffer } from "@mui/icons-material";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from "../AllStoreSlice/UserOrderListSlice";
-import { GetOrderTypes, QuantityType, User } from "../AllTypes";
+import { QuantityType, User } from "../AllTypes";
 
 export const Dashboard = () => {
     const { data, isLoading } = GetReportOrderApi();

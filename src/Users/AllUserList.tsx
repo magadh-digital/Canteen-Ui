@@ -9,8 +9,13 @@ import { AddVoucher } from "./AddVoucherAndUpdate"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../Store"
 import { setZoomImage } from "../AllStoreSlice/ZoomImageSlice"
+import { CustomPagination, UsePageHook } from "../Utils"
 
 const AllUserList = () => {
+    const { page, limit, setPage, setLimit } = UsePageHook({
+        page: 1,
+        limit: 10
+    })
     const [search, setSearch] = useState("")
     const [filter, setFilter] = useState("")
     const dispatch = useDispatch()
@@ -75,64 +80,77 @@ const AllUserList = () => {
                     </FormControl>
                 </Stack>
                 {isLoading ? <div><LinearProgress /></div> : (
-                    <TableContainer style={{
-                        border: "1px solid #E0E0E0",
-                        borderRadius: "5px",
-                        overflow: "auto",
-                        width: "100%",
-                        height: "70vh",
-                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                        padding: "30px"
-                    }}>
-                        <div >
-                            <table className="user_table">
-                                <tr>
-                                    <th> Name </th>
-                                    <th> Email </th>
-                                    <th> Contact </th>
-                                    <th> Role </th>
-                                    <th style={{ width: "200px", textAlign: "center" }}> Created  </th>
-                                    <th style={{ width: "100px", textAlign: "right" }}>Edit</th>
-                                </tr>
-                                {data?.users?.map((user, index) => (
-                                    <tr key={index + 1}>
-                                        <td>
-                                            <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                                                <div style={{
-                                                    padding: "0px",
-                                                    borderRadius: "50%",
-                                                    width: "40px",
-                                                    height: "40px",
-                                                    backgroundColor: "#E0E0E0"
-                                                }}
-                                                    onClick={() => dispatch(setZoomImage(`${baseUrl}${user?.profile_url}`))}
-                                                >
-                                                    <img src={`${baseUrl}${user?.thumbnail_url}`} alt="" width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} />
-                                                </div>
-                                                <span>
-                                                    {user?.name}
-                                                </span>
-                                            </Stack>
-                                        </td>
-                                        <td> {user?.email} </td>
-                                        <td> {user?.phone} </td>
-                                        <td> {user?.role} </td>
-                                        <td style={{ width: "200px", textAlign: "center" }}> {moment(user?.created_at).format("YYYY-MM-DD : HH:mm")} { } </td>
-                                        <td style={{
-                                            cursor: "pointer",
-                                            color: "blue",
-                                            width: "100px",
-                                            textAlign: "right",
-                                        }}>
-                                            <AddVoucher user_id={user?.id || ""} data={user} />
-                                        </td>
+                    <>
+                        <TableContainer style={{
+                            border: "1px solid #E0E0E0",
+                            borderRadius: "5px",
+                            overflow: "auto",
+                            width: "100%",
+                            height: "70vh",
+                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                            padding: "30px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}>
+                            <div >
+                                <table className="user_table">
+                                    <tr>
+                                        <th> Name </th>
+                                        <th> Email </th>
+                                        <th> Contact </th>
+                                        <th> Role </th>
+                                        <th style={{ width: "200px", textAlign: "center" }}> Created  </th>
+                                        <th style={{ width: "100px", textAlign: "right" }}>Edit</th>
                                     </tr>
-                                ))}
-                            </table>
-                        </div>
+                                    {data?.users?.map((user, index) => (
+                                        <tr key={index + 1}>
+                                            <td>
+                                                <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                                                    <div style={{
+                                                        padding: "0px",
+                                                        borderRadius: "50%",
+                                                        width: "40px",
+                                                        height: "40px",
+                                                        backgroundColor: "#E0E0E0"
+                                                    }}
+                                                        onClick={() => dispatch(setZoomImage(`${baseUrl}${user?.profile_url}`))}
+                                                    >
+                                                        <img src={`${baseUrl}${user?.thumbnail_url}`} alt="" width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} />
+                                                    </div>
+                                                    <span>
+                                                        {user?.name}
+                                                    </span>
+                                                </Stack>
+                                            </td>
+                                            <td> {user?.email} </td>
+                                            <td> {user?.phone} </td>
+                                            <td> {user?.role} </td>
+                                            <td style={{ width: "200px", textAlign: "center" }}> {moment(user?.created_at).format("YYYY-MM-DD : HH:mm")} { } </td>
+                                            <td style={{
+                                                cursor: "pointer",
+                                                color: "blue",
+                                                width: "100px",
+                                                textAlign: "right",
+                                            }}>
+                                                <AddVoucher user_id={user?.id || ""} data={user} />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </table>
+                            </div>
+                            <CustomPagination
+                                total={data?.total || 0}
+                                page={page}
+                                limit={limit}
+                                setpage={(value: number) => setPage(value)}
+                                setlimit={(value: number) => setLimit(value)}
+                            />
+                        </TableContainer>
+                    </>
 
-                    </TableContainer>
                 )}
+
             </Stack>
 
         </Box >

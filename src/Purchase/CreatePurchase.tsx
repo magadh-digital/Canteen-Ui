@@ -59,6 +59,7 @@ const CreatePurchase = () => {
             other_charges: ''
         })
         navigate("/purchase")
+        setOpen(false)
     }
 
 

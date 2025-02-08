@@ -1,5 +1,5 @@
-import { PlaylistRemove, PostAdd, PostAddTwoTone } from "@mui/icons-material"
-import { colors, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Popper, Select, Stack, styled, TextField, Tooltip, Typography } from "@mui/material"
+import { PlaylistRemove, } from "@mui/icons-material"
+import { colors, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Tooltip, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { GetStocksApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
@@ -20,7 +20,7 @@ const MenuProps = {
 
 const MinusStocks = () => {
     const [open, setOpen] = useState(false)
-    const { data, isLoading } = GetStocksApi()
+    const { data, } = GetStocksApi()
     const { mutateAsync } = UpdateStockItemApi()
     const [updateStocks, setUpdateStocks] = useState<any>({
         item_id: "",

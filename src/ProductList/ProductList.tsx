@@ -1,6 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, } from "react-redux";
 import { GetMenuItemListApi } from "../AllGetApi";
-import { RootState } from "../Store";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import RefecthButton from "../RefecthButton";
 import { DataGrid, GridPaginationModel } from "@mui/x-data-grid";
@@ -44,7 +43,6 @@ const ProductList = () => {
 
     return (
         <Box sx={{
-            width: "85vw",
             height: "100%",
             backgroundColor: "white",
             m: 1,
@@ -79,8 +77,9 @@ const ProductList = () => {
                     rows={ProductItemsRows}
                     columns={ProductItemsColumn}
                     loading={isLoading}
-                    paginationMode="server"
-                    rowCount={data?.total || 0}
+                    paginationMode="client"
+
+                    rowCount={data?.menuitems?.length || 0}
                     paginationModel={page}
                     onPaginationModelChange={handlePageChange}
                     pageSizeOptions={[10, 20, 50, 100]}

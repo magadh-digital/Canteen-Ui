@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import { setAddProduct } from "../AllStoreSlice/AddProductCanteenSlice";
 import { GridAddIcon } from "@mui/x-data-grid";
 import UpdateStocks from "../Stocks/UpdateStocks";
-import MinusStocks from "../Stocks/MinusStock";
 
 
 const PosList = () => {

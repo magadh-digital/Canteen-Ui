@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import { GetOrderDetailsApi } from '../AllGetApi';
@@ -6,7 +5,7 @@ import { Box, Card, Typography, Stack, Divider } from '@mui/material';
 import moment from 'moment';
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from '../AllStoreSlice/UserOrderListSlice';
 import { GetOrderTypes, QuantityType } from '../AllTypes';
-import { ArrowBack, ArrowLeft } from '@mui/icons-material';
+import { ArrowBack, } from '@mui/icons-material';
 
 
 const MyOrderList = () => {

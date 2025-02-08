@@ -1,12 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
-import { styled, useTheme, } from '@mui/material/styles';
-import { Box, Button, colors, IconButton, Stack, Table, Checkbox, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Tooltip, Typography, useMediaQuery, ButtonGroup } from '@mui/material';
+import { Box, Button, colors, IconButton, Stack, Table, Checkbox, TableBody, TableCell, TableContainer, TableHead, TableRow,  Typography, useMediaQuery, ButtonGroup } from '@mui/material';
 import { MenuItemType } from '../AllTypes';
-import { Delete } from '@mui/icons-material';
-import { decrementQuantity, incrementQuantity, removeItem, resetData, setData, setnewData, } from '../AllStoreSlice/AddQuantitySlice';
+import { decrementQuantity, incrementQuantity, setnewData, } from '../AllStoreSlice/AddQuantitySlice';
 import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQuantitySlice';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';

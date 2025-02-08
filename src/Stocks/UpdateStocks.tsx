@@ -1,5 +1,5 @@
 import { PostAdd } from "@mui/icons-material"
-import { Autocomplete, Box, Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Popper, Select, SelectChangeEvent, Stack, styled, Tab, Tabs, TextField, Tooltip, Typography } from "@mui/material"
+import { Autocomplete, Box, Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Stack, Tab, Tabs, TextField, Tooltip, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { GetStocksApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
@@ -30,7 +30,7 @@ export interface StockItemType {
 
 const UpdateStocks = () => {
     const [open, setOpen] = useState(false)
-    const { data, isLoading } = GetStocksApi()
+    const { data, } = GetStocksApi()
     const [value, setValue] = useState("0")
     const { mutateAsync } = UpdateStockItemApi()
     const [arrayAddStock, setArrayAddStock] = useState<StockItemType[]>([])

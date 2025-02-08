@@ -1,11 +1,10 @@
-import { Box, Checkbox, colors, Divider, FormControl, InputLabel, MenuItem, Paper, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, } from '@mui/material'
+import { Box, Checkbox, colors,  FormControl, InputLabel, MenuItem, Paper, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../Store'
 import { CreateOrderType, MenuItemType } from '../AllTypes'
 import { useEffect, useState } from 'react'
 import { UserDataType } from './RenderUserLogin'
 import { setPrice } from '../AllStoreSlice/PriceAndQuantitySlice'
-import { toast } from 'react-toastify'
 
 
 const ViewItemsDetails = ({ userData,

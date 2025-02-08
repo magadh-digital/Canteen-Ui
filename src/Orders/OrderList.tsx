@@ -1,23 +1,25 @@
 import { Box, colors, Stack, TextField, Typography } from "@mui/material"
 import { DataGrid, GridPaginationModel, } from "@mui/x-data-grid"
 import { GetOrderDetailsApi } from "../AllGetApi"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import RefecthButton from "../RefecthButton"
 import { OrderDetailsColumn } from "../DataGridColumn/OrderDetailsColumn"
+import { CustomPagination, UsePageHook } from "../Utils"
 
 export const OrderList = () => {
     const canteen_id = localStorage.getItem("canteen_user_id")
     const [search, setSearch] = useState<string>("")
-    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-        page: 0,
-        pageSize: 20,
-    })
+    const { page, limit, setPage, setLimit } = UsePageHook({ page: 1, limit: 100 })
     const { data, isRefetching, refetch } = GetOrderDetailsApi({
-        page: paginationModel.page + 1,
-        limit: paginationModel.pageSize,
+        page,
+        limit,
         canteen_id: canteen_id || ""
 
     })
+
+    useEffect(() => {
+        refetch();
+    }, [page, limit]);
 
     const OrderRowsData = useMemo(() => {
         if (data) {
@@ -27,20 +29,18 @@ export const OrderList = () => {
                 return {
                     ...item,
                     id: item?.id,
-                    idx: index + 1 * (paginationModel.page * paginationModel.pageSize + 1)
+                    idx: index + 1 + ((page - 1) * limit),
                 }
             })
         }
-    }, [data])
+    }, [data, search, page, limit])
 
-    const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
-        setPaginationModel(newPaginationModel)
-    }
+
 
     return (
         <Box
             sx={{
-                p:4,
+                p: 4,
                 height: "100vh",
                 width: "100%",
             }}
@@ -68,17 +68,20 @@ export const OrderList = () => {
             }}>
 
                 <DataGrid
-                    pagination
-                    rows={OrderRowsData || []}
+                    rows={OrderRowsData}
                     columns={OrderDetailsColumn}
                     rowCount={data?.pagination?.total_items || 0}
                     paginationMode="server"
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={handlePaginationModelChange}
-                    pageSizeOptions={[10, 20, 50, 100]}
-                    sx={{
-                        bgcolor: "white"
+                    paginationModel={{
+                        page,
+                        pageSize: limit
                     }}
+                    onPaginationModelChange={(model) => {
+                        setPage(model.page + 1);
+                        setLimit(model.pageSize);
+                    }}
+                    pageSizeOptions={[10, 20, 50, 100]}
+                    sx={{ bgcolor: "white" }}
                 />
 
             </Box>
