@@ -11,6 +11,7 @@ import UserSaveSlice from "./AllStoreSlice/UserSaveSlice";
 import UserOrderListSlice from "./AllStoreSlice/UserOrderListSlice";
 import LoginSlice from "./AllStoreSlice/LoginSlice";
 import StocksItemViewSlice from "./AllStoreSlice/StocksItemViewSlice";
+import ZoomImageSlice from "./AllStoreSlice/ZoomImageSlice";
 
 
 export const store = configureStore({
@@ -27,6 +28,7 @@ export const store = configureStore({
         OrderViewList: UserOrderListSlice,
         LoginSlice: LoginSlice,
         stocksItemView: StocksItemViewSlice,
+        ZoomImage: ZoomImageSlice,
 
     }
 })

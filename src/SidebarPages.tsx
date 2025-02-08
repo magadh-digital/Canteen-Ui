@@ -7,42 +7,41 @@ import { PagesTypes } from './AllTypes';
 import { FoodBank, Person } from '@mui/icons-material';
 // import { PagesTypes } from './AllTypes';
 import CategoryIcon from '@mui/icons-material/Category';
-import { Avatar } from '@mui/material';
+import { colors } from '@mui/material';
 export const NAVIGATION: PagesTypes[] = [
-
   {
     segment: 'dashboard',
     title: 'Dashboard',
-    icon: <DashboardIcon sx={{ color: "#9FD675" }} />,
+    icon: <DashboardIcon sx={{ color: colors.grey[200] }} />,
   },
   {
     segment: 'orders',
     title: 'Invoice',
-    icon: <ShoppingCartIcon sx={{ color: "#9FD675" }} />,
+    icon: <ShoppingCartIcon sx={{ color: colors.grey[200] }} />,
   },
   {
     segment: 'users',
     title: 'Users',
-    icon: <Person sx={{ color: "#9FD675",  }} />
+    icon: <Person sx={{ color: colors.grey[200] }} />
   },
   {
     segment: 'Canteen',
     title: 'Canteen',
-    icon: <FoodBank sx={{ color: "#9FD675" }} />,
+    icon: <FoodBank sx={{ color: colors.grey[200] }} />,
   },
   {
     segment: 'products',
     title: 'Products',
-    icon: <CategoryIcon sx={{ color: "#9FD675" }} />,
+    icon: <CategoryIcon sx={{ color: colors.grey[200] }} />,
     children: [
       {
         segment: 'products-items',
         title: 'Products items',
-        icon: <ShoppingCartIcon sx={{ color: "#9FD675" }} />
+        icon: <ShoppingCartIcon sx={{ color: colors.grey[200] }} />
       }
     ]
   },
-  
+
   {
     segment: 'supplier',
     title: 'Supplier',
@@ -61,23 +60,23 @@ export const NAVIGATION: PagesTypes[] = [
   {
     segment: 'reports',
     title: 'Reports',
-    icon: <BarChartIcon sx={{ color: "#9FD675" }} />,
+    icon: <BarChartIcon sx={{ color: colors.grey[200] }} />,
     children: [
       {
         segment: 'order-reports',
         title: 'Order Reports',
-        icon: <DescriptionIcon sx={{ color: "#9FD675" }} />,
+        icon: <DescriptionIcon sx={{ color: colors.grey[200] }} />,
       },
       {
         segment: 'traffic',
         title: 'Traffic',
-        icon: <DescriptionIcon sx={{ color: "#9FD675" }} />,
+        icon: <DescriptionIcon sx={{ color: colors.grey[200] }} />,
       },
     ],
   },
   {
     segment: 'integrations',
     title: 'Integrations',
-    icon: <LayersIcon sx={{ color: "#9FD675" }} />,
+    icon: <LayersIcon sx={{ color: colors.grey[200] }} />,
   },
 ];

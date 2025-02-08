@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { setAllMenuItems, setMenuItemId } from "../AllStoreSlice/AllMenuItemsSlice";
 import { DeleteProductItem } from "../AllPostApi";
 import { toast } from "react-toastify";
+import { setZoomImage } from "../AllStoreSlice/ZoomImageSlice";
 
 export const ProductItemsColumn: GridColDef[] = [
     {
@@ -71,32 +72,13 @@ export const ProductItemsColumn: GridColDef[] = [
         headerName: 'Image',
         width: 130,
         renderCell: ({ value }) => {
-            const [open, setOpen] = useState(false)
-            const handleOpen = () => {
-                setOpen(true)
-            }
+            const dispatch = useDispatch()
+
             return (
                 <>
                     <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
-                        <img src={value} width={"50px"} height={"50px"} onClick={handleOpen} />
+                        <img src={value} width={"50px"} height={"50px"} onClick={() => dispatch(setZoomImage(value))} />
                     </div>
-                    <Modal open={open} onClose={() => setOpen(false)}>
-                        <Box sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: 600,
-                            bgcolor: "background.paper",
-                            border: "0px solid #000",
-                            boxShadow: 24,
-                            p: 2,
-                            height: "60vh",
-                            borderRadius: "10px"
-                        }}>
-                            <img src={value} width={"100%"} height={"100%"} />
-                        </Box>
-                    </Modal>
                 </>
             )
         }

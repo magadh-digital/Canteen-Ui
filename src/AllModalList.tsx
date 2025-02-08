@@ -6,6 +6,7 @@ import AddMenuProduct from './POSPages/AddMenuProduct'
 import PrintPage from './POSPages/PrintPage'
 import { ProductItemsEdit } from './ProductList/ProductItemsEdit'
 import UserOrdersViewItems from './UserPosPage.tsx/UserOrderViewItem'
+import { ZoomImage } from './Users/AllUserList'
 
 const AllModalList = () => {
     return (
@@ -17,6 +18,7 @@ const AllModalList = () => {
             <UserOrdersViewItems />
             <RenderUserLoginModal />
             <ViewStocksDetails />
+            <ZoomImage />
         </>
     )
 }

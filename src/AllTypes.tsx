@@ -167,22 +167,25 @@ export interface CanteenData {
 export interface AllUserType {
   total: number;
   users: CanteenUserDataType[]
+  baseUrl: string
 }
 
 export interface CanteenUserDataType {
-  canteen_id?: string;
-  id: string;
-  name: string;
-  description: string;
-  phone: number;
-  email: string;
-  password: string;
-  image_url: string;
-  created_at: string;
-  updated_at: string;
-  location: string;
-  role: string;
-  cp_code: string
+  canteen_id?: string[];
+  id?: string;
+  name?: string;
+  description?: string;
+  phone?: string | number;
+  email?: string;
+  password?: string;
+  image_url?: string;
+  created_at?: string;
+  updated_at?: string;
+  location?: string;
+  role?: string;
+  cp_code?: string;
+  profile_url?: string | File;
+  thumbnail_url?: string
 
 }
 
@@ -372,13 +375,22 @@ export interface Canteen {
 }
 
 export interface User {
-  id: string
-  name: string
-  phone: number
-  role: string
-  email: string
-  cp_code: string
-  created_at: string
-  updated_at: string
-  canteen_id: any
+  id?: string
+  name?: string
+  phone?: number
+  role?: string
+  email?: string
+  cp_code?: string
+  created_at?: string
+  updated_at?: string
+  canteen_id?: any
+}
+
+export interface UpdateUserType {
+  name?: string;
+  phone?: number;
+  role?: string;
+  email?: string;
+  canteen_id?: []
+  profile_url?: string
 }

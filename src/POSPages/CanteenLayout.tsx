@@ -1,34 +1,24 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../Store'
+import { useDispatch, } from 'react-redux'
 
 
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { GetCanteenUserApi, GetOrderDetailsApi } from '../AllGetApi'
+import { GetCanteenUserApi, } from '../AllGetApi'
 import { styled, useTheme } from '@mui/material/styles';
 import {
-    Box,
-    IconButton, ListItemIcon, Menu, MenuItem, Stack, Toolbar, Typography, useMediaQuery,
-    Divider,
-    Button,
+    Box, MenuItem, Stack, Toolbar, Typography, useMediaQuery,
     SelectChangeEvent,
-    Tooltip,
     FormControl,
     colors,
     Select,
 
 } from "@mui/material"
-import { GridMenuIcon } from "@mui/x-data-grid";
-// import {  } from '@mui/x-data-grid';
 import moment from 'moment';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { setUser } from '../AllStoreSlice/UserSaveSlice';
+import { Outlet, useNavigate } from 'react-router-dom';
 
-import { AccountCircle, ArrowBack, ExitToApp, ListAlt, LogoutOutlined } from '@mui/icons-material';
-import { SetLoginModel, SetLogOut } from '../AllStoreSlice/LoginSlice';
+import { ExitToApp, } from '@mui/icons-material';
 import { setCanteenDataSlice } from '../AllStoreSlice/CanteenIdSlice';
 import { resetData } from '../AllStoreSlice/AddQuantitySlice';
-import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -59,7 +49,7 @@ const CanteenLayout = () => {
     const theme = useTheme()
     const open = Boolean(anchorEl);
     const mobile = useMediaQuery('(min-width:800px)');
-    const { data: canteenList, refetch } = GetCanteenUserApi()
+    const { data: canteenList, } = GetCanteenUserApi()
 
 
     const handleChange = (event: SelectChangeEvent) => {

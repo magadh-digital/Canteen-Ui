@@ -57,7 +57,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  backgroundColor: "#9FD675"
+  backgroundColor: colors.grey[200],
+
 }));
 
 interface AppBarProps extends MuiAppBarProps {
@@ -145,9 +146,9 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
         open={open}
         sx={{
           zIndex: theme.zIndex.drawer + 1,
-          backgroundColor: "#9FD675",
+          backgroundColor: colors.grey[100],
           border: "none",
-          boxShadow: "none",
+          boxShadow: "0px 2px 2px #bebebe, 0px 0px 1px #ffffff",
           borderBottom: "0.1px solid #E0E0E0",
         }}>
         <Toolbar>
@@ -222,13 +223,14 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
               marginRight: open ? '20px' : '0',
               transition: 'margin-right 0.3s',
               backgroundColor: 'white',
+              
             }}
           />
           <IconButton onClick={handleDrawerClose} sx={{ color: 'green' }}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
+        <Divider  />
         <List >
           {NAVIGATION.map((item: PagesTypes, index) => (
             <React.Fragment key={index}>

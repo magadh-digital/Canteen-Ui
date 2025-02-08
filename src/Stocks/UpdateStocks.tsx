@@ -1,5 +1,5 @@
 import { PostAdd } from "@mui/icons-material"
-import { Box, Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Popper, Select, SelectChangeEvent, Stack, styled, Tab, Tabs, TextField, Tooltip, Typography } from "@mui/material"
+import { Autocomplete, Box, Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Popper, Select, SelectChangeEvent, Stack, styled, Tab, Tabs, TextField, Tooltip, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { GetStocksApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
@@ -225,37 +225,26 @@ const UpdateStocks = () => {
                         value === "0" && (
                             <Stack spacing={3} mt={3}>
                                 <Stack direction={"row"} mt={5} sx={{ justifyContent: "space-between" }}>
-                                    <FormControl
+                                    <Autocomplete
                                         size="small"
                                         sx={{ width: "300px" }}
-                                        hiddenLabel
-                                    >
-                                        <InputLabel id="demo-multiple-chip-label">Items</InputLabel>
-                                        <Select
-                                            sx={{
-                                                width: "300px"
-                                            }}
-                                            label="demo-multiple-chip-label"
-                                            size="small"
-                                            value={updateStocks.item_id || ""}
-                                            onChange={(e) => {
-                                                const selectedItem = data?.remaining?.find((item) => item.ID === e.target.value);
-                                                if (selectedItem) {
-                                                    setUpdateStocks({
-                                                        ...updateStocks,
-                                                        item_id: selectedItem.ID ?? "",
-                                                        item_name: selectedItem.name ?? ""
-                                                    });
-                                                }
-                                            }}
-                                        >
-                                            {data?.remaining?.map((item) => (
-                                                <MenuItem key={item.ID} value={item.ID}>
-                                                    {item.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                        options={data?.remaining || []}
+                                        getOptionLabel={(option) => option.name || ""}
+                                        value={data?.remaining?.find((item) => item.ID === updateStocks.item_id) || null}
+                                        onChange={(_, newValue) => {
+                                            if (newValue) {
+                                                setUpdateStocks({
+                                                    ...updateStocks,
+                                                    item_id: newValue.ID || "",
+                                                    item_name: newValue.name
+                                                });
+                                            }
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Items" variant="outlined" size="small" />
+                                        )}
+                                    />
+
                                     <TextField
                                         label="Quantity"
                                         size="small"
@@ -364,34 +353,25 @@ const UpdateStocks = () => {
                         <>
                             <Stack spacing={3} mt={3}>
                                 <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
-                                    <FormControl size="small">
-                                        <InputLabel id="demo-multiple-chip-label">Items</InputLabel>
-                                        <Select
-                                            sx={{
-                                                width: "300px"
-                                            }}
-                                            size="small"
-                                            label="Items"
-                                            id="demo-multiple-chip"
-                                            value={minusUpdateStocks.item_id || ""}
-                                            onChange={(e) => {
-                                                const selectedItem = data?.remaining?.find((item) => item.ID === e.target.value);
-                                                if (selectedItem) {
-                                                    setMinusUpdateStocks({
-                                                        ...minusUpdateStocks,
-                                                        item_id: selectedItem.ID ?? "",
-                                                        item_name: selectedItem.name ?? ""
-                                                    });
-                                                }
-                                            }}
-                                        >
-                                            {data?.remaining?.map((item) => (
-                                                <MenuItem key={item.ID} value={item.ID}>
-                                                    {item.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                    <Autocomplete
+                                        size="small"
+                                        sx={{ width: "300px" }}
+                                        options={data?.remaining || []}
+                                        getOptionLabel={(option) => option.name || ""}
+                                        value={data?.remaining?.find((item) => item.ID === updateStocks.item_id) || null}
+                                        onChange={(_, newValue) => {
+                                            if (newValue) {
+                                                setUpdateStocks({
+                                                    ...updateStocks,
+                                                    item_id: newValue.ID || "",
+                                                    item_name: newValue.name
+                                                });
+                                            }
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Items" variant="outlined" size="small" />
+                                        )}
+                                    />
                                     <TextField
                                         label="Quantity"
                                         size="small"

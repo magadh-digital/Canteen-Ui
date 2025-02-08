@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoginCanteenUser, setLoginCanteenUserToken } from "./AllStoreSlice/LoginCanteenUserSlice";
 import { RootState } from "./Store";
+import { image_base_url } from "./ApiEndPoint";
+import { setZoomImage } from "./AllStoreSlice/ZoomImageSlice";
 
 export const ProfilePage = () => {
     const [open, setOpen] = useState(false);
@@ -23,6 +25,8 @@ export const ProfilePage = () => {
         localStorage.removeItem('canteen_name')
         navigate('/login');
     };
+
+
 
     return (
         <>
@@ -61,13 +65,20 @@ export const ProfilePage = () => {
                         spacing={1}
                         mt={5}
                     >
-                        <img src='public/imagesPr.png' width={"108px"} height={"108px"} />
+                        <img
+                            onClick={() => dispatch(setZoomImage(`${image_base_url}${canteen?.profile_url}`))}
+                            src={`${image_base_url}${canteen?.profile_url}`}
+                            width={"108px"}
+                            height={"108px"}
+                            style={{ borderRadius: "50%", cursor: "pointer" }}
+                        />
                         <div>
                             <Typography variant="h5" component="div"
                                 style={{
                                     fontWeight: "bold",
                                     color: "blue",
                                     fontStyle: "italic",
+
                                 }}
                             >
                                 {canteen?.name}

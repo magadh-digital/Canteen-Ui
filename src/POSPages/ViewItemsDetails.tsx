@@ -90,6 +90,15 @@ const ViewItemsDetails = ({ userData,
             return 0
         }
     }
+    useEffect(() => {
+        setCreatedOrderData((prevState) => ({
+            ...prevState,
+            total_amount: totalPaybaleAmount(),
+            payment_type: selectPyment ? selectPyment : "CASH",
+            voucher: voucherChecked,
+            status: "COMPLETED"
+        }))
+    }, [createdOrderData])
 
     return (
         <Box sx={{

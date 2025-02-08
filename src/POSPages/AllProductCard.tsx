@@ -66,7 +66,6 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                     top: 0,
                     zIndex: 1,
                     bgcolor: 'white',
-                    boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                 }}
             >
 
@@ -79,7 +78,7 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                         onChange={(e) => setSearch(e.target.value)}
                         fullWidth
                         sx={{
-                            bgcolor: 'white',
+                            bgcolor: "white",
                             borderRadius: '8px',
                             '& .MuiOutlinedInput-root': {
                                 borderRadius: '8px',

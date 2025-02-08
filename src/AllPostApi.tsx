@@ -1,8 +1,9 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import { AddPurcahseTypes, AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UpdatePurcahseTypes, } from "./AllTypes"
+import { AddPurcahseTypes, AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UpdatePurcahseTypes, UpdateUserType, User, } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StockItemType } from "./Stocks/UpdateStocks"
+import { AddNewUserListProps } from "./Users/AddNewUserList"
 
 
 export const PostCanteenUserApi = () => {
@@ -203,6 +204,55 @@ export const UpdateStockItemApi = () => {
         mutationFn: stocksApi,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['stock-item'] })
+        }
+    })
+}
+
+export const AddNewUserRegister = () => {
+    const queryClient = useQueryClient();
+
+    const userRegister = async (data: FormData) => {
+        const response = await axios.post(`${baseUrl}/user/register`, data);
+        return response;
+    };
+
+    return useMutation({
+        mutationFn: userRegister,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['alluser'] });
+        },
+    });
+};
+
+export interface AddVoucherType {
+    user_id: string,
+    amount: number;
+    description: string
+}
+export const AddVoucherAndUpdate = () => {
+    const queryClient = useQueryClient();
+    const voucherApi = async ({ data }: { data: AddVoucherType }) => {
+        const response = await axios.post(`${baseUrl}/voucher/create`, data)
+        return response
+    }
+    return useMutation({
+        mutationFn: voucherApi,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['alluser'] })
+        }
+    })
+}
+
+export const UpdateUserData = () => {
+    const queryClient = useQueryClient();
+    const updateUserData = async ({ data, user_id }: { data: FormData, user_id: string }) => {
+        const response = await axios.post(`${baseUrl}/user/${user_id}`, data)
+        return response
+    }
+    return useMutation({
+        mutationFn: updateUserData,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['alluser'] })
         }
     })
 }

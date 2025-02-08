@@ -29,7 +29,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
     const [open, setOpen] = React.useState(false);
     const dispatch = useDispatch()
     const [createOrderData, setCreateOrderData] = React.useState(initialState)
-    const { mutateAsync: orderCreate } = PostOrderCreateApi()
+    const { mutateAsync: orderCreate, isPending } = PostOrderCreateApi()
     const mobile = useMediaQuery("(max-width:800px)")
     const { orderData, price, } = useSelector((state: RootState) => state.PriceAndQuantity)
     const [selectedUser, setSelectedUser] = React.useState(null);
@@ -133,7 +133,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                         <Button variant='contained' color='error' onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={() => handleCreate()} variant="contained" sx={{}} color='success'>
+                        <Button disabled={isPending} onClick={() => handleCreate()} variant="contained" sx={{}} color='success'>
                             Create Order
                         </Button>
 

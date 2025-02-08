@@ -1,5 +1,5 @@
 import { Autocomplete, Box, Checkbox, colors, FormControlLabel, FormGroup, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateOrderType } from "../AllTypes";
 import ViewItemsDetails from "./ViewItemsDetails";
 ;
@@ -68,9 +68,19 @@ export const RenderUserLogin = ({
 
     };
 
+    useEffect(() => {
+        setCreateOrderData((prev) => ({
+            ...prev,
+            user_id: selectedUser?.id || "",
+            customer_name: selectedUser?.name || "WALKING",
+            customer_type: selectedUser ? "USER" : "USER",
+            status: "COMPLETED"
+        }))
+    }, [createOrderData])
+
     return (
         <Box sx={{ display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
-            <Box 
+            <Box
                 sx={{
                     width: mobile ? "100%" : "40%",
                     display: "flex",
@@ -79,7 +89,7 @@ export const RenderUserLogin = ({
                     bgcolor: colors.grey[50],
                 }}
             >
-                <Stack direction={mobile ? "column" : "row"} sx={{ mt:9, width: "100%", justifyContent: "space-between", }} spacing={2} >
+                <Stack direction={mobile ? "column" : "row"} sx={{ mt: 9, width: "100%", justifyContent: "space-between", }} spacing={2} >
                     <Stack>
                         <FormGroup row sx={{
                             ml: !mobile ? 0 : 5
@@ -104,7 +114,7 @@ export const RenderUserLogin = ({
                                                 ...prev,
                                                 user_id: "",
                                                 customer_name: "WALKING",
-                                                customer_type: "WALKING",
+                                                customer_type: "USER",
                                             }))
                                         }}
                                         name="WALKING" />}
