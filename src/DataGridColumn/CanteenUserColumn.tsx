@@ -77,7 +77,7 @@ export const CanteenUserColumn: GridColDef[] = [
         renderCell: ({ row }) => {
             const [open, setOpen] = useState(false);
             const handleCopy = () => {
-                const url = `172.30.2.67:5173/user?canteen_id=${row.id}`;
+                const url = `canteen-ui.mgdh.in/user?canteen_id=${row.id}`;
                 navigator.clipboard.writeText(url)
                     .then(() => {
                         alert("URL copied to clipboard!");
@@ -115,9 +115,9 @@ export const CanteenUserColumn: GridColDef[] = [
                         <DialogContent>
                             <Box sx={{ display: "flex", justifyContent: "center" }}>
                                 <QRCode
-                                    value={`172.30.2.67:5173/user?canteen_id=${row.id}`}
+                                    value={`canteen-ui.mgdh.in/user?canteen_id=${row.id}`}
                                     size={500}
-                                    style={{ height: "auto", width:"auto" }}
+                                    style={{ height: "auto", width: "auto" }}
                                 />
                             </Box>
                         </DialogContent>

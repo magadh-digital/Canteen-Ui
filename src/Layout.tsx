@@ -25,6 +25,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ProfilePage } from './ProfilePage';
 import { useSelector } from 'react-redux';
 import { RootState } from './Store';
+import imgMenu from '../src/assets/vintage-restaurant-menu_23-2147491098.avif'
 
 
 
@@ -163,7 +164,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           </IconButton>
           {
             open ? null :
-              <img src="public/vintage-restaurant-menu_23-2147491098.avif" alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
+              <img src={`${imgMenu}`} alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
           }
           <Stack width={"100%"} direction="row" spacing={2} alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="center" spacing={2}>
@@ -213,7 +214,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       >
         <DrawerHeader sx={{ position: 'relative', padding: 0 }}>
           <img
-            src="public/vintage-restaurant-menu_23-2147491098.avif"
+            src={`${imgMenu}`}
             alt="no img"
             width="100%"
             height="70px"

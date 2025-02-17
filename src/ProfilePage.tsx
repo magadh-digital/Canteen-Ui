@@ -6,6 +6,8 @@ import { setLoginCanteenUser, setLoginCanteenUserToken } from "./AllStoreSlice/L
 import { RootState } from "./Store";
 import { image_base_url } from "./ApiEndPoint";
 import { setZoomImage } from "./AllStoreSlice/ZoomImageSlice";
+import imgagePr from '../src/assets/imagesPr.png'
+import imagelog from '../src/assets/4263209.png'
 
 export const ProfilePage = () => {
     const [open, setOpen] = useState(false);
@@ -32,7 +34,7 @@ export const ProfilePage = () => {
         <>
             <Tooltip title=" View Profile">
                 <span onClick={handleClickOpen} style={{ cursor: "pointer" }}>
-                    <img src='public/imagesPr.png' width={"48px"} height={"48px"} />
+                    <img src={`${imgagePr}`} width={"48px"} height={"48px"} />
                 </span>
             </Tooltip>
 
@@ -111,7 +113,7 @@ export const ProfilePage = () => {
                             spacing={1}
                             p={2}
                         >
-                            <Typography component="div"                                                                                             
+                            <Typography component="div"
                                 style={{
                                     fontWeight: "bold",
                                     color: "black",
@@ -179,7 +181,7 @@ export const ProfilePage = () => {
                             fontSize: "15px",
                             fontWeight: "bold"
                         }}>
-                        Log Out <img src='public/4263209.png' alt='"no img' width={"40px"} height={"30px"} />
+                        Log Out <img src={`${imagelog}`} alt='"no img' width={"40px"} height={"30px"} />
                     </Button>
 
                 </div>

@@ -29,6 +29,8 @@ const MyOrderList = () => {
                 height: '100%',
                 bgcolor: 'white',
                 mt: 8,
+                position: 'fixed',
+                top: 10
             }}
         >
             <Typography variant="h6" sx={{ mb: 1, fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>

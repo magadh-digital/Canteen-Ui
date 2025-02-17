@@ -1,5 +1,5 @@
-import { Autocomplete, Box, Checkbox, colors, FormControlLabel, FormGroup, Stack, Table, TableBody, TableCell, TableContainer, TableRow, TextField, useMediaQuery } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Autocomplete, Box, colors, Stack, Table, TableBody, TableCell, TableContainer, TableRow, TextField, useMediaQuery } from "@mui/material";
+import { useEffect } from "react";
 import { CreateOrderType } from "../AllTypes";
 import ViewItemsDetails from "./ViewItemsDetails";
 ;
@@ -40,7 +40,7 @@ export const RenderUserLogin = ({
 
     const mobile = useMediaQuery("(max-width:800px)");
     const { data, isLoading, isRefetching } = GetAllUserApi()
-    const [userType, setUserType] = useState("WALKING")
+    // const [userType, setUserType] = useState("WALKING")
 
     const handleChangeSelectUser = async (user: any) => {
         try {
@@ -89,8 +89,8 @@ export const RenderUserLogin = ({
                     bgcolor: colors.grey[50],
                 }}
             >
-                <Stack direction={mobile ? "column" : "row"} sx={{ mt: 9, width: "100%", justifyContent: "space-between", }} spacing={2} >
-                    <Stack>
+                <Stack direction={mobile ? "column" : "row"} sx={{ mt: 9, width: "100%", justifyContent: "end", }} spacing={2} >
+                    {/* <Stack>
                         <FormGroup row sx={{
                             ml: !mobile ? 0 : 5
                         }}>
@@ -134,10 +134,10 @@ export const RenderUserLogin = ({
                             />
 
                         </FormGroup>
-                    </Stack>
+                    </Stack> */}
                     <Stack>
-                        {userType === "EMPLOYEE" && <>
-                            <Stack width={"100%"} >
+                        {<>
+                            <Stack width={"100%"} direction={"row"} >
                                 <Autocomplete
                                     id="free-solo-demo"
                                     size="small"
@@ -149,7 +149,11 @@ export const RenderUserLogin = ({
                                     onChange={(_, newValue: any) => {
                                         handleChangeSelectUser(newValue)
                                     }}
-                                    sx={{ width: !mobile ? 300 : "250px", ml: !mobile ? 0 : 5 }}
+                                    sx={{
+                                        width: !mobile ? 300 : "250px",
+                                        ml: !mobile ? 0 : 5,
+
+                                    }}
                                     renderInput={(params) => <TextField {...params} label="User" />}
                                     loading={isLoading || isRefetching}
                                 />
@@ -174,7 +178,7 @@ export const RenderUserLogin = ({
                                         Name :
                                     </TableCell>
                                     <TableCell style={{ fontSize: "12px", fontWeight: "bold", color: "#333", textAlign: "right", padding: "8px", }}>{
-                                        userData?.user?.name || 'N/A'
+                                        userData?.user?.name || 'WALKING'
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -208,6 +212,6 @@ export const RenderUserLogin = ({
                     createdOrderData={createOrderData}
                 />
             </Box>
-        </Box>
+        </Box >
     );
 };

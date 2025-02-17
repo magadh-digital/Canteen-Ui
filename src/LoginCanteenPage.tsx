@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Stack, TextField, Typography } from "@mui/material";
-import GoogleIcon from '@mui/icons-material/Google';
-import XIcon from '@mui/icons-material/X';
-import { FacebookOutlined } from "@mui/icons-material";
+// import GoogleIcon from '@mui/icons-material/Google';
+// import XIcon from '@mui/icons-material/X';
+// import { FacebookOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { PostOtpSender, PostVerifyOtp } from "./AllPostApi";
@@ -9,8 +9,9 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setLoginCanteenData, setLoginCanteenUser, setLoginCanteenUserToken } from "./AllStoreSlice/LoginCanteenUserSlice";
 import { LoadingButton } from "@mui/lab";
-
-
+import img from '../src/assets/ingredients-near-pizza_23-2147772081.avif'
+import imgBG from '../src/assets/Pasted image (2).png'
+import imgFood from '../src/assets/pngwing.com1_.webp'
 
 const LoginCanteenPage = () => {
 
@@ -97,7 +98,7 @@ const LoginCanteenPage = () => {
                     left: 0,
                     height: "100%",
                     width: "100%",
-                    backgroundImage: "url('public/ingredients-near-pizza_23-2147772081.avif')",
+                    backgroundImage: `url(${img})`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
@@ -139,14 +140,14 @@ const LoginCanteenPage = () => {
 
                             ml: 13
                         }}>
-                            <img src="public/Pasted image (2).png" width={"20%"} alt="logo" />
+                            <img src={`${imgBG}`} width={"20%"} alt="logo" />
                         </Typography>
                         <Box sx={{
                             ml: 4,
                             mb: 10
                         }}>
                             <img
-                                src={"public/pngwing.com1_.webp"}
+                                src={`${imgFood}`}
                                 width={"80%"}
                                 alt="Canteen Illustration"
                             />
@@ -317,7 +318,7 @@ const LoginCanteenPage = () => {
                                             }}
                                             flexDirection={"column"}
                                         >
-                                            <Stack direction={"row"}
+                                            {/* <Stack direction={"row"}
                                                 spacing={2}
                                                 justifyContent={"center"}
                                                 alignContent={"center"}
@@ -346,7 +347,7 @@ const LoginCanteenPage = () => {
                                                     p: 0.2
                                                 }}
                                                 />
-                                            </Stack>
+                                            </Stack> */}
 
                                         </Stack>
                                     </Stack>
