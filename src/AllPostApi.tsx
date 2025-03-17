@@ -1,6 +1,6 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import {  AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UpdatePurcahseTypes,  } from "./AllTypes"
+import { AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UpdatePurcahseTypes, } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StockItemType } from "./Stocks/UpdateStocks"
 
@@ -252,6 +252,20 @@ export const UpdateUserData = () => {
         mutationFn: updateUserData,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['alluser'] })
+        }
+    })
+}
+
+export const GetCanteenUserDelete = () => {
+    const queryClient = useQueryClient();
+    const deleteCanteenUser = async ({ id }: { id: string }) => {
+        const response = await axios.delete(`${baseUrl}/user/${id}`)
+        return response
+    }
+    return useMutation({
+        mutationFn: deleteCanteenUser,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['canteen'] })
         }
     })
 }

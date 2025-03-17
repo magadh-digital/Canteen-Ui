@@ -1,6 +1,6 @@
 
 import { LoadingButton } from '@mui/lab'
-import { Box, colors, Dialog, DialogActions, DialogTitle, Stack, TextField, Typography } from '@mui/material'
+import { Box, colors, Dialog, DialogActions, DialogTitle, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { AddNewUserRegister } from '../AllPostApi';
 import { toast } from 'react-toastify';
@@ -174,21 +174,25 @@ const AddNewUserList = () => {
                                     }
                                 }}
                             />
-                            <TextField
-                                id="outlined-basic"
-                                label="User Role"
-                                variant="outlined"
-                                size="small"
-                                fullWidth
-                                name="role"
-                                onChange={handleChange}
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
                                 value={addUser.role}
+                                label="User Role"
+                                name="role"
+                                size='small'
+                                fullWidth
+                                onChange={() => handleChange}
                                 sx={{
                                     "& .MuiOutlinedInput-root": {
                                         borderRadius: "15px"
                                     }
                                 }}
-                            />
+                            >
+                                <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
+                                <MenuItem value={"CUSTOMER"}>CUSTOMER</MenuItem>
+                                <MenuItem value={"EMPLOYEE"}>EMPLOYEE</MenuItem>
+                            </Select>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"

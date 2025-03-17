@@ -67,7 +67,30 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
                                 })}
                         />
                         <TextField label="Email" value={updateUserData.email} size='small' fullWidth onChange={(e) => setUpdateUserData({ ...updateUserData, email: e.target.value })} />
-                        <TextField label="Role" value={updateUserData.role} size='small' fullWidth onChange={(e) => setUpdateUserData({ ...updateUserData, role: e.target.value })} />
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={updateUserData.role}
+                            label="User Role"
+                            name="role"
+                            size='small'
+                            fullWidth
+                            onChange={(e) => {
+                                setUpdateUserData({
+                                    ...updateUserData,
+                                    role: e.target.value
+                                })
+                            }}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "15px"
+                                }
+                            }}
+                        >
+                            <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
+                            <MenuItem value={"CUSTOMER"}>CUSTOMER</MenuItem>
+                            <MenuItem value={"EMPLOYEE"}>EMPLOYEE</MenuItem>
+                        </Select>
                         <TextField label="Phone" value={updateUserData.phone} size='small' fullWidth onChange={(e) => setUpdateUserData({ ...updateUserData, phone: e.target.value })} />
                         <FormControl fullWidth>
                             <Select

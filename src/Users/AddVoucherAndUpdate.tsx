@@ -2,7 +2,7 @@ import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle,
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Add, Delete, } from '@mui/icons-material'
-import { AddVoucherAndUpdate } from '../AllPostApi'
+import { AddVoucherAndUpdate, GetCanteenUserDelete } from '../AllPostApi'
 import EditAndUpdateUsers from './EditAndUpdateUsers'
 import { CanteenUserDataType, } from '../AllTypes'
 
@@ -14,6 +14,7 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
         amount: 0,
     })
     const { mutateAsync } = AddVoucherAndUpdate()
+    const { mutateAsync: deleteUser } = GetCanteenUserDelete()
     const handleOpen = () => setOpen(true)
     const handleClose = () => {
         setVoucherData({
@@ -38,6 +39,16 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
             toast.error(error.response.data.message)
         }
     }
+    const handleDeleteUser = async () => {
+        try {
+            const res = await deleteUser({ id: user_id })
+            if (res.status === 200) {
+                toast.success(res.data.message)
+            }
+        } catch (error: any) {
+            toast.error(error.response.data.message)
+        }
+    }
 
     return (
         <>
@@ -46,7 +57,7 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
                     <Add />
                 </Button>
                 <EditAndUpdateUsers user_id={user_id} data={data} />
-                <Button size="small">
+                <Button size="small" onClick={handleDeleteUser}>
                     <Delete color="error" />
                 </Button>
             </ButtonGroup>
