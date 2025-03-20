@@ -4,7 +4,7 @@ import { AddStockItemType } from '../AllTypes';
 import { CreateStockItemApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
 
-const CreateStocks = () => {
+const CreateStocks = (refetch: any) => {
     const [open, setOpen] = React.useState(false);
     const [AddStock, setAddStock] = React.useState<AddStockItemType>({
         name: "",
@@ -22,13 +22,17 @@ const CreateStocks = () => {
     }
     const handleSaveStockData = async () => {
         try {
-            await mutateAsync({
+            const res = await mutateAsync({
                 data: AddStock
             })
-            toast.success("Stock Created Successfully")
-            handleClose()
+            if (res.status === 200) {
+                toast.success("Stock Created Successfully")
+                handleClose();
+                refetch();
+            }
         } catch (error: any) {
             toast.error(error.response.data.message)
+            handleClose()
         }
 
     }

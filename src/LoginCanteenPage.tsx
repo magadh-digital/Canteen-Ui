@@ -18,10 +18,10 @@ const LoginCanteenPage = () => {
     const navigate = useNavigate()
     const [signInPage, setSignInPage] = React.useState(false)
     const [loginData, setLoginData] = React.useState<{
-        phone?: number,
+        phone?: String,
         otp?: number,
     }>({
-        phone: 0,
+        phone: "",
         otp: 0,
     })
     const { mutateAsync: OtpSender, isPending } = PostOtpSender()
@@ -32,7 +32,7 @@ const LoginCanteenPage = () => {
     const handleUpdatePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
         setLoginData((prevState) => ({
             ...prevState,
-            [event.target.name]: event.target.value
+            [event.target.name]: Number(event.target.value)
         }))
     }
 
@@ -295,7 +295,7 @@ const LoginCanteenPage = () => {
 
                                     </Stack>
                                     <Stack spacing={2}>
-                                        <Stack sx={{ alignItems: "center", width: "100%", height: "100%", justifyContent: "end" }}>
+                                        {/* <Stack sx={{ alignItems: "center", width: "100%", height: "100%", justifyContent: "end" }}>
                                             <span style={{ color: "white", fontSize: "12px", fontWeight: "bold" }}>
                                                 <u style={{
                                                     cursor: "pointer",
@@ -306,7 +306,7 @@ const LoginCanteenPage = () => {
                                                 }}
                                                 >sign in </u>
                                             </span>
-                                        </Stack>
+                                        </Stack> */}
                                         <Stack
                                             direction={"row"}
                                             mb={1}

@@ -4,6 +4,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { setItemViewId } from '../AllStoreSlice/ItemViewSlice';
 import { RootState } from '../Store';
+import PrintBillData from './PrintBillData';
 
 const OrdersViewItems = () => {
     const { id, order } = useSelector((state: RootState) => state.ItemView)
@@ -288,7 +289,7 @@ const OrdersViewItems = () => {
                         </Typography>
 
                         <Grid container justifyContent="center" style={{ marginTop: "20px" }}>
-                            <Grid item>
+                            <Grid item spacing={1}>
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -299,8 +300,10 @@ const OrdersViewItems = () => {
                                         backgroundColor: "#007bff",
                                     }}
                                 >
-                                    Close
+                                    Closer
                                 </Button>
+                                <PrintBillData data={order || null} />
+
                             </Grid>
                         </Grid>
                     </Container>

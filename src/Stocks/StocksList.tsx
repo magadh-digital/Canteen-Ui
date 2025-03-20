@@ -9,7 +9,6 @@ import { StockItemColumn } from '../DataGridColumn/StockItemColumn'
 // import CreatePurchase from './CreatePurchase'
 
 const StocksList = () => {
-    const { data, isLoading, isRefetching, refetch } = GetStocksApi()
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: 20,
@@ -17,7 +16,7 @@ const StocksList = () => {
     const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
         setPaginationModel(newPaginationModel)
     }
-
+    const { data, isLoading, isRefetching, refetch } = GetStocksApi()
     const StockItem = useMemo(() => {
         if (!data) return []
         const stockData = data?.remaining
@@ -53,7 +52,7 @@ const StocksList = () => {
                     Stock Item
                 </Typography>
                 <Stack spacing={2} direction='row' alignItems={'center'}>
-                    <CreateStocks />
+                    <CreateStocks refetch={refetch} />
                     <RefecthButton refetch={refetch} isRefetching={isRefetching} />
                     <TextField
                         size='small'
@@ -74,7 +73,7 @@ const StocksList = () => {
                     paginationMode='client'
                     paginationModel={{
                         page: 0,
-                        pageSize: 10
+                        pageSize: 20
                     }}
                     style={{
                         height: '75vh',

@@ -21,7 +21,7 @@ const initialState: CreateOrderType = {
     customer_type: "",
     canteen_id: "",
     voucher: false,
-
+    payable_amt: 0
 }
 
 export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
@@ -49,11 +49,13 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
             price: item.price,
             name: item.name,
             total: item.price * (item.quantity ?? 0)
+
         }))
         const data = {
             ...createOrderData,
             canteen_id: canteen_id,
             items: changeItemData,
+            payable_amt: price
         }
         try {
             const res = await orderCreate({ data })
@@ -68,6 +70,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                     user: {},
                     vouchers: 0,
                 });
+                toast.success("Order Created Successfully")
                 navigate('/pos?canteen_id=' + canteen_id)
 
             }

@@ -103,7 +103,6 @@ export default function RenderUserLoginModal() {
   };
 
   React.useEffect(() => {
-    console.count("render");
     if (user?.id) {
       handleClose();
     }
@@ -186,9 +185,10 @@ export default function RenderUserLoginModal() {
                   variant="contained"
                   size="small"
                   onClick={handleClose}
-                  sx={{ mt: 2,
+                  sx={{
+                    mt: 2,
                     bgcolor: colors.red[200],
-                   }}>Close</Button>
+                  }}>Close</Button>
               </Box>
             </Box>
 
@@ -230,36 +230,37 @@ export default function RenderUserLoginModal() {
                   bgcolor: colors.green[400],
                 }}
               >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                'Verify OTP'
-              )}
-            </Button>
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  'Verify OTP'
+                )}
+              </Button>
 
-            <Box sx={{ textAlign: 'center', mt: 2, }}>
-              <Link href="#" variant="body2" >
-                <span style={{ color: colors.green[400], cursor: "pointer" }}>
-                  Resend OTP
-                </span>
-              </Link>
+              <Box sx={{ textAlign: 'center', mt: 2, }}>
+                <Link href="#" variant="body2" >
+                  <span style={{ color: colors.green[400], cursor: "pointer" }}>
+                    Resend OTP
+                  </span>
+                </Link>
+              </Box>
+              <Box sx={{
+                width: "100%", display: "flex", justifyContent: 'end'
+              }}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={handleClose}
+                  sx={{
+                    mt: 2,
+                    bgcolor: colors.red[200],
+                  }}>Close</Button>
+              </Box>
             </Box>
-            <Box sx={{
-              width: "100%", display: "flex", justifyContent: 'end'
-            }}>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={handleClose}
-                sx={{ mt: 2, 
-                  bgcolor: colors.red[200],
-                }}>Close</Button>
-            </Box>
-          </Box>
 
           </Fade>
         )}
-    </Box>
+      </Box>
     </Dialog >
   );
 }

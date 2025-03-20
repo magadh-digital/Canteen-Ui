@@ -1,4 +1,4 @@
-import { Box, Checkbox, colors,  FormControl, InputLabel, MenuItem, Paper, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, } from '@mui/material'
+import { Box, Checkbox, colors, FormControl, InputLabel, MenuItem, Paper, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../Store'
 import { CreateOrderType, MenuItemType } from '../AllTypes'
@@ -63,7 +63,8 @@ const ViewItemsDetails = ({ userData,
         setCreatedOrderData((prevState) => ({
             ...prevState,
             voucher: event.target.checked,
-            total_amount: totalPaybaleAmount()
+            total_amount: totalPaybaleAmount(),
+            payable_amt: totalPaybaleAmount()
         }))
     }
 
@@ -71,6 +72,7 @@ const ViewItemsDetails = ({ userData,
         setCreatedOrderData((prevState) => ({
             ...prevState,
             total_amount: totalPaybaleAmount(),
+            payable_amt: totalPaybaleAmount(),
             voucher: voucherChecked
         }))
     }, [voucherChecked, userData?.vouchers, totalPrice])
@@ -93,6 +95,7 @@ const ViewItemsDetails = ({ userData,
         setCreatedOrderData((prevState) => ({
             ...prevState,
             total_amount: totalPaybaleAmount(),
+            payable_amt: totalPaybaleAmount(),
             payment_type: selectPyment ? selectPyment : "CASH",
             voucher: voucherChecked,
             status: "COMPLETED"

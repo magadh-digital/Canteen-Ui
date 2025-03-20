@@ -19,14 +19,12 @@ const UserOrderListSlice = createSlice({
     initialState,
     reducers: {
         setUserItemViewId: (state, action) => {
-            console.log(action.payload)
             state.id = action.payload;
         },
         setUserItemViewData: (state, action) => {
             state.data = action.payload
         },
         setuserOrderDetails: (state, action) => {
-            console.log(action.payload)
             state.order = action.payload
         }
     },

@@ -5,8 +5,6 @@ import { setPrint } from "../AllStoreSlice/PrintSlice";
 
 const PrintPage = () => {
     const { printData } = useSelector((state: RootState) => state.PrintData);
-
-    console.log("Current printData:", printData); 
     const dispatch = useDispatch()
 
     return (

@@ -1,4 +1,4 @@
-import { Box, Button, colors, Stack, Tooltip, useMediaQuery } from "@mui/material"
+import { Box, Button, colors, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material"
 
 import AllProductCard from './AllProductCard';
 import ItemQuantityDetails from './ItemQuantityDetails';
@@ -20,6 +20,7 @@ const PosList = () => {
     const { data: canteen } = useSelector((state: RootState) => state.Quantity)
     const { canteenData } = useSelector((state: RootState) => state.canteenData)
     const canteenId = canteenData?.id
+
 
     return (
         <Box sx={{
@@ -103,7 +104,7 @@ const PosList = () => {
                                         }} />
                                     </span>
                                 </Tooltip>
-                                <UpdateStocks  />
+                                <UpdateStocks />
                             </div>
                             <ItemQuantityDetails />
 
@@ -140,50 +141,64 @@ const PosList = () => {
                                     zIndex: 1
                                 }}
                             >
-                                <Stack
-                                    sx={{
-                                        width: '300px',
-                                        height: '100%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        backgroundColor: colors.green[500],
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <span style={{
-                                        fontSize: '20px',
-                                        fontWeight: 'bold',
-                                        color: 'white',
-                                    }}>
-                                        Quantity : {quantity}
-                                    </span>
-                                </Stack>
 
 
-                                <PaymentMethod canteen_id={canteenId || ""} />
+                                {((canteen?.length ?? 0) > 0) ? (
+                                    <>
+                                        <Stack
+                                            sx={{
+                                                width: '300px',
+                                                height: '100%',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                backgroundColor: colors.green[500],
+                                                alignItems: 'center'
+                                            }}
+                                        >
+                                            <span style={{
+                                                fontSize: '20px',
+                                                fontWeight: 'bold',
+                                                color: 'white',
+                                            }}>
+                                                Quantity : {quantity}
+                                            </span>
+                                        </Stack>
+                                        <PaymentMethod canteen_id={canteenId || ""} />
+                                        <Stack
+                                            sx={{
+                                                width: '300px',
+                                                height: '100%',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                backgroundColor: colors.green[500],
+                                            }}
+                                        >
+                                            <span style={{
+                                                fontSize: '20px',
+                                                fontWeight: 'bold',
+                                                color: 'white',
+                                            }}>
+                                                Total Price &#8377;{price}
+                                            </span>
+                                        </Stack>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Stack sx={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                            <Typography variant='h5'
+                                                color={colors.green[900]}
+                                            >
+                                            No Items Selected
+                                        </Typography>
+                                    </Stack>
+                            </>
+                                )}
 
-                                <Stack
-                                    sx={{
-                                        width: '300px',
-                                        height: '100%',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        backgroundColor: colors.green[500],
-                                    }}
-                                >
-                                    <span style={{
-                                        fontSize: '20px',
-                                        fontWeight: 'bold',
-                                        color: 'white',
-                                    }}>
-                                        Total Price &#8377;{price}
-                                    </span>
-                                </Stack>
-                            </Box>
                         </Box>
-                    </>
+                    </Box>
+            </>
                 )}
-            </Box>
+        </Box>
 
         </Box >
     )

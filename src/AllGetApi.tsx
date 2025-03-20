@@ -141,7 +141,9 @@ export const GetPurchaseApi = () => {
 export const GetStocksApi = () => {
     const stocks = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/stock-item/`)
+            const response = await axios.get(`${baseUrl}/stock-item/`, {
+              
+            })
             const data = response.data
             return data as GetStockDataTypes
         } catch (error: any) {
@@ -149,7 +151,7 @@ export const GetStocksApi = () => {
         }
     }
     return useQuery({
-        queryKey: ['stock-item`'],
+        queryKey: ['stock-item', ],
         queryFn: stocks
     })
 }
@@ -165,7 +167,7 @@ export const GetStockDetailsApi = ({ id }: { id: string }) => {
         }
     }
     return useQuery({
-        queryKey: ['stock', id],
+        queryKey: ['stock-item', id],
         enabled: !!id,
         queryFn: stockDetails
     })

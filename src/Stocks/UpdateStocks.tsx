@@ -35,6 +35,8 @@ const UpdateStocks = () => {
     const { mutateAsync } = UpdateStockItemApi()
     const [arrayAddStock, setArrayAddStock] = useState<StockItemType[]>([])
     const [minusArrayStock, setMinusArrayStock] = useState<StockItemType[]>([])
+    const [itemQuantity, setItemQuantity] = useState(0)
+    const [error, setError] = useState(false)
     const [minusUpdateStocks, setMinusUpdateStocks] = useState<StockItemType>({
         item_id: "",
         quantity: "",
@@ -53,6 +55,7 @@ const UpdateStocks = () => {
 
     const handleChange = (_: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
+        setItemQuantity(0)
     };
 
 
@@ -71,6 +74,54 @@ const UpdateStocks = () => {
 
         }
     }, [])
+    const handleQuantityChange = (value: string) => {
+        const numValue = Number(value);
+
+        if (isNaN(numValue) || numValue < 0) {
+            return;
+        }
+
+        if (numValue > itemQuantity) {
+            setError(true);
+        } else {
+            setError(false);
+        }
+        setMinusUpdateStocks((prevState) => ({
+            ...prevState,
+            quantity: value,
+        }));
+    };
+
+
+    const handleUpdateStockAdd = (e: any) => {
+        if (e) {
+            const qty = data?.remaining?.find((item) => item.ID === e.ID)
+            if (qty) {
+                setItemQuantity(qty?.remaining || 0)
+            }
+            setUpdateStocks({
+                ...updateStocks,
+                item_id: e.ID || "",
+                item_name: e.name,
+            });
+        }
+    }
+
+    const handleChangeMinusItem = (e: any) => {
+
+        if (e) {
+            const qty = data?.remaining?.find((item) => item.ID === e.ID)
+            if (qty) {
+                setItemQuantity(qty?.remaining || 0)
+            }
+            setMinusUpdateStocks({
+                ...minusUpdateStocks,
+                item_id: e.ID || "",
+                item_name: e.name,
+            });
+        }
+
+    }
 
     const handleClose = () => {
         setOpen(false)
@@ -81,6 +132,7 @@ const UpdateStocks = () => {
             remarks: "PURCHASE",
             type: "IN"
         })
+        setItemQuantity(0)
     }
 
     const handleCloseMinus = () => {
@@ -126,6 +178,11 @@ const UpdateStocks = () => {
     }
 
     const handleMinusAddStock = () => {
+        if (Number(minusUpdateStocks?.quantity ?? 0) > itemQuantity) {
+            setError(true)
+            toast.error("please use only available quantity")
+            return
+        }
         setMinusArrayStock((prevState: any) => [...prevState, minusUpdateStocks])
         setMinusUpdateStocks({
             item_id: "",
@@ -188,31 +245,42 @@ const UpdateStocks = () => {
                 },
             }}>
                 <DialogTitle>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label={
-                            <Typography sx={{
-                                fontWeight: "bold",
-                                color: colors.blue[500],
-                                fontStyle: "sans-serif",
-                                fontFamily: "monospace"
-                            }}>
-                                Update Stocks
-                            </Typography>
-                        }
-                            value="0"
-                        />
-                        <Tab label={
-                            <Typography sx={{
-                                fontWeight: "bold",
-                                color: colors.red[500],
-                                fontStyle: "sans-serif",
-                                fontFamily: "monospace"
-                            }}
-                            >
-                                Use Stocks
-                            </Typography>
-                        } value="1" />
-                    </Tabs>
+                    <Stack direction="row" sx={{
+                        justifyContent: "space-between"
+                    }}>
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                            <Tab label={
+                                <Typography sx={{
+                                    fontWeight: "bold",
+                                    color: colors.blue[500],
+                                    fontStyle: "sans-serif",
+                                    fontFamily: "monospace"
+                                }}>
+                                    Update Stocks
+                                </Typography>
+                            }
+                                value="0"
+                            />
+                            <Tab label={
+                                <Typography sx={{
+                                    fontWeight: "bold",
+                                    color: colors.red[500],
+                                    fontStyle: "sans-serif",
+                                    fontFamily: "monospace"
+                                }}
+                                >
+                                    Use Stocks
+                                </Typography>
+                            } value="1" />
+                        </Tabs>
+                        {(
+                            <>
+                                <Typography color="error" fontSize={12}>
+                                    Quantity :   {itemQuantity}
+                                </Typography>
+                            </>
+                        )}
+                    </Stack>
 
                 </DialogTitle>
                 <DialogContent sx={{
@@ -232,13 +300,14 @@ const UpdateStocks = () => {
                                         getOptionLabel={(option) => option.name || ""}
                                         value={data?.remaining?.find((item) => item.ID === updateStocks.item_id) || null}
                                         onChange={(_, newValue) => {
-                                            if (newValue) {
-                                                setUpdateStocks({
-                                                    ...updateStocks,
-                                                    item_id: newValue.ID || "",
-                                                    item_name: newValue.name
-                                                });
-                                            }
+                                            // if (newValue) {
+                                            //     setUpdateStocks({
+                                            //         ...updateStocks,
+                                            //         item_id: newValue.ID || "",
+                                            //         item_name: newValue.name
+                                            //     });
+                                            // }
+                                            handleUpdateStockAdd(newValue)
                                         }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="Items" variant="outlined" size="small" />
@@ -352,21 +421,17 @@ const UpdateStocks = () => {
                     {value === "1" && (
                         <>
                             <Stack spacing={3} mt={3}>
+
                                 <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
                                     <Autocomplete
                                         size="small"
                                         sx={{ width: "300px" }}
                                         options={data?.remaining || []}
                                         getOptionLabel={(option) => option.name || ""}
-                                        value={data?.remaining?.find((item) => item.ID === updateStocks.item_id) || null}
+                                        value={data?.remaining?.find((item) => item.ID === minusUpdateStocks.item_id) || null}
                                         onChange={(_, newValue) => {
-                                            if (newValue) {
-                                                setUpdateStocks({
-                                                    ...updateStocks,
-                                                    item_id: newValue.ID || "",
-                                                    item_name: newValue.name
-                                                });
-                                            }
+
+                                            handleChangeMinusItem(newValue as any)
                                         }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="Items" variant="outlined" size="small" />
@@ -375,17 +440,13 @@ const UpdateStocks = () => {
                                     <TextField
                                         label="Quantity"
                                         size="small"
-                                        type="number"
                                         value={minusUpdateStocks.quantity}
-                                        onChange={(e) => {
-                                            setMinusUpdateStocks({
-                                                ...minusUpdateStocks,
-                                                quantity: Number(e.target.value)
-                                            })
-                                        }}
+                                        onChange={(e) => handleQuantityChange(e.target.value)}
+                                        error={error}
                                         sx={{
                                             width: "300px"
                                         }}
+                                        helperText={error ? `Maximum allowed quantity is ${itemQuantity}` : ""}
                                     />
                                 </Stack>
                                 {Number(minusUpdateStocks.quantity) > 0 && minusUpdateStocks.item_name && (<>

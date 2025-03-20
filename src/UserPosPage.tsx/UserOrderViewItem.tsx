@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import { setUserItemViewId } from '../AllStoreSlice/UserOrderListSlice';
 
+import PrintUserData from './PrintUserData';
+
 const UserOrdersViewItems = () => {
     const { id, data, order } = useSelector((state: RootState) => state.OrderViewList)
 
@@ -316,6 +318,7 @@ const UserOrdersViewItems = () => {
                                 >
                                     Close
                                 </Button>
+                                <PrintUserData data={data} order={order} />
                             </Grid>
                         </Grid>
                     </Container>
