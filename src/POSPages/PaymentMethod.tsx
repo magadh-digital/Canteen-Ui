@@ -258,6 +258,11 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                     </Box>
                 </Box>
             </SwipeableDrawer>
+
+
+
+
+            
             <Dialog open={billOpen} onClose={() => setBillOpen(false)}
                 fullWidth
                 maxWidth="sm">

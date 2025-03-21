@@ -4,6 +4,7 @@ import {
     Button,
     colors,
     Stack,
+    Typography,
     useMediaQuery,
 
 } from "@mui/material"
@@ -114,44 +115,57 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                                     zIndex: 1
                                 }}
                             >
-                                <Stack
-                                    sx={{
-                                        width: '300px',
-                                        height: '100%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        backgroundColor: colors.green[500],
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <span style={{
-                                        fontSize: '20px',
-                                        fontWeight: 'bold',
-                                        color: 'white',
-                                    }}>
-                                        Quantity : {quantity}
-                                    </span>
-                                </Stack>
-                                <UserPaymentMethod canteen_id={canteenId || ""} />
+                                {((canteen?.length ?? 0) > 0) ? (
+                                    <>
+                                        <Stack
+                                            sx={{
+                                                width: '300px',
+                                                height: '100%',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                backgroundColor: colors.green[500],
+                                                alignItems: 'center'
+                                            }}
+                                        >
+                                            <span style={{
+                                                fontSize: '20px',
+                                                fontWeight: 'bold',
+                                                color: 'white',
+                                            }}>
+                                                Quantity : {quantity}
+                                            </span>
+                                        </Stack>
+                                        <UserPaymentMethod canteen_id={canteenId || ""} />
+                                        <Stack
+                                            sx={{
+                                                width: '300px',
+                                                height: '100%',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                backgroundColor: colors.green[500],
+                                            }}
+                                        >
+                                            <span style={{
+                                                fontSize: '20px',
+                                                fontWeight: 'bold',
+                                                color: 'white',
+                                            }}>
+                                                Total Price &#8377;{price}
+                                            </span>
+                                        </Stack>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Stack sx={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                            <Typography variant='h5'
+                                                color={colors.green[900]}
+                                            >
+                                                No Items Selected
+                                            </Typography>
+                                        </Stack>
+                                    </>
+                                )}
 
-                                <Stack
-                                    sx={{
-                                        width: '300px',
-                                        height: '100%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        backgroundColor: colors.green[500],
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <span style={{
-                                        fontSize: '20px',
-                                        fontWeight: 'bold',
-                                        color: 'white',
-                                    }}>
-                                        Total Price &#8377;{price}
-                                    </span>
-                                </Stack>
                             </Box>
                         </Box>
                     </>
