@@ -102,6 +102,10 @@ export interface CreateOrderType {
   payment_type?: string;
   voucher?: boolean;
   payable_amt?: Number;
+  order_id?: string
+  voucher_amt?: number;
+  customer_phone?: number;
+  customer_email?: string
 
 }
 
