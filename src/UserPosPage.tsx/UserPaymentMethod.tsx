@@ -75,14 +75,25 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
     }
 
     const handleCLosePRint = () => {
+        setBillOpen(false);
+        dispatch(resetData());
+        setCreateOrderData(initialState);
         setOpen(false);
         localStorage.removeItem('user');
         localStorage.removeItem('user_token');
-        dispatch(resetData());
-        setCreateOrderData(initialState);
-        setBillOpen(false)
-        navigate('/user?canteen_id=' + canteen_id)
-    }
+        navigate('/user?canteen_id=' + canteen_id);
+    };
+
+
+
+    React.useEffect(() => {
+        if (!billOpen) {
+            dispatch(resetData());
+            setCreateOrderData(initialState);
+            console.log("State fully reset after Dialog close");
+        }
+    }, [billOpen]);
+
 
     const handlePrint = () => {
         setPrintOpen(true)
@@ -96,7 +107,7 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
 
             const receiptContent = renderToString(
                 <div style={{ maxWidth: "100%", margin: "auto", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
-                    <h2>{canteenData?.name || "MAGADH CANTEEN"}</h2>
+                    <h2>{"MAGADH CANTEEN"}</h2>
                     <p>{moment().format("DD MMM YYYY h:mm A")}</p>
                     <p>Invoice ID: {billData?.order_id}</p>
                     <p>Customer: {billData?.customer_name}</p>
@@ -235,7 +246,7 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                 </Box>
             </SwipeableDrawer>
 
-            <Dialog open={billOpen} onClose={() => setBillOpen(false)}
+            <Dialog open={billOpen} onClose={() => handleCLosePRint()}
                 fullWidth
                 maxWidth="sm">
                 <DialogTitle>
@@ -273,7 +284,7 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                                     marginBottom: "15px",
                                 }}
                             >
-                                {canteenData?.name || "MAGADH CANTEEN"}
+                                {"MAGADH CANTEEN"}
                             </Typography>
                             <Typography
                                 variant="body2"

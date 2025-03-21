@@ -399,3 +399,19 @@ export interface UpdateUserType {
   canteen_id?: []
   profile_url?: string
 }
+
+export interface UserVoucherTypes {
+  message: String;
+  total: number;
+  vouchers: VouchersType[]
+}
+
+
+export interface VouchersType {
+  ID: string;
+  amount: Number;
+  created_at: string;
+  description: string;
+  type: String;
+  user_id: string;
+}

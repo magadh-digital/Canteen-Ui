@@ -142,7 +142,7 @@ export const GetStocksApi = () => {
     const stocks = async () => {
         try {
             const response = await axios.get(`${baseUrl}/stock-item/`, {
-              
+
             })
             const data = response.data
             return data as GetStockDataTypes
@@ -151,7 +151,7 @@ export const GetStocksApi = () => {
         }
     }
     return useQuery({
-        queryKey: ['stock-item', ],
+        queryKey: ['stock-item',],
         queryFn: stocks
     })
 }
@@ -212,3 +212,22 @@ export const GetAllUserApiSearch = ({
 
 
 
+export const GetUserVoucherApi = ({
+    user_id
+}: {
+    user_id: string
+}) => {
+    const userVoucherGet = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/?user_id=${user_id}`)
+            const data = response.data
+            return data
+        } catch (error: any) {
+            toast.error(error.response.data.message)
+        }
+    }
+    return useQuery({
+        queryKey: ['userVoucher', user_id],
+        queryFn: userVoucherGet
+    })
+}

@@ -44,12 +44,13 @@ type Props = {
     page?: number;
     limit?: number;
 };
-    
+
 export function UsePageHook(props: Props) {
     const [page, setPage] = React.useState(props.page || 1);
     const [total, setTotal] = React.useState<number>(0);
     const [limit, setLimit] = React.useState(props.limit || 20);
 
+    console.log(page)
 
     return {
         page,

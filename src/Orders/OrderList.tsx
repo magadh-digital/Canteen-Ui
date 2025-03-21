@@ -1,10 +1,10 @@
 import { Box, colors, Stack, TextField, Typography } from "@mui/material"
-import { DataGrid,  } from "@mui/x-data-grid"
+import { DataGrid, } from "@mui/x-data-grid"
 import { GetOrderDetailsApi } from "../AllGetApi"
 import { useEffect, useMemo, useState } from "react"
 import RefecthButton from "../RefecthButton"
 import { OrderDetailsColumn } from "../DataGridColumn/OrderDetailsColumn"
-import {  UsePageHook } from "../Utils"
+import { UsePageHook } from "../Utils"
 
 export const OrderList = () => {
     const canteen_id = localStorage.getItem("canteen_user_id")
@@ -29,7 +29,7 @@ export const OrderList = () => {
                 return {
                     ...item,
                     id: item?.id,
-                    idx: index + 1 + ((page - 1) * limit),
+                    idx: index + 1 + (page - 1) * limit,
                 }
             })
         }
@@ -57,7 +57,7 @@ export const OrderList = () => {
                     />
                     <RefecthButton isRefetching={isRefetching} refetch={refetch} />
                 </Stack>
-            </Stack>
+            </Stack>    
             <Box sx={{
                 height: "80vh",
                 width: "100%",
@@ -73,16 +73,17 @@ export const OrderList = () => {
                     rowCount={data?.pagination?.total_items || 0}
                     paginationMode="server"
                     paginationModel={{
-                        page,
+                        page: page - 1, 
                         pageSize: limit
                     }}
                     onPaginationModelChange={(model) => {
-                        setPage(model.page + 1);
+                        setPage(model.page + 1); 
                         setLimit(model.pageSize);
                     }}
                     pageSizeOptions={[10, 20, 50, 100]}
                     sx={{ bgcolor: "white" }}
                 />
+
 
             </Box>
         </Box>

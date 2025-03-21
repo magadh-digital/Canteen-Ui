@@ -124,7 +124,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                             <tr style={{
                                 borderBottom: "1px solid black",
                             }}>
-                                <th style={{ textAlign: "left" }}>SL</th>
+                                <th style={{ textAlign: "left" }}>Sl</th>
                                 <th style={{ textAlign: "left" }}>Name</th>
                                 <th style={{ textAlign: "right" }}>Qty</th>
                                 <th style={{ textAlign: "right" }}>Price</th>
@@ -262,8 +262,8 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
 
 
 
-            
-            <Dialog open={billOpen} onClose={() => setBillOpen(false)}
+
+            <Dialog open={billOpen} onClose={() => handleCLosePRint()}
                 fullWidth
                 maxWidth="sm">
                 <DialogTitle>
