@@ -11,7 +11,6 @@ import { CreateOrderType, MenuItemType } from '../AllTypes';
 import { resetData } from '../AllStoreSlice/AddQuantitySlice';
 import { useNavigate } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
-import PrintBillData from '../Orders/PrintBillData';
 import moment from 'moment';
 import { Print } from '@mui/icons-material';
 import { ToWords } from 'to-words';
@@ -72,14 +71,13 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
             payable_amt: price
         };
 
-        console.log("Setting Bill Data...", data);
+
 
 
 
         try {
             const res = await orderCreate({ data });
             if (res.status === 201) {
-                console.log(res)
                 setBillData(res.data.order);
                 setBillOpen(true);
 
@@ -100,6 +98,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
         setSelectedUser(null);
         setUserData({ user: {}, vouchers: 0 });
         setBillOpen(false)
+        navigate('/pos?canteen_id=' + canteen_id)
     }
 
     const handlePrint = () => {
