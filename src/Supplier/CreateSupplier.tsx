@@ -34,9 +34,10 @@ const CreateSupplier = () => {
             await mutateAsync({
                 data: data
             })
+            handleClose()
             toast.success("Supplier Created Successfully")
         } catch (error: any) {
-            toast.error(error.response.data.error)
+            toast.error(error.response.data.message)
         }
     }
     return (

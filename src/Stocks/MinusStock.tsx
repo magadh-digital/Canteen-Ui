@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { GetStocksApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
 import { toast } from "react-toastify"
+import { UsePageHook } from "../Utils"
 
 
 const ITEM_HEIGHT = 48;
@@ -19,8 +20,12 @@ const MenuProps = {
 
 
 const MinusStocks = () => {
+    const { page, limit,  } = UsePageHook({ page: 1, limit: 100 })
     const [open, setOpen] = useState(false)
-    const { data, } = GetStocksApi()
+    const { data, } = GetStocksApi({
+        page,
+        limit
+    })
     const { mutateAsync } = UpdateStockItemApi()
     const [updateStocks, setUpdateStocks] = useState<any>({
         item_id: "",

@@ -20,14 +20,19 @@ import { RootState } from '../Store';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { GridDeleteIcon } from '@mui/x-data-grid';
+import { UsePageHook } from '../Utils';
 
 
 const CreatePurchase = () => {
     const navigate = useNavigate()
+    const { page, limit,  } = UsePageHook({ page: 1, limit: 100 })
     const [open, setOpen] = useState(true);
     const { canteenData } = useSelector((state: RootState) => state.canteenData)
     const { data: supplier } = GetSupplierApi()
-    const { data: stockItem } = GetStocksApi()
+    const { data: stockItem } = GetStocksApi({
+        page,
+        limit
+    })
     const { mutateAsync } = PostPurchaseApi()
     const [purchaseData, setPurchaseData] = useState<AddPurcahseTypes>({
         supplier_id: '',
@@ -81,7 +86,7 @@ const CreatePurchase = () => {
                 canteen_id: canteenData.id
             }));
         }
-    }, [canteenData]);
+    }, [supplier, canteenData]);
 
     const handleAddStockItem = (value: any) => {
         if (value && !purchaseData.stock_items.some(item => item.ID === value.ID)) {

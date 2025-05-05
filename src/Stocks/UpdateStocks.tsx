@@ -5,6 +5,7 @@ import { GetStocksApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
 import { toast } from "react-toastify"
 import { GridAddIcon, GridDeleteIcon } from "@mui/x-data-grid"
+import { UsePageHook } from "../Utils"
 
 
 const ITEM_HEIGHT = 48;
@@ -29,8 +30,13 @@ export interface StockItemType {
 
 
 const UpdateStocks = () => {
+    const { page, limit,  } = UsePageHook({ page: 1, limit: 100 })
+
     const [open, setOpen] = useState(false)
-    const { data, } = GetStocksApi()
+    const { data, } = GetStocksApi({
+        page,
+        limit
+    })
     const [value, setValue] = useState("0")
     const { mutateAsync } = UpdateStockItemApi()
     const [arrayAddStock, setArrayAddStock] = useState<StockItemType[]>([])

@@ -1,9 +1,11 @@
-import {  Chip, colors, Stack, Typography } from "@mui/material";
+import { Chip, colors, Stack, Typography } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { GetOrderTypes } from "../AllTypes";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setItemViewData, setItemViewId, setOrderDetails } from "../AllStoreSlice/ItemViewSlice";
 import moment from "moment";
+import { DeleteOrderReason } from "../Orders/OrderDelete";
+import { RootState } from "../Store";
 
 
 export const OrderDetailsColumn: GridColDef[] = [
@@ -96,22 +98,28 @@ export const OrderDetailsColumn: GridColDef[] = [
         headerName: "View Items",
         width: 180,
         renderCell: ({ row }: { row: GetOrderTypes }) => {
+
+            const { user } = useSelector((state: RootState) => state.LoginCanteenUser)
+
             const dispatch = useDispatch();
             const handleViewItem = () => {
                 dispatch(setItemViewId(row.id))
                 dispatch(setItemViewData(row.items))
                 dispatch(setOrderDetails(row))
             }
+
+
             return (
                 <Stack
                     direction="row"
                     sx={{
                         alignItems: "center",
-                        height: "100%"
+                        height: "100%",
+                        gap: 2
                     }}>
 
-                        <p 
-                         style={{
+                    <p
+                        style={{
                             color: colors.blue[500],
                             cursor: "pointer",
                             fontWeight: "bold",
@@ -119,14 +127,19 @@ export const OrderDetailsColumn: GridColDef[] = [
                             textDecorationColor: colors.blue[500],
                             textDecorationThickness: "1px",
 
-                         }}
-                         onClick={handleViewItem}
-                        >
-                            view
-                        </p>
-                  
+                        }}
+                        onClick={handleViewItem}
+                    >
+                        view
+                    </p>
+                    {user?.role === "ADMIN" && (
+                        <DeleteOrderReason id={row?.id || ""} />
+                    )}
+
                 </Stack>
             )
         }
     }
 ]
+
+

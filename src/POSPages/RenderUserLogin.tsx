@@ -148,6 +148,10 @@ export const RenderUserLogin = ({
                                     value={selectedUser}
                                     onChange={(_, newValue: any) => {
                                         handleChangeSelectUser(newValue)
+                                        setUserData({
+                                            user: {},
+                                            vouchers: 0
+                                        })
                                     }}
                                     sx={{
                                         width: !mobile ? 300 : "250px",

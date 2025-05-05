@@ -88,9 +88,8 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
 
     React.useEffect(() => {
         if (!billOpen) {
-            dispatch(resetData());
+            // dispatch(resetData());
             setCreateOrderData(initialState);
-            console.log("State fully reset after Dialog close");
         }
     }, [billOpen]);
 

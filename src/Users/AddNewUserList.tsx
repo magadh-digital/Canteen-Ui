@@ -18,7 +18,7 @@ const AddNewUserList = () => {
     const [addUser, setAddUser] = useState<AddNewUserListProps>({
         name: "",
         email: "",
-        role: "",
+        role: "CUSTOMER",
         image: "",
         phone: ""
     })
@@ -34,7 +34,7 @@ const AddNewUserList = () => {
     }
     const { mutateAsync, isPending } = AddNewUserRegister()
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: any) => {
         const { name, value } = e.target;
         setAddUser((prevState) => ({
             ...prevState,
@@ -63,11 +63,11 @@ const AddNewUserList = () => {
         }
 
         try {
-            const response = await mutateAsync(formData);
-            if (response.status === 200) {
-                handleClose()
-                toast.success("User Added Successfully")
-            }
+            await mutateAsync(formData);
+
+            handleClose()
+            toast.success("User Added Successfully")
+
 
 
         } catch (error: any) {
@@ -182,7 +182,7 @@ const AddNewUserList = () => {
                                 name="role"
                                 size='small'
                                 fullWidth
-                                onChange={() => handleChange}
+                                onChange={handleChange}
                                 sx={{
                                     "& .MuiOutlinedInput-root": {
                                         borderRadius: "15px"

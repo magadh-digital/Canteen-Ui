@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, Typography, colors, Stack } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, Typography, colors, Stack, Button } from '@mui/material'
 import { RootState } from './Store'
 import { setLoginCanteenData, setLoginCanteenUser, setLoginCanteenUserToken } from './AllStoreSlice/LoginCanteenUserSlice'
 import { useNavigate } from 'react-router-dom'
@@ -49,6 +49,15 @@ const SelectCanteen = () => {
         navigate('/dashboard')
     }
 
+    const handleLogOut = () => {
+        dispatch(setLoginCanteenUserToken(""))
+        dispatch(setLoginCanteenUser(null))
+        localStorage.removeItem('canteen_token')
+        localStorage.removeItem('canteen_user_id')
+        localStorage.removeItem('canteen_data')
+        localStorage.removeItem('canteen_name')
+    navigate('/login');
+    };
     return (
         <Dialog
             open={openModal}
@@ -75,15 +84,20 @@ const SelectCanteen = () => {
             }}
         >
             <DialogTitle>
-                <Typography variant="h6" sx={{
-                    color: colors.blue[800],
-                    fontWeight: "bold",
-                    letterSpacing: "1px",
-                    fontSize: "25px",
-                    fontStyle: "italic"
-                }}>
-                    Select a Canteen
-                </Typography>
+                <Stack direction={"row"} justifyContent={"space-between"}>
+                    <Typography variant="h6" sx={{
+                        color: colors.blue[800],
+                        fontWeight: "bold",
+                        letterSpacing: "1px",
+                        fontSize: "25px",
+                        fontStyle: "italic"
+                    }}>
+                        Select a Canteen
+                    </Typography>
+                    <Button variant="contained" onClick={() => handleLogOut()}>
+                        LogOut
+                    </Button>
+                </Stack>
             </DialogTitle>
             <DialogContent>
                 <Stack direction={"row"} width={"100%"} gap={2} mt={2} justifyContent={"center"}>

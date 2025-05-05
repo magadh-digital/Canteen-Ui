@@ -138,11 +138,20 @@ export const GetPurchaseApi = () => {
 
 }
 
-export const GetStocksApi = () => {
+export const GetStocksApi = ({
+    page,
+    limit
+}: {
+    page?: number,
+    limit?: number
+}) => {
     const stocks = async () => {
         try {
             const response = await axios.get(`${baseUrl}/stock-item/`, {
-
+                params: {
+                    page,
+                    limit
+                }
             })
             const data = response.data
             return data as GetStockDataTypes
@@ -151,7 +160,7 @@ export const GetStocksApi = () => {
         }
     }
     return useQuery({
-        queryKey: ['stock-item',],
+        queryKey: ['stock-item', page, limit],
         queryFn: stocks
     })
 }

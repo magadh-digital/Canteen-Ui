@@ -50,6 +50,7 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
     const { data: canteen } = useSelector((state: RootState) => state.Quantity)
 
     const handleAddToCart = (item: any) => {
+        console.log(item)
         dispatch(setData({
             ...item,
             image_url: `${data?.base_url}${item?.image_url}`,

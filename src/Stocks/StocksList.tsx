@@ -1,22 +1,21 @@
 
-import { useMemo, useState } from 'react'
+import { useMemo,  } from 'react'
 import { GetStocksApi, } from '../AllGetApi'
 import { Box, colors, Stack, TextField, Typography } from '@mui/material'
 import RefecthButton from '../RefecthButton'
-import { DataGrid, GridPaginationModel } from '@mui/x-data-grid'
+import { DataGrid, } from '@mui/x-data-grid'
 import CreateStocks from './CreateStocks'
 import { StockItemColumn } from '../DataGridColumn/StockItemColumn'
+import { UsePageHook } from '../Utils'
 // import CreatePurchase from './CreatePurchase'
 
 const StocksList = () => {
-    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-        page: 0,
-        pageSize: 20,
+    const { page, limit, setPage, setLimit } = UsePageHook({ page: 1, limit: 100 })
+
+    const { data, isLoading, isRefetching, refetch } = GetStocksApi({
+        page,
+        limit
     })
-    const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
-        setPaginationModel(newPaginationModel)
-    }
-    const { data, isLoading, isRefetching, refetch } = GetStocksApi()
     const StockItem = useMemo(() => {
         if (!data) return []
         const stockData = data?.remaining
@@ -25,7 +24,7 @@ const StocksList = () => {
                 return {
                     ...item,
                     id: item?.ID,
-                    idx: index + 1 * (paginationModel.page * paginationModel.pageSize + 1),
+                    idx: index + 1,
                     address: item?.description,
                     remaining: {
                         remaining: item?.remaining,
@@ -70,16 +69,21 @@ const StocksList = () => {
                     rows={StockItem || []}
                     columns={StockItemColumn}
                     loading={isLoading || isRefetching}
-                    paginationMode='client'
+                    paginationMode="server"
                     paginationModel={{
-                        page: 0,
-                        pageSize: 20
+                        page: page - 1,
+                        pageSize: limit
                     }}
                     style={{
                         height: '75vh',
                         backgroundColor: 'white'
                     }}
-                    onPaginationModelChange={handlePaginationModelChange}
+                    onPaginationModelChange={(model) => {
+                        setPage(model.page + 1);
+                        setLimit(model.pageSize);
+                    }}
+                    pageSizeOptions={[10, 20, 50, 100]}
+                    rowCount={data?.total}
 
                 />
 

@@ -143,11 +143,15 @@ export const PurchasesColumn: GridColDef[] = [
         width: 180,
         renderCell: ({ value }) => {
             return (
-                <div>
+                <div style={{ alignItems: "center", }}>
                     {value?.map((item: GetStockTypes, index: number) => (
-                        <div key={index}>
-                            {item.name} - {item.quantity} {item.unit}
-                        </div>
+                        <>
+                            <span key={index}>
+                                {item.name} - {item.quantity} {item.unit}, {"   "}
+                            </span>
+
+                        </>
+
                     ))}
                 </div>
             );

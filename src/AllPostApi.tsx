@@ -269,3 +269,18 @@ export const GetCanteenUserDelete = () => {
         }
     })
 }
+
+
+export const DeleteOrderByAdmin = () => {
+    const queryClient = useQueryClient();
+    const deleteOrder = async ({ id, remarks }: { id: string, remarks: string }) => {
+        const response = await axios.delete(`${baseUrl}/order/${id}?remarks=${remarks}`,)
+        return response
+    }
+    return useMutation({
+        mutationFn: deleteOrder,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['orderdetails'] })
+        }
+    })
+}

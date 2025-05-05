@@ -78,6 +78,7 @@ export const CanteenUserColumn: GridColDef[] = [
             const [open, setOpen] = useState(false);
             const handleCopy = () => {
                 const url = `canteen-ui.mgdh.in/user?canteen_id=${row.id}`;
+                // `localhost:5174/user?canteen_id=${row.id}` 
                 navigator.clipboard.writeText(url)
                     .then(() => {
                         alert("URL copied to clipboard!");

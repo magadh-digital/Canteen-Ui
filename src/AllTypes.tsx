@@ -265,6 +265,7 @@ export interface GetStockTypes {
 export interface GetStockDataTypes {
   data: GetStockTypes[]
   remaining: GetStockTypes[]
+  total:number
 }
 
 export interface GetPurchaseApiTypes {
