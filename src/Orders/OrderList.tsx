@@ -1,4 +1,4 @@
-import { Box, colors, Stack, TextField, Typography } from "@mui/material"
+import { Box, colors, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material"
 import { DataGrid, } from "@mui/x-data-grid"
 import { GetOrderDetailsApi } from "../AllGetApi"
 import { useEffect, useMemo, useState } from "react"
@@ -10,31 +10,28 @@ export const OrderList = () => {
     const canteen_id = localStorage.getItem("canteen_user_id")
     const [search, setSearch] = useState<string>("")
     const { page, limit, setPage, setLimit } = UsePageHook({ page: 1, limit: 100 })
+    const [filter, setFilter] = useState<string>("COMPLETED")
     const { data, isRefetching, refetch } = GetOrderDetailsApi({
         page,
         limit,
-        canteen_id: canteen_id || ""
-
+        canteen_id: canteen_id || "",
+        status: filter,
+        search: search
     })
 
     useEffect(() => {
         refetch();
     }, [page, limit]);
 
-    const OrderRowsData = useMemo(() => {
-        if (data) {
-            return data?.orders?.filter((item) =>
-                item?.customer_name?.toLowerCase().includes(search.toLowerCase())
-            )?.map((item, index: number) => {
-                return {
-                    ...item,
-                    id: item?.id,
-                    idx: index + 1 + (page - 1) * limit,
-                }
-            })
-        }
+    const   OrderRowsData = useMemo(() => {
+        if (!data) return [];
+        return data?.orders?.map((item, idx) => ({
+            ...item, 
+            id: item?.id,
+            idx: idx + 1 + (page - 1) * limit,
+        }))
     }, [data, search, page, limit])
-
+    
 
 
     return (
@@ -54,10 +51,29 @@ export const OrderList = () => {
                         placeholder="Search"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
+                        sx={{ width: '100%' }}
                     />
+                    <FormControl size="small" sx={{
+                        width: "100%"
+                    }}>
+                        <InputLabel>Status</InputLabel>
+                        <Select
+                            variant="outlined"
+                            size="small"
+                            label
+                            labelId=""
+                            value={filter}
+                            onChange={(e) => {
+                                setFilter(e.target.value)
+                            }}
+                        >
+                            <MenuItem value={"COMPLETED"}>COMPLETED</MenuItem>
+                            <MenuItem value={"DELETED"}>DELETED</MenuItem>
+                        </Select>
+                    </FormControl>
                     <RefecthButton isRefetching={isRefetching} refetch={refetch} />
                 </Stack>
-            </Stack>    
+            </Stack>
             <Box sx={{
                 height: "80vh",
                 width: "100%",
@@ -73,11 +89,11 @@ export const OrderList = () => {
                     rowCount={data?.pagination?.total_items || 0}
                     paginationMode="server"
                     paginationModel={{
-                        page: page - 1, 
+                        page: page - 1,
                         pageSize: limit
                     }}
                     onPaginationModelChange={(model) => {
-                        setPage(model.page + 1); 
+                        setPage(model.page + 1);
                         setLimit(model.pageSize);
                     }}
                     pageSizeOptions={[10, 20, 50, 100]}

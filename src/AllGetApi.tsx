@@ -3,6 +3,7 @@ import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
 import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, ReportDashboard, StockDetails, UpdateOrderType } from "./AllTypes"
 import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 
 export const GetCanteenUserApi = () => {
     const canteenUser = async () => {
@@ -43,11 +44,15 @@ export const GetOrderDetailsApi = ({
     limit,
     canteen_id,
     user_id,
+    status,
+    search
 }: {
     page?: number,
     limit?: number,
     canteen_id?: string
     user_id?: string
+    status?: string
+    search?: string
 }) => {
     const orderDetails = async () => {
         try {
@@ -56,7 +61,9 @@ export const GetOrderDetailsApi = ({
                     page,
                     limit,
                     canteen_id,
-                    user_id
+                    user_id,
+                    status,
+                    search
                 }
             })
             const data = response.data as UpdateOrderType
@@ -66,7 +73,7 @@ export const GetOrderDetailsApi = ({
         }
     }
     return useQuery({
-        queryKey: ['orderdetails', page, limit, canteen_id, user_id],
+        queryKey: ['orderdetails', search, page, limit, canteen_id, user_id, status],
         queryFn: orderDetails
     })
 }
@@ -153,6 +160,7 @@ export const GetStocksApi = ({
                     limit
                 }
             })
+            console.log(response)
             const data = response.data
             return data as GetStockDataTypes
         } catch (error: any) {

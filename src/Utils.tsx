@@ -50,7 +50,6 @@ export function UsePageHook(props: Props) {
     const [total, setTotal] = React.useState<number>(0);
     const [limit, setLimit] = React.useState(props.limit || 20);
 
-    console.log(page)
 
     return {
         page,
