@@ -65,7 +65,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
 
         const data = {
             ...createOrderData,
-            // canteen_id: canteen_id,
+            canteen_id: canteen_id,
             items: changeItemData,
             payable_amt: price
         };
