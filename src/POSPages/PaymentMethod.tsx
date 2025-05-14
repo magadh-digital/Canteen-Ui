@@ -14,6 +14,7 @@ import { renderToString } from 'react-dom/server';
 import moment from 'moment';
 import { Print } from '@mui/icons-material';
 import { ToWords } from 'to-words';
+import { ErrorHandle } from '../ErrorHandle';
 
 
 const initialState: CreateOrderType = {
@@ -54,8 +55,6 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
 
 
     const handleCreate = async () => {
-
-
         const changeItemData = orderData.map((item: MenuItemType) => ({
             qty: item.quantity ?? 0,
             item_id: item.id ?? "",
@@ -66,26 +65,21 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
 
         const data = {
             ...createOrderData,
-            canteen_id: canteen_id,
+            // canteen_id: canteen_id,
             items: changeItemData,
             payable_amt: price
         };
-
-
-
-
-
         try {
             const res = await orderCreate({ data });
-            if (res.status === 201) {
-                setBillData(res.data.order);
+            if (res?.status === 201) {
+                setBillData(res?.data?.order);
                 setBillOpen(true);
 
 
                 toast.success("Order Created Successfully");
             }
         } catch (error: any) {
-            toast.error(error.response.data.error[0].message);
+            ErrorHandle(error.response)
         }
     };
 

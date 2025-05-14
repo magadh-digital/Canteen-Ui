@@ -12,6 +12,7 @@ import { LoadingButton } from "@mui/lab";
 import img from '../src/assets/ingredients-near-pizza_23-2147772081.avif'
 import imgBG from '../src/assets/Pasted image (2).png'
 import imgFood from '../src/assets/pngwing.com1_.webp'
+import { ErrorHandle } from "./ErrorHandle";
 
 const LoginCanteenPage = () => {
 
@@ -43,18 +44,16 @@ const LoginCanteenPage = () => {
         try {
             const res = await OtpSender({ data: Number(userData.phone) })
 
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setLoginData((prevState) => ({
                     ...prevState,
-                    otp: res.data.otp
+                    otp: res?.data.otp
                 }))
                 setSignInPage(true)
             }
 
         } catch (error: any) {
-            toast.error(error?.message)
-            toast.error(error?.response?.data?.error)
-
+            ErrorHandle(error.response)
         }
     };
 
@@ -66,7 +65,7 @@ const LoginCanteenPage = () => {
                 otp: loginData.otp || 0
             }
             try {
-                const res = await VerifyOtp({ data: Number(userData.otp), phone: Number(userData.phone) })
+                const res : any = await VerifyOtp({ data: Number(userData.otp), phone: Number(userData.phone) })
                 if (res.status === 200) {
                     localStorage.setItem('canteen_token', res.data.token)
                     localStorage.setItem('canteen_data', JSON.stringify(res.data.canteen))
@@ -77,7 +76,7 @@ const LoginCanteenPage = () => {
                 }
             } catch (error: any) {
                 setSignInPage(false)
-                toast.error(error.response.data.error)
+                ErrorHandle(error.response)
             }
         } else {
             toast.error("Enter OTP")

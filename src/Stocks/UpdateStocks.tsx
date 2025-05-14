@@ -6,6 +6,7 @@ import { UpdateStockItemApi } from "../AllPostApi"
 import { toast } from "react-toastify"
 import { GridAddIcon, GridDeleteIcon } from "@mui/x-data-grid"
 import { UsePageHook } from "../Utils"
+import { ErrorHandle } from "../ErrorHandle"
 
 
 const ITEM_HEIGHT = 48;
@@ -160,26 +161,28 @@ const UpdateStocks = () => {
             }));
 
             const res = await mutateAsync({ data: updatedStock });
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setOpen(false);
                 handleCloseMinus();
                 toast.success("Stock Updated Successfully");
             }
         } catch (error: any) {
-            toast.error(error.response.data.message);
+            ErrorHandle(error.response)
+            // toast.error(error.response.data.message);
         }
     };
 
     const handleUpdate = async () => {
         try {
             const res = await mutateAsync({ data: arrayAddStock })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setOpen(false)
                 handleClose()
                 toast.success("Stock Updated Successfully")
             }
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
+            // toast.error(error.response.data.message)
         }
     }
 

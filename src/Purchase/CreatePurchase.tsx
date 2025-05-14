@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { GridDeleteIcon } from '@mui/x-data-grid';
 import { UsePageHook } from '../Utils';
+import { ErrorHandle } from '../ErrorHandle';
 
 
 const CreatePurchase = () => {
@@ -139,13 +140,14 @@ const CreatePurchase = () => {
             };
 
             const res = await mutateAsync({ data: formattedData });
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 handleClose()
                 navigate('/purchase')
                 toast.success("Purchase Created Successfully")
             }
         } catch (error: any) {
-            toast.error(error.response.data.message);
+            ErrorHandle(error.response)
+            // toast.error(error.response.data.message);
         }
     };
 

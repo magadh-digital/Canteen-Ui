@@ -5,6 +5,7 @@ import { CanteenUserDataType } from '../AllTypes';
 import { UpdateUserData } from '../AllPostApi';
 import { toast } from 'react-toastify';
 import { GetCanteenUserApi } from '../AllGetApi';
+import { ErrorHandle } from '../ErrorHandle';
 
 const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenUserDataType }) => {
     const [open, setOpen] = React.useState(false);
@@ -39,12 +40,13 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
         }
         try {
             const res = await mutateAsync({ data: formData, user_id });
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 handleClose();
                 toast.success("User Updated Successfully");
             }
         } catch (error: any) {
-            toast.error(error.response.data.message);
+            // toast.error(error.response.data.message);
+            ErrorHandle(error.response)
         }
     };
 

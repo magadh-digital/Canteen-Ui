@@ -7,6 +7,7 @@ import EditAndUpdateUsers from './EditAndUpdateUsers'
 import { CanteenUserDataType, UserVoucherTypes, } from '../AllTypes'
 import axios from 'axios'
 import { baseUrl } from '../ApiEndPoint'
+import { ErrorHandle } from '../ErrorHandle'
 
 
 export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUserDataType }) => {
@@ -45,12 +46,13 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
                     user_id: user_id
                 }
             })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 toast.success(res.data.message)
                 handleClose()
             }
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
+            // toast.error(error.response.data.message)
         }
     }
     // const handleDeleteUser = async () => {

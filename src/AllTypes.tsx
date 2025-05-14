@@ -75,7 +75,7 @@ export interface MenuItemType {
 export interface AddMenuProductType {
   name: string;
   price: number;
-  description: string;
+  description?: string;
   category: string;
   unit: string;
   available: boolean;

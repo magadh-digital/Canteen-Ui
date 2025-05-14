@@ -3,6 +3,7 @@ import React from 'react';
 import { CanteenUserType } from '../AllTypes';
 import { PostCanteenUserApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
+import { ErrorHandle } from '../ErrorHandle';
 
 
 
@@ -39,7 +40,7 @@ const CreateCanteen = () => {
                 password: ""
             })
         } catch (error: any) {
-            toast.error(error.response.data.error)
+            ErrorHandle(error.response)
         }
 
     }

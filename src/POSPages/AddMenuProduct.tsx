@@ -1,5 +1,5 @@
 
-import { AppBar, Box, Button, Checkbox,  Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Button, Checkbox, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import React from 'react'
@@ -78,30 +78,31 @@ const AddMenuProduct = () => {
         }
     };
     const saveHandleAllProduct = async () => {
-        const formData = new FormData();
-        formData.append("canteen_id", canteen_id);
-        formData.append("name", AddMenuItem.name);
-        formData.append("description", AddMenuItem.description);
-        formData.append("price", AddMenuItem.price.toString());
-        formData.append("category", AddMenuItem.category);
-        formData.append("unit", AddMenuItem.unit);
-        formData.append("available", AddMenuItem.available.toString());
-        // formData.append("image_url", AddMenuItem.image_url);
-        if (AddMenuItem.image_url instanceof File) {
-            formData.append("image_url", AddMenuItem.image_url);
-        } else {
-            formData.append("image_url", AddMenuItem.image_url);
-        }
         try {
-            await mutateAsync({
+            const formData = new FormData();
+            formData.append("canteen_id", canteen_id || "");
+            formData.append("name", AddMenuItem.name || ""); ;
+            formData.append("description", AddMenuItem.description || "");
+            formData.append("price", AddMenuItem.price.toString() || "");
+            formData.append("category", AddMenuItem.category || "");
+            formData.append("unit", AddMenuItem.unit || "");
+            formData.append("available", AddMenuItem.available.toString() || "");
+            // formData.append("image_url", AddMenuItem.image_url);
+            if (AddMenuItem.image_url instanceof File) {
+                formData.append("image_url", AddMenuItem.image_url);
+            }
+            const res = await mutateAsync({
                 data: formData
             })
-            toast.success("Product Added Successfully")
-            handleClose()
-            dispatch(setAddProduct(""))
+            if (res?.status === 200) {
+                toast.success("Product Added Successfully")
+                handleClose()
+                dispatch(setAddProduct(""))
+            }
 
         } catch (error: any) {
-            toast.error(error.response.data.error)
+            console.log(error)
+            toast.error(error.response.data.message)
 
         }
     }

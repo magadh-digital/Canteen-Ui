@@ -3,6 +3,7 @@ import { Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, Stac
 import React from 'react'
 import { toast } from 'react-toastify';
 import { CreateSupplierApi } from '../AllPostApi';
+import { ErrorHandle } from '../ErrorHandle';
 
 const CreateSupplier = () => {
     const mobile = useMediaQuery("(max-width:800px)")
@@ -31,13 +32,15 @@ const CreateSupplier = () => {
             address: createSupplierData.address
         }
         try {
-            await mutateAsync({
+          const res =   await mutateAsync({
                 data: data
             })
-            handleClose()
-            toast.success("Supplier Created Successfully")
+            if (res?.status === 200){
+                handleClose()
+                toast.success("Supplier Created Successfully")
+            }
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return (

@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { DeleteOrderByAdmin } from "../AllPostApi";
 import { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { ErrorHandle } from "../ErrorHandle";
 
 export const DeleteOrderReason = ({ id }: { id: string }) => {
 
@@ -16,13 +17,14 @@ export const DeleteOrderReason = ({ id }: { id: string }) => {
                     id,
                     remarks: remarks
                 })
-                if (res.status === 200) {
+                if (res?.status === 200) {
                     toast.success("Order Deleted Successfully")
                     setOpen(false)
                 }
             }
         } catch (error: any) {
-            toast.success(error?.response?.data?.message)
+            // toast.success(error?.response?.data?.message)
+            ErrorHandle(error.response)
         }
     }
     return (

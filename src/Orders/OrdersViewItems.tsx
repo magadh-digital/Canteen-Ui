@@ -28,7 +28,6 @@ const OrdersViewItems = () => {
                             backgroundColor: "#f9f9f9",
                         }}
                     >
-                        {/* Header */}
                         <Typography
                             variant="h6"
                             align="center"
@@ -300,7 +299,7 @@ const OrdersViewItems = () => {
                                         backgroundColor: "#007bff",
                                     }}
                                 >
-                                    Closer
+                                    Close
                                 </Button>
                                 <PrintBillData data={order || null} />
 

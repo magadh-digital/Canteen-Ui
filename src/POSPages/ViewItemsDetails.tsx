@@ -74,6 +74,9 @@ const ViewItemsDetails = ({ userData,
             total_amount: totalPaybaleAmount(),
             payable_amt: totalPaybaleAmount(),
             voucher: voucherChecked
+
+
+            
         }))
     }, [voucherChecked, userData?.vouchers, totalPrice])
 

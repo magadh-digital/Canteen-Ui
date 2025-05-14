@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { TransitionProps } from '@mui/material/transitions';
 import { UpdateProductItem } from '../AllPostApi';
 import { toast } from 'react-toastify';
+import { ErrorHandle } from '../ErrorHandle';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children: React.ReactElement<any, any> },
@@ -84,11 +85,13 @@ export const ProductItemsEdit = () => {
             if (EditData.image_url instanceof File) {
                 formData.append('image_url', EditData.image_url);
             }
-            await updateMenuItem({ id: menuItemId, data: formData });
-            toast.success('Product Updated Successfully');
-            handleClose();
+            const res = await updateMenuItem({ id: menuItemId, data: formData });
+            if (res?.status === 200) {
+                toast.success('Product Updated Successfully');
+                handleClose();
+            }
         } catch (error: any) {
-            toast.error(error.response?.data?.error || 'Update failed');
+            ErrorHandle(error.response)
         }
     };
 

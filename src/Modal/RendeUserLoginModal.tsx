@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import { SetLoginModel, SetToken, SetUser, setLoginType } from '../AllStoreSlice/LoginSlice';
 import { PostOtpSender, PostVerifyOtp } from '../AllPostApi';
-import { toast } from 'react-toastify';
+import { ErrorHandle } from '../ErrorHandle';
 
 
 
@@ -62,11 +62,11 @@ export default function RenderUserLoginModal() {
     if (!validatePhone()) return;
     try {
       const res = await sendOtp({ data: Number(phone) });
-      const otp = res.data.otp;
+      const otp = res?.data?.otp;
       setOtp(otp);
       setLoading(false);
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to send OTP");
+      ErrorHandle(error.response)
       setLoading(false);
     }
 
@@ -78,23 +78,21 @@ export default function RenderUserLoginModal() {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateOtp()) return;
-
     setLoading(true);
-
-    const res = await verifyOtp({
-      data: Number(otp),
-      phone: Number(phone),
-    });
-
-    dispatch(SetUser(res?.data?.user))
-    dispatch(SetToken(res?.data?.user?.token))
-    dispatch(setLoginType("USER"))
-
-
-
-    setLoading(false);
-
-    handleClose();
+    try {
+      const res = await verifyOtp({
+        data: Number(otp),
+        phone: Number(phone),
+      });
+      dispatch(SetUser(res?.data?.user))
+      dispatch(SetToken(res?.data?.user?.token))
+      dispatch(setLoginType("USER"))
+      setLoading(false);
+  
+      handleClose();
+    } catch (error: any) {
+      ErrorHandle(error.response)
+    }
   };
 
   const handleClose = () => {

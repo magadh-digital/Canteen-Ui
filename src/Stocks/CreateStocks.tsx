@@ -3,6 +3,7 @@ import React from 'react'
 import { AddStockItemType } from '../AllTypes';
 import { CreateStockItemApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
+import { ErrorHandle } from '../ErrorHandle';
 
 const CreateStocks = (refetch: any) => {
     const [open, setOpen] = React.useState(false);
@@ -25,13 +26,13 @@ const CreateStocks = (refetch: any) => {
             const res = await mutateAsync({
                 data: AddStock
             })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 toast.success("Stock Created Successfully")
                 handleClose();
                 refetch();
             }
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
             handleClose()
         }
 

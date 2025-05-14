@@ -2,8 +2,7 @@ import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
 import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, ReportDashboard, StockDetails, UpdateOrderType } from "./AllTypes"
-import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
+import { ErrorHandle } from "./ErrorHandle"
 
 export const GetCanteenUserApi = () => {
     const canteenUser = async () => {
@@ -12,7 +11,7 @@ export const GetCanteenUserApi = () => {
             const data = response.data
             return data as GetApiUserCanteens
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -29,7 +28,7 @@ export const GetMenuItemListApi = ({ canteen_id }: { canteen_id: string }) => {
             const data = response.data
             return data as GetMenuItemList
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -69,7 +68,7 @@ export const GetOrderDetailsApi = ({
             const data = response.data as UpdateOrderType
             return data
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -86,7 +85,7 @@ export const GetAllUserApi = () => {
             const data = response.data
             return data as AllUserType
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -102,7 +101,7 @@ export const GetReamainingVoucherApi = ({ user_id }: { user_id: string }) => {
             const data = response.data
             return data
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -119,7 +118,7 @@ export const GetSupplierApi = () => {
             const data = response.data
             return data as GetSupplierApiType
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -135,7 +134,7 @@ export const GetPurchaseApi = () => {
             const data = response.data
             return data as GetPurchaseApiTypes
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -160,11 +159,10 @@ export const GetStocksApi = ({
                     limit
                 }
             })
-            console.log(response)
             const data = response.data
             return data as GetStockDataTypes
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -180,7 +178,7 @@ export const GetStockDetailsApi = ({ id }: { id: string }) => {
             const data = response.data
             return data as StockDetails
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -198,7 +196,7 @@ export const GetReportOrderApi = () => {
             const data = response.data
             return data as ReportDashboard
         } catch (error: any) {
-            toast.error(error.response.data.message)
+             ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -218,7 +216,7 @@ export const GetAllUserApiSearch = ({
             const data = response.data
             return data as AllUserType
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({
@@ -240,7 +238,7 @@ export const GetUserVoucherApi = ({
             const data = response.data
             return data
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({

@@ -4,6 +4,7 @@ import { Box, colors, Dialog, DialogActions, DialogTitle, MenuItem, Select, Stac
 import { useState } from 'react'
 import { AddNewUserRegister } from '../AllPostApi';
 import { toast } from 'react-toastify';
+import { ErrorHandle } from '../ErrorHandle';
 
 export interface AddNewUserListProps {
     name: string;
@@ -71,7 +72,7 @@ const AddNewUserList = () => {
 
 
         } catch (error: any) {
-            toast.error(error.response.data.error)
+            ErrorHandle(error.response)
         }
     }
 

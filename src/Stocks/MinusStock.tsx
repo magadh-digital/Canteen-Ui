@@ -5,6 +5,7 @@ import { GetStocksApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
 import { toast } from "react-toastify"
 import { UsePageHook } from "../Utils"
+import { ErrorHandle } from "../ErrorHandle"
 
 
 const ITEM_HEIGHT = 48;
@@ -20,7 +21,7 @@ const MenuProps = {
 
 
 const MinusStocks = () => {
-    const { page, limit,  } = UsePageHook({ page: 1, limit: 100 })
+    const { page, limit, } = UsePageHook({ page: 1, limit: 100 })
     const [open, setOpen] = useState(false)
     const { data, } = GetStocksApi({
         page,
@@ -69,13 +70,14 @@ const MinusStocks = () => {
                     quantity: -Math.abs(Number(updateStocks.quantity))
                 }
             })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setOpen(false)
                 handleClose()
                 toast.success("Stock Updated Successfully")
             }
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
+            ErrorHandle(error.response)
         }
     }
 

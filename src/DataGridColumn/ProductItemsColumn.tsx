@@ -7,6 +7,7 @@ import { setAllMenuItems, setMenuItemId } from "../AllStoreSlice/AllMenuItemsSli
 import { DeleteProductItem } from "../AllPostApi";
 import { toast } from "react-toastify";
 import { setZoomImage } from "../AllStoreSlice/ZoomImageSlice";
+import { ErrorHandle } from "../ErrorHandle";
 
 export const ProductItemsColumn: GridColDef[] = [
     {
@@ -103,7 +104,7 @@ export const ProductItemsColumn: GridColDef[] = [
                         toast.success("Product Deleted Successfully")
                     }
                 } catch (error: any) {
-                    toast.error(error.response.data.error)
+                    ErrorHandle(error.response)
 
                 }
             }
