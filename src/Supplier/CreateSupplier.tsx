@@ -26,16 +26,28 @@ const CreateSupplier = () => {
         setOpen(false);
     }
     const handleAddSupplier = async () => {
+        if (createSupplierData.name === "") {
+            toast.error("Please Enter Supplier Name")
+            return
+        }
+        if (createSupplierData.contact === "") {
+            toast.error("Please Enter Supplier Contact")
+            return
+        }
+        if (createSupplierData.address === "") {
+            toast.error("Please Enter Supplier Address")
+            return
+        }
         const data = {
             name: createSupplierData.name,
             contact: Number(createSupplierData.contact),
             address: createSupplierData.address
         }
         try {
-          const res =   await mutateAsync({
+            const res = await mutateAsync({
                 data: data
             })
-            if (res?.status === 200){
+            if (res?.status === 200) {
                 handleClose()
                 toast.success("Supplier Created Successfully")
             }

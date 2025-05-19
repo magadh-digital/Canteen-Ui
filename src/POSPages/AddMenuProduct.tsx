@@ -78,10 +78,30 @@ const AddMenuProduct = () => {
         }
     };
     const saveHandleAllProduct = async () => {
+
+        if (!AddMenuItem.name) {
+            toast.error("Please Enter Product Name")
+            return
+        }
+        if (!AddMenuItem.price) {
+            toast.error("Please Enter Product Price")
+            return
+        }
+        if (!AddMenuItem.category) {
+            toast.error("Please Enter Product Category")
+            return
+        }
+        if (!AddMenuItem.unit) {
+            toast.error("Please Enter Product Unit")
+            return
+        }
+
+
         try {
+
             const formData = new FormData();
             formData.append("canteen_id", canteen_id || "");
-            formData.append("name", AddMenuItem.name || ""); ;
+            formData.append("name", AddMenuItem.name || "");;
             formData.append("description", AddMenuItem.description || "");
             formData.append("price", AddMenuItem.price.toString() || "");
             formData.append("category", AddMenuItem.category || "");
@@ -224,6 +244,7 @@ const AddMenuProduct = () => {
                                             <MenuItem value="SNACKS">Snacks</MenuItem>
                                             <MenuItem value="BEVERAGES">Beverages</MenuItem>
                                             <MenuItem value="MEALS">Meals</MenuItem>
+                                            <MenuItem value="OTHERS">Others</MenuItem>
                                         </Select>
                                     </FormControl>
 
@@ -246,6 +267,7 @@ const AddMenuProduct = () => {
                                         >
                                             <MenuItem value="PIECE">Piece</MenuItem>
                                             <MenuItem value="KG">Kg</MenuItem>
+                                            <MenuItem value="PLATE">Plate</MenuItem>
                                         </Select>
                                     </FormControl>
 

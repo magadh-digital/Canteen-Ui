@@ -19,7 +19,7 @@ import {
 import { GetMenuItemListApi } from '../AllGetApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setData } from '../AllStoreSlice/AddQuantitySlice';
-import { useState } from 'react';
+import {  useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
 import { GridSearchIcon } from '@mui/x-data-grid';
@@ -34,8 +34,6 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
     });
     const dispatch = useDispatch();
 
-
-    // console.log(canteen)
     const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCategory(event.target.value);
     }
@@ -50,7 +48,6 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
     const { data: canteen } = useSelector((state: RootState) => state.Quantity)
 
     const handleAddToCart = (item: any) => {
-        console.log(item)
         dispatch(setData({
             ...item,
             image_url: `${data?.base_url}${item?.image_url}`,

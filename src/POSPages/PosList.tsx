@@ -35,7 +35,6 @@ const PosList = () => {
                 height: "100%",
                 overflow: "hidden"
             }}>
-
                 {!mobile ? (
                     <>
                         <AllProductCard canteenId={canteenId || ""} />

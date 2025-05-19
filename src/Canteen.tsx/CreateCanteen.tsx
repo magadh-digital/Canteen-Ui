@@ -27,6 +27,27 @@ const CreateCanteen = () => {
 
     const handleSubmitUserDetails = async () => {
 
+        if(CanteenUserData?.name === "") {
+            toast.error("Please Enter Canteen Name")
+            return
+        }
+        if(CanteenUserData?.description === "") {
+            toast.error("Please Enter Canteen Description")
+            return
+        }
+        if(CanteenUserData?.contact === 0) {
+            toast.error("Please Enter Canteen Contact")
+            return
+        }
+        if(CanteenUserData?.email === "") {
+            toast.error("Please Enter Canteen Email")
+            return
+        }
+        if(CanteenUserData?.password === "") {
+            toast.error("Please Enter Canteen Password")
+            return
+        }
+
         try {
             await mutateAsync({
                 data: CanteenUserData

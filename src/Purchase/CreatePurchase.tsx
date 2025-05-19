@@ -26,7 +26,7 @@ import { ErrorHandle } from '../ErrorHandle';
 
 const CreatePurchase = () => {
     const navigate = useNavigate()
-    const { page, limit,  } = UsePageHook({ page: 1, limit: 100 })
+    const { page, limit, } = UsePageHook({ page: 1, limit: 100 })
     const [open, setOpen] = useState(true);
     const { canteenData } = useSelector((state: RootState) => state.canteenData)
     const { data: supplier } = GetSupplierApi()
@@ -124,6 +124,20 @@ const CreatePurchase = () => {
         Number(purchaseData?.discount || 0);
 
     const handleCreatePurchase = async () => {
+
+        if (!purchaseData?.supplier_id) {
+            toast.error("Please Select Supplier")
+            return
+        }
+
+        if (purchaseData?.refrence_no === "") {
+            toast.error("Please Enter Reference No")
+            return
+        }
+        if (purchaseData?.stock_items?.length === 0) {
+            toast.error("Please Add Stock Items")
+            return
+        }
         try {
             let formattedData = {
                 ...purchaseData,

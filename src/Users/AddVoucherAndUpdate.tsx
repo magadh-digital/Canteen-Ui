@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material'
-import { useState } from 'react'
+import { Button, ButtonGroup, colors, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Stack, TextField, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Add, GridViewOutlined, } from '@mui/icons-material'
 import { AddVoucherAndUpdate, } from '../AllPostApi'
@@ -14,20 +14,34 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
     const [open, setOpen] = useState(false)
     const [openVoucher, setOpenVoucher] = useState(false)
     const [voucherDataGet, setVoucherDataGet] = useState<UserVoucherTypes | null>(null)
+    const [page, setPage] = useState(1)
+    const limit = 10
     const [voucherData, setVoucherData] = useState({
         description: "",
         amount: 0,
     })
-
+    
+    
     const fetchUser = async () => {
         try {
-            const res = await axios.get(`${baseUrl}/voucher/?user_id=${user_id}`)
+            const res = await axios.get(`${baseUrl}/voucher/?user_id=${user_id}`,{
+                params: {
+                    page,
+                    limit
+                }
+            })
             setVoucherDataGet(res.data)
             return res.data as UserVoucherTypes
         } catch (error: any) {
             toast.error(error.response.data.message)
         }
+
     }
+    
+    const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value)
+    }
+    const totalPages = Math.ceil((voucherDataGet?.total || 0) / limit)
     const { mutateAsync } = AddVoucherAndUpdate()
     // const { mutateAsync: deleteUser } = GetCanteenUserDelete()
     const handleOpen = () => setOpen(true)
@@ -37,6 +51,7 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
             amount: 0,
         })
         setOpen(false)
+        setPage(1)
     }
     const handleSubmitVoucher = async () => {
         try {
@@ -55,6 +70,12 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
             // toast.error(error.response.data.message)
         }
     }
+    useEffect(() => {
+        if (openVoucher) {
+            fetchUser()
+        }
+    }, [page, openVoucher])
+    
     // const handleDeleteUser = async () => {
     //     try {
     //         const res = await deleteUser({ id: user_id })
@@ -67,8 +88,8 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
     // }
 
     const handleViewVoucher = () => {
-        setOpenVoucher(true)
-        fetchUser()
+        setPage(1) 
+        setOpenVoucher(true) 
     }
 
     return (
@@ -132,7 +153,7 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
             </Dialog>
             <Dialog open={openVoucher} onClose={() => setOpenVoucher(false)} sx={{
                 "& .MuiDialog-paper": {
-                    minWidth: "500px",
+                    minWidth: "600px",
                     borderRadius: "10px",
                     maxHeight: "400px",
                     minHeight: "400px",
@@ -155,7 +176,7 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
                     },
                 }}>
                     <table style={{
-                        width: "500px",
+                        width: "100%",
                         maxHeight: "200px",
                         minHeight: "200px",
                         overflowX: "hidden",
@@ -163,6 +184,7 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
                     }}>
                         <thead style={{ position: "sticky", top: "0px", zIndex: "1" }}>
                             <tr>
+                                <th>OrderId</th>
                                 <th>Description</th>
                                 <th>Amount</th>
                             </tr>
@@ -172,6 +194,7 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
                                 const color = Number(item?.amount ?? 0) > 0 ? "green" : "red"
                                 return (
                                     <tr key={idx}>
+                                        <td>{item?.order_id || ""}</td>
                                         <td>{item.description || "-"}</td>
                                         <td style={{
                                             color: color
@@ -183,6 +206,18 @@ export const AddVoucher = ({ user_id, data }: { user_id: string, data: CanteenUs
                         </tbody>
                     </table>
                 </DialogContent>
+                <DialogActions>
+                    <Pagination
+                        page={page}
+                        count={totalPages}
+                        onChange={handlePageChange}
+                        sx={{
+                            "& .MuiPaginationItem-root": {
+                                color: colors.green[500]
+                            }
+                        }}
+                    />
+                </DialogActions>
             </Dialog>
         </>
 

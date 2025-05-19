@@ -5,6 +5,7 @@ import { setStocksItemView } from "../AllStoreSlice/StocksItemViewSlice";
 import { RootState } from "../Store";
 import { GetStockDetailsApi } from "../AllGetApi";
 import moment from "moment";
+import { useState } from "react";
 
 export const StockItemColumn: GridColDef[] = [
     {
@@ -91,13 +92,23 @@ export const StockItemColumn: GridColDef[] = [
 
 export const ViewStocksDetails = () => {
     const dispatch = useDispatch()
+
     const { stockId } = useSelector((state: RootState) => state.stocksItemView)
-    const { data, isLoading } = GetStockDetailsApi({ id: stockId })
+
+    const [page, setPage] = useState(1)
+    const limit = 10
+
+    const { data, isLoading } = GetStockDetailsApi({ id: stockId, page, limit })
     const handleClose = () => {
         dispatch(setStocksItemView(""))
+        setPage(1)
     }
 
+    const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value)
+    }
 
+    const totalPages = Math.ceil((data?.total || 0) / limit)
     return (
         <>
             <Dialog
@@ -175,18 +186,14 @@ export const ViewStocksDetails = () => {
                         marginTop: "10px"
                     }}>
                         <Pagination
+                            page={page}
+                            count={totalPages}
+                            onChange={handlePageChange}
                             sx={{
                                 "& .MuiPaginationItem-root": {
                                     color: colors.green[500]
-                                },
-                                display: "flex",
-                                alignItems: "center",
-                                width: "100%",
-                                justifyContent: "center",
+                                }
                             }}
-                            page={1}
-                            color="primary"
-                            count={data?.total}
                         />
                     </Box>
                 </DialogContent>

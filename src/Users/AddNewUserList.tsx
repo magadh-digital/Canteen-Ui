@@ -55,6 +55,7 @@ const AddNewUserList = () => {
 
     const handleSaveUser = async () => {
         const formData = new FormData();
+
         formData.append("name", addUser.name);
         formData.append("email", addUser.email);
         formData.append("role", addUser.role);
@@ -63,11 +64,28 @@ const AddNewUserList = () => {
             formData.append("image", addUser.image);
         }
 
+        if (formData?.get("name") === "") {
+            toast.error("Please Enter User Name")
+            return
+        }
+        if (formData?.get("email") === "") {
+            toast.error("Please Enter User Email")
+            return
+        }
+        if (formData?.get("role") === "") {
+            toast.error("Please Enter User Role")
+            return
+        }
+        if (formData?.get("phone") === "") {
+            toast.error("Please Enter User Phone")
+            return
+        }
         try {
-            await mutateAsync(formData);
-
-            handleClose()
-            toast.success("User Added Successfully")
+            const res = await mutateAsync(formData);
+            if (res?.status === 200) {
+                handleClose()
+                toast.success("User Added Successfully")
+            }
 
 
 

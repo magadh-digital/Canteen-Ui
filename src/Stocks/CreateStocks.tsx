@@ -22,6 +22,19 @@ const CreateStocks = (refetch: any) => {
         })
     }
     const handleSaveStockData = async () => {
+        if (!AddStock.name) {
+            toast.error("Please Enter Stock Name")
+            return
+        }
+        if (!AddStock.description) {
+            toast.error("Please Enter Stock Description")
+            return
+        }
+        if (!AddStock.unit) {
+            toast.error("Please Enter Stock Unit")
+            return
+        }
+        
         try {
             const res = await mutateAsync({
                 data: AddStock

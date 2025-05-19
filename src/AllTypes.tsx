@@ -415,4 +415,5 @@ export interface VouchersType {
   description: string;
   type: String;
   user_id: string;
+  order_id: string
 }

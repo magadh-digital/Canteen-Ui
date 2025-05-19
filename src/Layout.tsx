@@ -23,9 +23,10 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import { PagesTypes } from './AllTypes';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ProfilePage } from './ProfilePage';
-import { useSelector } from 'react-redux';
-import { RootState } from './Store';
-import imgMenu from '../src/assets/vintage-restaurant-menu_23-2147491098.avif'
+// import { useSelector } from 'react-redux';
+// import { RootState } from './Store';
+import imgMenu from '../src/assets/logoBlack.jpeg'
+import moment from 'moment';
 
 
 
@@ -105,8 +106,15 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   const navigate = useNavigate()
   const location = useLocation();
   const canteen_id = localStorage.getItem('canteen_user_id')
-  const { canteenData } = useSelector((state: RootState) => state.canteenData)
+  // const { canteenData } = useSelector((state: RootState) => state.canteenData)
+  const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDate(moment().format("DD-MM-YYYY hh:mm:ss"));
+    }, 1000);
 
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -121,14 +129,8 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   };
   const isPOSPage = location.pathname === '/pos';
 
-  const newDate = new Date();
-  const formattedDate = newDate.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  // const newDate = new Date();
+
 
 
   return (
@@ -164,15 +166,18 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           </IconButton>
           {
             open ? null :
-              <img src={`${imgMenu}`} alt='"no img' width={"48px"} height={"48px"} style={{ borderRadius: "30%", marginRight: "10px" }} />
+              <img src={`${imgMenu}`}
+                alt='"no img'
+                width={"20px"} height={"20px"}
+                style={{ borderRadius: "30%", marginRight: "10px" }} />
           }
           <Stack width={"100%"} direction="row" spacing={2} alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="h6" noWrap component="div" sx={{ color: 'black' }}>
-                {canteenData?.name}
+                Magadh Canteen
               </Typography>
               <Typography sx={{ color: colors.grey[900] }}>
-                ({formattedDate})
+                ({currentDate})
               </Typography>
             </Stack>
 
@@ -212,15 +217,16 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           },
         }}
       >
-        <DrawerHeader sx={{ position: 'relative', padding: 0 }}>
+        <DrawerHeader sx={{ position: 'relative' }}>
           <img
             src={`${imgMenu}`}
             alt="no img"
-            width="100%"
-            height="70px"
+            width={180}
+            height={60}
             style={{
-              objectFit: 'cover',
-              backgroundColor: 'white',
+              alignContent: "center",
+              marginLeft:"auto",
+              marginRight:"auto"
             }}
           />
           <IconButton
@@ -228,7 +234,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
             sx={{
               position: 'absolute',
               top: '50%',
-              right: '5px',
+              right: '-10px',
               transform: 'translateY(-50%)',
               color: 'green',
               // backgroundColor: 'rgba(255, 255, 255, 0.7)',   

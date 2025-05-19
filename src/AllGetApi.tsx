@@ -33,8 +33,8 @@ export const GetMenuItemListApi = ({ canteen_id }: { canteen_id: string }) => {
     }
     return useQuery({
         queryKey: ['menuitem', canteen_id],
-        queryFn: menuItemList
-
+        queryFn: menuItemList,
+        enabled: !!canteen_id
     })
 }
 
@@ -171,10 +171,15 @@ export const GetStocksApi = ({
     })
 }
 
-export const GetStockDetailsApi = ({ id }: { id: string }) => {
+export const GetStockDetailsApi = ({ id, page, limit }: { id: string, page?: number, limit?: number }) => {
     const stockDetails = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/stock/?item_id=${id}`)
+            const response = await axios.get(`${baseUrl}/stock/?item_id=${id}`, {
+                params: {
+                    page,
+                    limit
+                }
+            })
             const data = response.data
             return data as StockDetails
         } catch (error: any) {
@@ -182,7 +187,7 @@ export const GetStockDetailsApi = ({ id }: { id: string }) => {
         }
     }
     return useQuery({
-        queryKey: ['stock-item', id],
+        queryKey: ['stock-item', id, page, limit],
         enabled: !!id,
         queryFn: stockDetails
     })
@@ -196,7 +201,7 @@ export const GetReportOrderApi = () => {
             const data = response.data
             return data as ReportDashboard
         } catch (error: any) {
-             ErrorHandle(error.response)
+            ErrorHandle(error.response)
         }
     }
     return useQuery({

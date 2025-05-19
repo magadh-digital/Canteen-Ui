@@ -127,6 +127,7 @@ export const ProductItemsEdit = () => {
                                 <MenuItem value="SNACKS">Snacks</MenuItem>
                                 <MenuItem value="BEVERAGES">Beverages</MenuItem>
                                 <MenuItem value="MEALS">Meals</MenuItem>
+                                <MenuItem value="OTHERS">Others</MenuItem>
                             </Select>
                         </FormControl>
 
@@ -135,6 +136,7 @@ export const ProductItemsEdit = () => {
                             <Select size="small" label="Unit" name="unit" value={EditData.unit} onChange={handleSelectChange}>
                                 <MenuItem value="PIECE">Piece</MenuItem>
                                 <MenuItem value="KG">Kg</MenuItem>
+                                <MenuItem value="PLATE">Plate</MenuItem>
                             </Select>
                         </FormControl>
 
