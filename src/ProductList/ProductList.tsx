@@ -1,6 +1,6 @@
 import { useDispatch, } from "react-redux";
 import { GetMenuItemListApi } from "../AllGetApi";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import RefecthButton from "../RefecthButton";
 import { DataGrid, GridPaginationModel } from "@mui/x-data-grid";
 import { useMemo, useState } from "react";
@@ -9,6 +9,7 @@ import { setAddProduct } from "../AllStoreSlice/AddProductCanteenSlice";
 
 const ProductList = () => {
     const canteen_id = localStorage.getItem("canteen_user_id");
+    const [Search, setSearch] = useState<string>('');
     const { data, isLoading, isRefetching, refetch } = GetMenuItemListApi({
         canteen_id: canteen_id || "",
     });
@@ -28,7 +29,7 @@ const ProductList = () => {
         const itemsData = data?.menuitems || [];
         if (!itemsData) return [];
         if (itemsData) {
-            return itemsData?.map((items, index) => {
+            return itemsData?.filter((item: any) => item?.name?.toLowerCase().includes(Search.toLowerCase()))?.map((items, index) => {
                 return {
                     ...items,
                     id: items?.id,
@@ -39,18 +40,25 @@ const ProductList = () => {
 
         }
 
-    }, [data])
+    }, [data, Search]);
 
     return (
         <Box sx={{
+            width: "98%",
             height: "100%",
             backgroundColor: "white",
             m: 1,
-            p: 1
+            mt: 3,
         }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="h4">Product List</Typography>
                 <Stack direction="row" spacing={3}>
+                    <TextField
+                        value={Search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        label="Search"
+                        size="small"
+                    />
                     <Button
                         variant="contained"
                         size="small"
