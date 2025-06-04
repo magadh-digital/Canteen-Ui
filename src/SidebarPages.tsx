@@ -1,7 +1,7 @@
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { PagesTypes } from './AllTypes';
-import { FoodBank, Person } from '@mui/icons-material';
+import { BarChart, FoodBank, Person, Report } from '@mui/icons-material';
 // import { PagesTypes } from './AllTypes';
 import CategoryIcon from '@mui/icons-material/Category';
 import { colors } from '@mui/material';
@@ -58,23 +58,23 @@ export const NAVIGATION: PagesTypes[] = [
     title: 'Purchase',
     icon: <img src={`${imgPurchase}`} style={{ width: "25px", height: "30px" }} />,
   },
-  // {
-  //   segment: 'reports',
-  //   title: 'Reports',
-  //   icon: <BarChartIcon sx={{ color: colors.grey[200] }} />,
-  //   children: [
-  //     {
-  //       segment: 'order-reports',
-  //       title: 'Order Reports',
-  //       icon: <DescriptionIcon sx={{ color: colors.grey[200] }} />,
-  //     },
-  //     {
-  //       segment: 'traffic',
-  //       title: 'Traffic',
-  //       icon: <DescriptionIcon sx={{ color: colors.grey[200] }} />,
-  //     },
-  //   ],
-  // },
+  {
+    segment: 'reports',
+    title: 'Reports',
+    icon: <BarChart sx={{ color: colors.grey[200] }} />,
+    children: [
+      {
+        segment: 'sell-reports',
+        title: 'Sell Report',
+        icon: <Report sx={{ color: colors.grey[200] }} />,
+      },
+      {
+        segment: 'purchase-reports',
+        title: 'Purchase Report',
+        icon: <Report sx={{ color: colors.grey[200] }} />,
+      },
+    ],
+  },
   // {
   //   segment: 'integrations',
   //   title: 'Integrations',

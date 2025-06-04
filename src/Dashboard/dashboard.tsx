@@ -101,7 +101,7 @@ export const Dashboard = () => {
                         <div className="table-dashboard">
                             <table style={{ width: "100%", }}>
                                 <tbody>
-                                    {data?.last20orders?.map((item, index) => (
+                                    {data?.last20orders?.filter((item) => item?.status !== "DELETED").map((item, index) => (
                                         <tr key={index}>
                                             <td style={{ display: "flex", alignItems: "center", gap: 9 }}>
                                                 <Avatar alt={item?.canteen?.name} src={item?.canteen?.name} sx={{ bgcolor: "#1976d2", color: "#fff" }} />
