@@ -169,11 +169,27 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                     <html>
                         <head>
                             <title>Invoice</title>
-                            <style>
-                                body { font-family: Arial, sans-serif; text-align: center; }
-                                table { width: 100%; margin-top: 10px; }
-                                td, th { padding: 5px; }
-                            </style>
+                           <style>
+                               @page {
+                                    size: auto; 
+                                       margin: 5mm; 
+                                    }
+                                body {
+                                    font-family: Arial, sans-serif;
+                                     text-align: center;
+                                     margin: 0;
+                                     padding: 0;
+                                     }
+                                 table {
+                                     width: 100%;
+                                     margin-top: 10px;
+                                     border-collapse: collapse;
+                                      }
+                                 td, th {
+                                     padding: 4px;
+                                     font-size: 12px;
+                                       }
+                           </style>
                         </head>
                         <body>
                             ${receiptContent}

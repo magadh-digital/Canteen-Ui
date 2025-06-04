@@ -1,5 +1,5 @@
 import { Print } from '@mui/icons-material';
-import { Button,} from '@mui/material';
+import { Button, } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { GetOrderTypes } from '../AllTypes';
 import { renderToString } from 'react-dom/server';
@@ -22,7 +22,7 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
                 <div style={{ maxWidth: "100%", margin: "auto", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
                     <h2>{order?.canteen?.name}</h2>
                     <p>{moment(order?.created_at).format("DD MMM YYYY h:mm A")}</p>
-                    <p>Invoice ID: {order?.order_id}</p>
+                    <p>Invoice dID: {order?.order_id}</p>
                     <p>Customer: {order?.customer_name}</p>
                     <hr style={{ borderTop: "1px dashed black" }} />
                     <h3>INVOICE</h3>
@@ -80,11 +80,27 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
                     <html>
                         <head>
                             <title>Invoice</title>
-                            <style>
-                                body { font-family: Arial, sans-serif; text-align: center; }
-                                table { width: 100%; margin-top: 10px; }
-                                td, th { padding: 5px; }
-                            </style>
+                          <style>
+                               @page {
+                                    size: auto; 
+                                       margin: 5mm; 
+                                    }
+                                body {
+                                    font-family: Arial, sans-serif;
+                                     text-align: center;
+                                     margin: 0;
+                                     padding: 0;
+                                     }
+                                 table {
+                                     width: 100%;
+                                     margin-top: 10px;
+                                     border-collapse: collapse;
+                                      }
+                                 td, th {
+                                     padding: 4px;
+                                     font-size: 12px;
+                                       }
+                           </style>
                         </head>
                         <body>
                             ${receiptContent}

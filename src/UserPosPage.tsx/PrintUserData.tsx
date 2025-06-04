@@ -32,7 +32,7 @@ const PrintUserData = ({
                     <p>Invoice ID: {order?.order_id}</p>
                     <p>Customer: {order?.customer_name}</p>
                     <hr style={{ borderTop: "1px dashed black" }} />
-                    <h3>INVOICE</h3>
+                    <h3>INVdOICE</h3>
                     <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black" }}>
                         <thead>
                             <tr style={{
@@ -87,11 +87,27 @@ const PrintUserData = ({
                 <html>
                     <head>
                         <title>Invoice</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; text-align: center; }
-                            table { width: 100%; margin-top: 10px; }
-                            td, th { padding: 5px; }
-                        </style>
+                       <style>
+                               @page {
+                                    size: auto; 
+                                       margin: 5mm; 
+                                    }
+                                body {
+                                    font-family: Arial, sans-serif;
+                                     text-align: center;
+                                     margin: 0;
+                                     padding: 0;
+                                     }
+                                 table {
+                                     width: 100%;
+                                     margin-top: 10px;
+                                     border-collapse: collapse;
+                                      }
+                                 td, th {
+                                     padding: 4px;
+                                     font-size: 12px;
+                                       }
+                           </style>
                     </head>
                     <body>
                         ${receiptContent}

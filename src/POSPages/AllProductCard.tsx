@@ -19,7 +19,7 @@ import {
 import { GetMenuItemListApi } from '../AllGetApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setData } from '../AllStoreSlice/AddQuantitySlice';
-import {  useState } from 'react';
+import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
 import { GridSearchIcon } from '@mui/x-data-grid';
@@ -174,7 +174,9 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                                         opacity: canteen.some((canteenItem) => canteenItem.id === item.id)
                                             ? 0.7
                                             : 1,
+                                        cursor: 'pointer'
                                     }}
+                                    onClick={() => handleAddToCart(item)}
                                 >
                                     <CardMedia
                                         component="img"
@@ -208,7 +210,6 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                                     <CardActionArea>
                                         <Stack
                                             direction="row"
-                                            onClick={() => handleAddToCart(item)}
                                             sx={{
                                                 bgcolor: colors.red[400],
                                                 cursor: 'pointer',
