@@ -22,7 +22,7 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
                 <div style={{ maxWidth: "100%", margin: "auto", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
                     <h2>{order?.canteen?.name}</h2>
                     <p>{moment(order?.created_at).format("DD MMM YYYY h:mm A")}</p>
-                    <p>Invoice dID: {order?.order_id}</p>
+                    <p>Invoice ID: {order?.order_id}</p>
                     <p>Customer: {order?.customer_name}</p>
                     <hr style={{ borderTop: "1px dashed black" }} />
                     <h3>INVOICE</h3>
@@ -50,7 +50,7 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
                             ))}
                         </tbody>
                     </table>
-                    <hr style={{ borderTop: "1px dashed black", margin: "10px 0" }} />
+                    <hr style={{ borderTop: "1px dashed black", margin: "1px 0" }} />
                     <table style={{ width: "100%", borderCollapse: "collapse", }}>
                         <tbody>
                             <tr >
@@ -93,11 +93,11 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
                                      }
                                  table {
                                      width: 100%;
-                                     margin-top: 10px;
+                                     margin-top: 1px;
                                      border-collapse: collapse;
                                       }
                                  td, th {
-                                     padding: 4px;
+                                     padding: 1px;
                                      font-size: 12px;
                                        }
                            </style>

@@ -26,13 +26,23 @@ const PrintUserData = ({
             if (!printWindow) return;
 
             const receiptContent = renderToString(
-                <div style={{ maxWidth: "100%", margin: "auto", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
-                    <h2>{order?.canteen?.name}</h2>
-                    <p>{moment(order?.created_at).format("DD MMM YYYY h:mm A")}</p>
-                    <p>Invoice ID: {order?.order_id}</p>
-                    <p>Customer: {order?.customer_name}</p>
-                    <hr style={{ borderTop: "1px dashed black" }} />
-                    <h3>INVdOICE</h3>
+                <div
+                    style={{
+                        maxWidth: "100%",
+                        fontFamily: "Arial, sans-serif",
+                        textAlign: "center",
+                    }}
+                >
+                    <div style={{ margin: 0, padding: 0 }}>
+                        <h2 style={{ margin: "4px 0" }}>{order?.canteen?.name}</h2>
+                        <p style={{ margin: "5px 0" }}>
+                            {moment(order?.created_at).format("DD MMM YYYY h:mm A")}
+                        </p>
+                        <p style={{ margin: "2px 0" }}>Invoice ID: {order?.order_id}</p>
+                        <p style={{ margin: "2px 0" }}>Customer: {order?.customer_name}</p>
+                        <hr style={{ borderTop: "1px dashed black", margin: "8px 0" }} />
+                    <h3>INVOICE</h3>
+                    </div>
                     <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black" }}>
                         <thead>
                             <tr style={{
@@ -57,7 +67,7 @@ const PrintUserData = ({
                             ))}
                         </tbody>
                     </table>
-                    <hr style={{ borderTop: "1px dashed black", margin: "10px 0" }} />
+                    <hr style={{ borderTop: "1px dashed black", margin: "1px 0" }} />
                     <table style={{ width: "100%", borderCollapse: "collapse", }}>
                         <tbody>
                             <tr >
@@ -78,9 +88,9 @@ const PrintUserData = ({
                             </tr>
                         </tbody>
                     </table>
-                    <hr style={{ borderTop: "1px dashed black", margin: "10px 0" }} />
+                    <hr style={{ borderTop: "1px dashed black", margin: "1px 0" }} />
                     <p style={{ fontStyle: "italic" }}>In Text: {Toword.convert(Number(order?.total_amount ?? 0))}</p>
-                </div>
+                </div >
             );
 
             printWindow.document.write(`
@@ -90,7 +100,7 @@ const PrintUserData = ({
                        <style>
                                @page {
                                     size: auto; 
-                                       margin: 5mm; 
+                                       margin: 3mm; 
                                     }
                                 body {
                                     font-family: Arial, sans-serif;
@@ -104,7 +114,7 @@ const PrintUserData = ({
                                      border-collapse: collapse;
                                       }
                                  td, th {
-                                     padding: 4px;
+                                     padding: 3px;
                                      font-size: 12px;
                                        }
                            </style>
