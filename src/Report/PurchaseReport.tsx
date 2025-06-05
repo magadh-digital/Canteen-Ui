@@ -59,7 +59,6 @@ const PurchaseReport = () => {
             WinPrint.document.close()
             WinPrint.focus()
             WinPrint.print()
-          
         }
     }
 

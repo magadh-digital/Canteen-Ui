@@ -107,32 +107,32 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
 
             const receiptContent = renderToString(
                 <div style={{ maxWidth: "100%", margin: "auto", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
-                    <h2>{canteenData?.name}</h2>
-                    <p>{moment().format("DD MMM YYYY h:mm A")}</p>
-                    <p>Invoice ID: {billData?.order_id}</p>
-                    <p>Customer: {billData?.customer_name}</p>
-                    <hr style={{ borderTop: "1px dashed black" }} />
-                    <h3>INVOICE</h3>
+                    <h3>{canteenData?.name}</h3>
+                    <p style={{ margin: "2px", fontSize: "12px" }}>{moment().format("DD MMM YYYY h:mm A")}</p>
+                    <p style={{ margin: "2px", fontSize: "12px" }}>Invoice ID: {billData?.order_id}</p>
+                    <p style={{ margin: "2px", fontSize: "12px" }}>Customer: {billData?.customer_name}</p>
+                    <hr style={{ width: "100%", margin: "2px 0", borderTop: "1px dashed black" }} />
+                    <p style={{ fontSize: "17px", margin: "5px 0" }}>INVOICE</p>
                     <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black" }}>
                         <thead>
                             <tr style={{
-                                borderBottom: "1px solid black",
+                                borderBottom: "1px solid black"
                             }}>
-                                <th style={{ textAlign: "left" }}>Sl</th>
-                                <th style={{ textAlign: "left" }}>Name</th>
-                                <th style={{ textAlign: "right" }}>Qty</th>
-                                <th style={{ textAlign: "right" }}>Price</th>
-                                <th style={{ textAlign: "right" }}>Amount</th>
+                                <th style={{ textAlign: "left", fontSize: "8px" }}>Sl</th>
+                                <th style={{ textAlign: "left", fontSize: "8px" }}>Name</th>
+                                <th style={{ textAlign: "right", fontSize: "8px" }}>Qty</th>
+                                <th style={{ textAlign: "right", fontSize: "8px" }}>Price</th>
+                                <th style={{ textAlign: "right", fontSize: "8px" }}>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {billData?.items?.map((item, index) => (
                                 <tr key={item?.item_id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.name}</td>
-                                    <td style={{ textAlign: "right" }}>{item.qty}</td>
-                                    <td style={{ textAlign: "right" }}>₹{item.price}</td>
-                                    <td style={{ textAlign: "right" }}>₹{item.total}</td>
+                                    <td style={{ fontSize: "8px" }}>{index + 1}</td>
+                                    <td style={{ fontSize: "8px" }}>{item.name}</td>
+                                    <td style={{ textAlign: "right", fontSize: "8px" }}>{item.qty}</td>
+                                    <td style={{ textAlign: "right", fontSize: "8px" }}>₹{item.price}</td>
+                                    <td style={{ textAlign: "right", fontSize: "8px" }}>₹{item.total}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -141,25 +141,25 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                     <table style={{ width: "100%", borderCollapse: "collapse", }}>
                         <tbody>
                             <tr >
-                                <td style={{ textAlign: "right" }}>Total Amt:</td>
-                                <td style={{ textAlign: "right" }}>₹{billData?.total_amount}</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>Total Amt:</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>₹{billData?.total_amount}</td>
                             </tr>
                             <tr>
-                                <td style={{ textAlign: "right" }}>Total Due:</td>
-                                <td style={{ textAlign: "right" }}>₹{billData?.total_amount}</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>Total Due:</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>₹{billData?.total_amount}</td>
                             </tr>
                             <tr>
-                                <td style={{ textAlign: "right" }}>Voucher:</td>
-                                <td style={{ textAlign: "right" }}> -₹{Number(billData?.voucher_amt ?? 0)}</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>Voucher:</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}> -₹{Number(billData?.voucher_amt ?? 0)}</td>
                             </tr>
                             <tr>
-                                <td style={{ textAlign: "right" }}>Paid Amount:</td>
-                                <td style={{ textAlign: "right" }}>₹{Number(billData?.payable_amt ?? 0)}</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>Paid Amount:</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>₹{Number(billData?.payable_amt ?? 0)}</td>
                             </tr>
                         </tbody>
                     </table>
                     <hr style={{ borderTop: "1px dashed black", margin: "10px 0" }} />
-                    <p style={{ fontStyle: "italic" }}>In Text:
+                    <p style={{ fontStyle: "italic", fontSize: "8px" }}>In Text:
                         {toWord.convert(Number(billData?.total_amount ?? 0))}
                     </p>
                 </div>

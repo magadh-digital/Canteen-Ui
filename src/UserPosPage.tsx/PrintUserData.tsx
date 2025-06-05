@@ -34,35 +34,35 @@ const PrintUserData = ({
                     }}
                 >
                     <div style={{ margin: 0, padding: 0 }}>
-                        <h2 style={{ margin: "4px 0" }}>{order?.canteen?.name}</h2>
-                        <p style={{ margin: "5px 0" }}>
+                        <h3 style={{ margin: "4px 0" }}>{order?.canteen?.name}</h3>
+                        <p style={{ margin: "5px 0", fontSize: "12px" }}>
                             {moment(order?.created_at).format("DD MMM YYYY h:mm A")}
                         </p>
-                        <p style={{ margin: "2px 0" }}>Invoice ID: {order?.order_id}</p>
-                        <p style={{ margin: "2px 0" }}>Customer: {order?.customer_name}</p>
-                        <hr style={{ borderTop: "1px dashed black", margin: "8px 0" }} />
-                    <h3>INVOICE</h3>
+                        <p style={{ margin: "2px 0", fontSize: "12px" }}>Invoice ID: {order?.order_id}</p>
+                        <p style={{ margin: "2px 0", fontSize: "12px" }}>Customer: {order?.customer_name}</p>
+                        <hr style={{ borderTop: "1px dashed black", margin: "3px 0" }} />
+                        <p style={{ margin: "2px 0", fontSize: "17px", fontWeight: "bold" }}>INVOICE</p>
                     </div>
-                    <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black", fontSize: "5px" }}>
                         <thead>
                             <tr style={{
                                 borderBottom: "1px solid black",
                             }}>
-                                <th style={{ textAlign: "left" }}>SL</th>
-                                <th style={{ textAlign: "left" }}>Name</th>
-                                <th style={{ textAlign: "right" }}>Qty</th>
-                                <th style={{ textAlign: "right" }}>Price</th>
-                                <th style={{ textAlign: "right" }}>Amount</th>
+                                <th style={{ textAlign: "left", fontSize: "8px" }}>SL</th>
+                                <th style={{ textAlign: "left", fontSize: "8px" }}>Name</th>
+                                <th style={{ textAlign: "right", fontSize: "8px" }}>Qty</th>
+                                <th style={{ textAlign: "right", fontSize: "8px" }}>Price</th>
+                                <th style={{ textAlign: "right", fontSize: "8px" }}>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data?.map((item, index) => (
                                 <tr key={item?.item_id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.name}</td>
-                                    <td style={{ textAlign: "right" }}>{item.qty}</td>
-                                    <td style={{ textAlign: "right" }}>₹{item.price}</td>
-                                    <td style={{ textAlign: "right" }}>₹{item.total}</td>
+                                    <td style={{ fontSize: "8px" }}>{index + 1}</td>
+                                    <td style={{ fontSize: "8px" }}>{item.name}</td>
+                                    <td style={{ textAlign: "right", fontSize: "8px" }}>{item.qty}</td>
+                                    <td style={{ textAlign: "right", fontSize: "8px" }}>₹{item.price}</td>
+                                    <td style={{ textAlign: "right", fontSize: "8px" }}>₹{item.total}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -71,25 +71,25 @@ const PrintUserData = ({
                     <table style={{ width: "100%", borderCollapse: "collapse", }}>
                         <tbody>
                             <tr >
-                                <td style={{ textAlign: "right" }}>Total Amt:</td>
-                                <td style={{ textAlign: "right" }}>₹{order?.total_amount}</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>Total Amt:</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>₹{order?.total_amount}</td>
                             </tr>
                             <tr>
-                                <td style={{ textAlign: "right" }}>Total Due:</td>
-                                <td style={{ textAlign: "right" }}>₹{order?.total_amount}</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>Total Due:</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>₹{order?.total_amount}</td>
                             </tr>
                             <tr>
-                                <td style={{ textAlign: "right" }}>Voucher:</td>
-                                <td style={{ textAlign: "right" }}> -₹{Number(order?.voucher_amt ?? 0)}</td>
+                                <td style={{ textAlign: "right" ,fontSize: "8px" }}>Voucher:</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}> -₹{Number(order?.voucher_amt ?? 0)}</td>
                             </tr>
                             <tr>
-                                <td style={{ textAlign: "right" }}>Paid Amount:</td>
+                                <td style={{ textAlign: "right",fontSize: "8px" }}>Paid Amount:</td>
                                 <td style={{ textAlign: "right" }}>₹{Number(order?.payable_amt ?? 0)}</td>
                             </tr>
                         </tbody>
                     </table>
                     <hr style={{ borderTop: "1px dashed black", margin: "1px 0" }} />
-                    <p style={{ fontStyle: "italic" }}>In Text: {Toword.convert(Number(order?.total_amount ?? 0))}</p>
+                    <p style={{ fontStyle: "italic",fontSize: "8px" }}>In Text: {Toword.convert(Number(order?.total_amount ?? 0))}</p>
                 </div >
             );
 
