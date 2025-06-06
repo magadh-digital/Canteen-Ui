@@ -1,7 +1,7 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
-import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, ReportDashboard, StockDetails, UpdateOrderType } from "./AllTypes"
+import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, ReportDashboard, SellReportType, StockDetails, UpdateOrderType } from "./AllTypes"
 import { ErrorHandle } from "./ErrorHandle"
 
 export const GetCanteenUserApi = () => {
@@ -251,5 +251,27 @@ export const GetUserVoucherApi = ({
     return useQuery({
         queryKey: ['userVoucher', user_id],
         queryFn: userVoucherGet
+    })
+}
+
+export const GetSellReportApi = ({
+    startDate,
+    endDate
+}: {
+    startDate: string,
+    endDate: string
+}) => {
+    const sellReport = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/order/daily/report?start_date=${startDate}&end_date=${endDate}`)
+            const data = response.data as SellReportType
+            return data
+        } catch (error: any) {
+            ErrorHandle(error.response)
+        }
+    }
+    return useQuery({
+        queryKey: ['sellreport', startDate, endDate],
+        queryFn: sellReport
     })
 }

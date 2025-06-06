@@ -265,7 +265,7 @@ export interface GetStockTypes {
 export interface GetStockDataTypes {
   data: GetStockTypes[]
   remaining: GetStockTypes[]
-  total:number
+  total: number
 }
 
 export interface GetPurchaseApiTypes {
@@ -416,4 +416,17 @@ export interface VouchersType {
   type: String;
   user_id: string;
   order_id: string
+}
+
+export interface SellReportType {
+  total_amount: number;
+  date: string;
+  items: SellItems[]
+}
+
+export interface SellItems {
+  item_id: string;
+  name: string;
+  total: number;
+  qty: number;
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
-  GetReportOrderApi,
+
+  GetSellReportApi,
 } from '../AllGetApi';
 import {
   Box,
@@ -20,9 +21,26 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import moment from 'moment';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 
 const SellReport = () => {
-  const { data, isLoading, isRefetching, refetch } = GetReportOrderApi();
+
+  const [date, setDate] = useState({
+    startDate: moment(new Date()).format('YYYY-MM-DD'),
+    endDate: moment(new Date()).format('YYYY-MM-DD'),
+  });
+  const reportTitle = `Sell Report (${moment(date.startDate).format('DD-MM-YYYY')} to ${moment(date.endDate).format('DD-MM-YYYY')})`;
+
+
+  const { data, isLoading, isRefetching, refetch } = GetSellReportApi({
+    startDate: date.startDate,
+    endDate: date.endDate
+  });
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
     page: 0,
     pageSize: 20,
@@ -35,25 +53,20 @@ const SellReport = () => {
 
   const ReportItem = useMemo(() => {
     if (!data) return [];
-    const sellDataReport = data?.last20orders;
+    const sellDataReport = data?.items;
     if (sellDataReport) {
       return sellDataReport
         .filter((item) =>
-          item.customer_name.toLowerCase().includes(search.toLowerCase())
+          item.name.toLowerCase().includes(search.toLowerCase())
         )
         .map((item, index: number) => ({
           ...item,
-          id: item?.id,
+          id: item?.item_id,
           idx: index + 1 + paginationModel.page * paginationModel.pageSize,
-          address: item?.customer_name,
-          remaining: {
-            remaining: item?.customer_type,
-            unit: item?.payable_amt,
-          },
         }));
     }
     return [];
-  }, [data, search, paginationModel]);
+  }, [data, search, paginationModel,]);
 
   const getPlainRows = () => {
     return ReportItem.map((row) => {
@@ -80,30 +93,76 @@ const SellReport = () => {
 
   const handlePDFDownload = () => {
     const doc = new jsPDF();
+    doc.text(reportTitle, 50, 15);
     const columns = SellReportColumn.map((col) => col.headerName as string);
     const rows = getPlainRows().map((row) => columns.map((col) => row[col]));
 
     autoTable(doc, {
+      startY: 20,
+      showHead: "everyPage",
       head: [columns],
       body: rows,
     });
+
 
     doc.save("sell_report.pdf");
   };
 
   const handleExcelDownload = () => {
-    const worksheet = XLSX.utils.json_to_sheet(getPlainRows());
+    const plainRows = getPlainRows();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+
+    const title = `${reportTitle}`;
+    const columnHeaders = SellReportColumn.map(col => col.headerName as string);
+
+    XLSX.utils.sheet_add_aoa(worksheet, [[title]], { origin: 'A1' });
+
+    XLSX.utils.sheet_add_aoa(worksheet, [columnHeaders], { origin: 'A3' });
+
+    const dataRows = plainRows.map(row => columnHeaders.map(col => row[col]));
+    XLSX.utils.sheet_add_aoa(worksheet, dataRows, { origin: 'A4' });
+
+    worksheet['!merges'] = [
+      {
+        s: { r: 0, c: 0 },
+        e: { r: 0, c: columnHeaders.length - 1 }
+      }
+    ];
+
+    worksheet['A1'].s = {
+      font: { bold: true, sz: 14 },
+      alignment: { horizontal: "center" },
+    };
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sell Report");
     XLSX.writeFile(workbook, "sell_report.xlsx");
   };
 
+
   const handleCSVDownload = () => {
-    const worksheet = XLSX.utils.json_to_sheet(getPlainRows());
-    const csv = XLSX.utils.sheet_to_csv(worksheet);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const plainRows = getPlainRows();
+    const columnHeaders = SellReportColumn.map((col) => col.headerName as string);
+    const title = `${reportTitle}`;
+
+    let csvContent = "";
+
+    const fakeMerge = [title, ...new Array(columnHeaders.length - 1).fill("")].join(",");
+    csvContent += `${fakeMerge}\n`;
+
+    csvContent += "\n";
+
+    csvContent += columnHeaders.join(",") + "\n";
+
+    plainRows.forEach(row => {
+      const rowData = columnHeaders.map(col => `"${row[col] ?? ""}"`);
+      csvContent += rowData.join(",") + "\n";
+    });
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, "sell_report.csv");
   };
+
 
   return (
     <Box
@@ -152,17 +211,40 @@ const SellReport = () => {
             </Tooltip>
           </ButtonGroup>
           <RefecthButton refetch={refetch} isRefetching={isRefetching} />
-          <TextField
-            size="small"
-            type="date"
-            sx={{ width: '9vw', bgcolor: colors.grey[200], borderRadius: '5px' }}
-          />
-          <span>to</span>
-          <TextField
-            size="small"
-            type="date"
-            sx={{ width: '9vw', bgcolor: colors.grey[200], borderRadius: '5px' }}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {/* Start Date Picker */}
+            <DatePicker
+              label="Start Date"
+              value={dayjs(date.startDate)}
+              maxDate={dayjs(date.endDate)}
+              onChange={(newValue) => {
+                setDate((prev) => ({
+                  ...prev,
+                  startDate: dayjs(newValue).format('YYYY-MM-DD'),
+                }));
+              }}
+              slotProps={{ textField: { size: 'small' } }}
+            />
+
+            {/* End Date Picker */}
+            <DatePicker
+              label="End Date"
+              value={dayjs(date.endDate)}
+              minDate={dayjs(date.startDate)}
+              maxDate={dayjs()}
+              onChange={(newValue) => {
+                const formatted = dayjs(newValue).format('YYYY-MM-DD');
+                setDate((prev) => ({
+                  ...prev,
+                  endDate: formatted,
+                }));
+                refetch(); // Auto-call API
+              }}
+              slotProps={{ textField: { size: 'small' } }}
+            />
+          </LocalizationProvider>
+
+
           <TextField
             size="small"
             placeholder="Search customer"
