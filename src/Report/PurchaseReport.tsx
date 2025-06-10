@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { GetReportOrderApi } from '../AllGetApi'
+import { GetPurchaseReportApi, } from '../AllGetApi'
 import {
     Box,
     Button,
@@ -18,9 +18,22 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
+import moment from 'moment'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 
 const PurchaseReport = () => {
-    const { data, isLoading, isRefetching, refetch } = GetReportOrderApi()
+    const [date, setDate] = useState({
+        startDate: moment(new Date()).format('YYYY-MM-DD'),
+        endDate: moment(new Date()).format('YYYY-MM-DD'),
+    });
+    const { data, isLoading, isRefetching, refetch } = GetPurchaseReportApi({
+        startDate: date.startDate,
+        endDate: date.endDate
+    })
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: 20,
@@ -30,69 +43,161 @@ const PurchaseReport = () => {
     const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
         setPaginationModel(newPaginationModel)
     }
+    const reportTitle = `Purchase Report (${moment(date.startDate).format('DD-MM-YYYY')} to ${moment(date.endDate).format('DD-MM-YYYY')})`;
+
 
     const ReportItem = useMemo(() => {
         if (!data) return []
-        const sellDataReport = data?.last20orders
-        if (sellDataReport) {
-            return sellDataReport
-                .filter((item) => item.customer_name.toLowerCase().includes(search.toLowerCase()))
+        const purchasereport = data?.items
+        if (purchasereport) {
+            return purchasereport
+                .filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
                 .map((item, index: number) => ({
                     ...item,
-                    id: item?.id,
+                    id: item?.item_id,
                     idx: index + 1 * (paginationModel.page * paginationModel.pageSize + 1),
-                    address: item?.customer_name,
-                    remaining: {
-                        remaining: item?.customer_type,
-                        unit: item?.payable_amt
-                    }
                 }))
         }
         return []
     }, [data, search, paginationModel])
 
-    const handlePrint = () => {
-        const printContent = document.getElementById('print-section')
-        const WinPrint = window.open('', '', 'width=900,height=650')
-        if (WinPrint && printContent) {
-            WinPrint.document.write(printContent.innerHTML)
-            WinPrint.document.close()
-            WinPrint.focus()
-            WinPrint.print()
-        }
-    }
+    const getPlainRows = () => {
+        return ReportItem.map((row) => {
+            const plainRow: Record<string, any> = {};
+            PurchaseReportColumn.forEach((col) => {
+                const value = (row as any)[col.field];
+                plainRow[col.headerName as string] =
+                    typeof value === "object" ? JSON.stringify(value) : value;
+            });
+            return plainRow;
+        });
+    };
 
+    const handlePrint = () => {
+        const WinPrint = window.open('', '', 'width=900,height=650');
+        if (WinPrint) {
+            WinPrint.document.write(`
+            <html>
+              <head>
+                <title>${reportTitle}</title>
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                    padding: 4px;
+                  }
+                  table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                  }
+                  th, td {
+                    border: 1px solid black;
+                    padding: 3px;
+                    text-align: left;
+                  }
+                  th {
+                    background-color: #f2f2f2;
+                  }
+                  h2 {
+                    text-align: center;
+                    margin-bottom: 20px;
+                  }
+                </style>
+              </head>
+              <body>
+                <h2>${reportTitle}</h2>
+                <table>
+                  <tr>
+                    <th>S.No.</th>
+                    <th>Items</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                  </tr>
+                  ${data?.items.map((item, index) => `
+                    <tr>
+                      <td>${index + 1}</td>
+                      <td>${item.name}</td>
+                      <td>${item.qty}</td>
+                      <td>${item.total}</td>
+                    </tr>
+                  `).join('')}
+                </table>
+              </body>
+            </html>
+          `);
+            WinPrint.document.close();
+            WinPrint.focus();
+            WinPrint.print();
+        }
+    };
     const handlePDFDownload = () => {
-        const doc = new jsPDF()
-        const columns  = PurchaseReportColumn.map(col => col?.headerName as string) 
-        const rows = ReportItem.map(row =>
-            PurchaseReportColumn.map(col => {
-                const val = (row as any)[col.field]
-                return val !== undefined ? val : ""
-            })
-        )
+        const doc = new jsPDF();
+        doc.text(reportTitle, 50, 15);
+        const columns = PurchaseReportColumn.map((col) => col.headerName as string);
+        const rows = getPlainRows().map((row) => columns.map((col) => row[col]));
 
         autoTable(doc, {
+            startY: 20,
+            showHead: "everyPage",
             head: [columns],
             body: rows,
-        })
+        });
 
-        doc.save("purchase_report.pdf")
-    }
 
-    const handleExcelDownload = () => {
-        const worksheet = XLSX.utils.json_to_sheet(ReportItem)
-        const workbook = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Report")
-        XLSX.writeFile(workbook, "purchase_report.xlsx")
-    }
+        doc.save("sell_report.pdf");
+    }; const handleExcelDownload = () => {
+        const plainRows = getPlainRows();
+        const worksheet = XLSX.utils.json_to_sheet([]);
+
+        const title = `${reportTitle}`;
+        const columnHeaders = PurchaseReportColumn.map(col => col.headerName as string);
+
+        XLSX.utils.sheet_add_aoa(worksheet, [[title]], { origin: 'A1' });
+
+        XLSX.utils.sheet_add_aoa(worksheet, [columnHeaders], { origin: 'A3' });
+
+        const dataRows = plainRows.map(row => columnHeaders.map(col => row[col]));
+        XLSX.utils.sheet_add_aoa(worksheet, dataRows, { origin: 'A4' });
+
+        worksheet['!merges'] = [
+            {
+                s: { r: 0, c: 0 },
+                e: { r: 0, c: columnHeaders.length - 1 }
+            }
+        ];
+
+        worksheet['A1'].s = {
+            font: { bold: true, sz: 14 },
+            alignment: { horizontal: "center" },
+        };
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sell Report");
+        XLSX.writeFile(workbook, "sell_report.xlsx");
+    };
 
     const handleCSVDownload = () => {
-        const worksheet = XLSX.utils.json_to_sheet(ReportItem)
-        const csv = XLSX.utils.sheet_to_csv(worksheet)
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-        saveAs(blob, "purchase_report.csv")
-    }
+        const plainRows = getPlainRows();
+        const columnHeaders = PurchaseReportColumn.map((col) => col.headerName as string);
+        const title = `${reportTitle}`;
+
+        let csvContent = "";
+
+        const fakeMerge = [title, ...new Array(columnHeaders.length - 1).fill("")].join(",");
+        csvContent += `${fakeMerge}\n`;
+
+        csvContent += "\n";
+
+        csvContent += columnHeaders.join(",") + "\n";
+
+        plainRows.forEach(row => {
+            const rowData = columnHeaders.map(col => `"${row[col] ?? ""}"`);
+            csvContent += rowData.join(",") + "\n";
+        });
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        saveAs(blob, "sell_report.csv");
+    };
 
     return (
         <Box sx={{
@@ -105,7 +210,7 @@ const PurchaseReport = () => {
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
-                    color: colors.red[500],
+                    color: colors.grey[600],
                     fontWeight: 'bold',
                     letterSpacing: '1px',
                     fontFamily: 'monospace'
@@ -128,9 +233,38 @@ const PurchaseReport = () => {
                 </ButtonGroup>
                 <Stack spacing={2} direction='row' alignItems={'center'}>
                     <RefecthButton refetch={refetch} isRefetching={isRefetching} />
-                    <TextField size='small' type='date' sx={{ width: '9vw', bgcolor: colors.grey[200], borderRadius: '5px' }} />
-                    <span>to</span>
-                    <TextField size='small' type='date' sx={{ width: '9vw', bgcolor: colors.grey[200], borderRadius: '5px' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {/* Start Date Picker */}
+                        <DatePicker
+                            label="Start Date"
+                            value={dayjs(date.startDate)}
+                            maxDate={dayjs(date.endDate)}
+                            onChange={(newValue: any) => {
+                                setDate((prev) => ({
+                                    ...prev,
+                                    startDate: dayjs(newValue).format('YYYY-MM-DD'),
+                                }));
+                            }}
+                            slotProps={{ textField: { size: 'small' } }}
+                        />
+
+                        {/* End Date Picker */}
+                        <DatePicker
+                            label="End Date"
+                            value={dayjs(date.endDate)}
+                            minDate={dayjs(date.startDate)}
+                            maxDate={dayjs()}
+                            onChange={(newValue: any) => {
+                                const formatted = dayjs(newValue).format('YYYY-MM-DD');
+                                setDate((prev) => ({
+                                    ...prev,
+                                    endDate: formatted,
+                                }));
+                                refetch(); // Auto-call API
+                            }}
+                            slotProps={{ textField: { size: 'small' } }}
+                        />
+                    </LocalizationProvider>
                     <TextField
                         size='small'
                         value={search}
@@ -140,6 +274,7 @@ const PurchaseReport = () => {
                             bgcolor: colors.grey[200],
                             borderRadius: '5px',
                         }}
+                        placeholder='Search'
                     />
                 </Stack>
             </Stack>

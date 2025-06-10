@@ -275,3 +275,26 @@ export const GetSellReportApi = ({
         queryFn: sellReport
     })
 }
+
+
+export const GetPurchaseReportApi = ({
+    startDate,
+    endDate
+}: {
+    startDate: string,
+    endDate: string
+}) => {
+    const sellReport = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/order/daily/report?start_date=${startDate}&end_date=${endDate}`)
+            const data = response.data as SellReportType
+            return data
+        } catch (error: any) {
+            ErrorHandle(error.response)
+        }
+    }
+    return useQuery({
+        queryKey: ['purchasereport', startDate, endDate],
+        queryFn: sellReport
+    })
+}

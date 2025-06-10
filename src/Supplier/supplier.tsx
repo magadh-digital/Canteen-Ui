@@ -39,10 +39,10 @@ const Supplier = () => {
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
-                    color: colors.red[500],
-                    fontWeight: 'bold',
-                    letterSpacing: '1px',
-                    fontFamily: 'monospace'
+                     color: colors.grey[600],
+                     fontWeight: 'bold',
+                     letterSpacing: '1px',
+                     fontFamily: 'monospace'
                 }}>
                     Supplier
                 </Typography>

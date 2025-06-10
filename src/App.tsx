@@ -27,7 +27,7 @@ import CanteenLayout from './POSPages/CanteenLayout';
 import { MobilePosViewItemList } from './POSPages/MobilePosViewList';
 import StocksList from './Stocks/StocksList';
 import CreatePurchase from './Purchase/CreatePurchase';
-import OrderReports from './Report/SellReports';
+// import OrderReports from './Report/SellReports';
 import { createTheme, ThemeProvider } from '@mui/material';
 import AllUserList from './Users/AllUserList';
 import SellReport from './Report/SellReports';
@@ -128,46 +128,39 @@ function AppContent({ dispatch }: { dispatch: any }) {
     return (
         <>
             <Routes>
-                {/* Public Routes */}
                 <Route element={<PublicRoute redirectTo="/dashboard" />}>
                     <Route path="/login" element={<LoginCanteenPage />} />
                 </Route>
 
-                {/* Private Routes */}
                 <Route element={<PrivateRoute redirectTo="/login" />}>
                     <Route element={<Layout />}>
                         <Route path="/" element={<Navigate to="/dashboard" />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/orders" element={<OrderList />} />
                         <Route path="/canteen" element={<CanteenList />} />
-                        <Route path="/products" element={<ProductList />} />
+                        {/* <Route path="/products" element={<ProductList />} /> */}
                         <Route path="/selectCanteen" element={<SelectCanteen />} />
                         <Route path="/products-items" element={<ProductList />} />
                         <Route path="/supplier" element={<Supplier />} />
                         <Route path="/purchase" element={<Purchases />} />
                         <Route path='/stocks' element={<StocksList />} />
                         <Route path='/add-purchase' element={<CreatePurchase />} />
-                        <Route path='/order-reports' element={<OrderReports />} />
+                        {/* <Route path='/order-reports' element={<OrderReports />} /> */}
                         <Route path='/users' element={<AllUserList />} />
                         <Route path='/sell-reports' element={<SellReport />} />
                         <Route path='/purchase-reports' element={<PurchaseReport />} />
                     </Route>
                 </Route>
-
                 <Route path="/user" element={<UserLayout />}>
                     <Route index element={<UserPosListWrapper />} />
                     <Route path="/user/view_item" element={<MobileViewItemDetails />} />
                     <Route path="/user/order/view" element={<MyOrderList />} />
                 </Route>
-
-
-                {/* <Route element={<PrivateRoute redirectTo="/login" />}> */}
                 <Route path="/qrcode" element={<Qrcode />} />
                 <Route path='/pos' element={<CanteenLayout />}>
                     <Route path="/pos" element={<PosList />} />
                     <Route path='/pos/view_item' element={<MobilePosViewItemList />} />
                 </Route>
-                {/* </Route> */}
             </Routes>
 
             <AllModalList />

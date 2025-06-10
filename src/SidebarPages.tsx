@@ -11,32 +11,32 @@ import imgPurchase from '../src/assets/payment-method.png'
 
 export const NAVIGATION: PagesTypes[] = [
   {
-    segment: 'dashboard',
+    path: 'dashboard',
     title: 'Dashboard',
     icon: <DashboardIcon sx={{ color: colors.grey[200] }} />,
   },
   {
-    segment: 'orders',
+    path: 'orders',
     title: 'Invoice',
     icon: <ShoppingCartIcon sx={{ color: colors.grey[200] }} />,
   },
   {
-    segment: 'users',
+    path: 'users',
     title: 'Users',
     icon: <Person sx={{ color: colors.grey[200] }} />
   },
   {
-    segment: 'Canteen',
+    path: 'Canteen',
     title: 'Canteen',
     icon: <FoodBank sx={{ color: colors.grey[200] }} />,
   },
   {
-    segment: 'products',
+    path: 'products',
     title: 'Products',
     icon: <CategoryIcon sx={{ color: colors.grey[200] }} />,
     children: [
       {
-        segment: 'products-items',
+        path: 'products-items',
         title: 'Products items',
         icon: <ShoppingCartIcon sx={{ color: colors.grey[200] }} />
       }
@@ -44,40 +44,35 @@ export const NAVIGATION: PagesTypes[] = [
   },
 
   {
-    segment: 'supplier',
+    path: 'supplier',
     title: 'Supplier',
     icon: <img src={`${imgSupp}`} style={{ width: "25px", height: "30px" }} />,
   },
   {
-    segment: "stocks",
+    path: "stocks",
     title: "Stocks",
     icon: <img src={`${imgStock}`} style={{ color: '#9FD675', width: "25px", height: "30px" }} />,
   },
   {
-    segment: 'purchase',
+    path: 'purchase',
     title: 'Purchase',
     icon: <img src={`${imgPurchase}`} style={{ width: "25px", height: "30px" }} />,
   },
   {
-    segment: 'reports',
+    path: 'reports',
     title: 'Reports',
     icon: <BarChart sx={{ color: colors.grey[200] }} />,
     children: [
       {
-        segment: 'sell-reports',
+        path: 'sell-reports',
         title: 'Sell Report',
         icon: <Report sx={{ color: colors.grey[200] }} />,
       },
       {
-        segment: 'purchase-reports',
+        path: 'purchase-reports',
         title: 'Purchase Report',
         icon: <Report sx={{ color: colors.grey[200] }} />,
       },
     ],
   },
-  // {
-  //   segment: 'integrations',
-  //   title: 'Integrations',
-  //   icon: <LayersIcon sx={{ color: colors.grey[200] }} />,
-  // },
 ];

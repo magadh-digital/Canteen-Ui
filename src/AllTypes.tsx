@@ -3,14 +3,14 @@ import { GetPurchaseApi } from "./AllGetApi";
 export interface PagesTypes {
   kind?: string;
   title: string;
-  segment?: string;
+  path?: string;
   icon?: JSX.Element;
   children?: PagesChildrenPage[];
 }
 
 export interface PagesChildrenPage {
   title: string;
-  segment?: string;
+  path?: string;
   icon?: JSX.Element;
   children?: PagesChildrenPage[];
 }

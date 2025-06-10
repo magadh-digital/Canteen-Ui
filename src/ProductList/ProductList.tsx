@@ -1,6 +1,6 @@
 import { useDispatch, } from "react-redux";
 import { GetMenuItemListApi } from "../AllGetApi";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, colors, Stack, TextField, Typography } from "@mui/material";
 import RefecthButton from "../RefecthButton";
 import { DataGrid, GridPaginationModel } from "@mui/x-data-grid";
 import { useMemo, useState } from "react";
@@ -51,7 +51,12 @@ const ProductList = () => {
             mt: 3,
         }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography variant="h4">Product List</Typography>
+                <Typography variant="h6" sx={{
+                    color: colors.grey[600],
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    fontFamily: 'monospace'
+                }}>Product List</Typography>
                 <Stack direction="row" spacing={3}>
                     <TextField
                         value={Search}

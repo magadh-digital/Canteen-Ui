@@ -23,15 +23,15 @@ export const OrderList = () => {
         refetch();
     }, [page, limit]);
 
-    const   OrderRowsData = useMemo(() => {
+    const OrderRowsData = useMemo(() => {
         if (!data) return [];
         return data?.orders?.map((item, idx) => ({
-            ...item, 
+            ...item,
             id: item?.id,
             idx: idx + 1 + (page - 1) * limit,
         }))
     }, [data, search, page, limit])
-    
+
 
 
     return (
@@ -43,7 +43,12 @@ export const OrderList = () => {
             }}
         >
             <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-                <Typography variant="h5" sx={{ fontWeight: "bold" }}>Order List</Typography>
+                <Typography variant="h5" sx={{
+                    color: colors.grey[600],
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    fontFamily: 'monospace'
+                }}>Order List</Typography>
                 <Stack alignItems="center" direction="row" spacing={2}>
                     <TextField
                         size="small"

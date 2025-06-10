@@ -81,15 +81,63 @@ const SellReport = () => {
   };
 
   const handlePrint = () => {
-    const printContent = document.getElementById("print-section");
     const WinPrint = window.open('', '', 'width=900,height=650');
-    if (WinPrint && printContent) {
-      WinPrint.document.write(`<html><head><title>Sell Report</title></head><body>${printContent.innerHTML}</body></html>`);
+    if (WinPrint) {
+      WinPrint.document.write(`
+        <html>
+          <head>
+            <title>${reportTitle}</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                padding: 4px;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+              }
+              th, td {
+                border: 1px solid black;
+                padding: 3px;
+                text-align: left;
+              }
+              th {
+                background-color: #f2f2f2;
+              }
+              h2 {
+                text-align: center;
+                margin-bottom: 20px;
+              }
+            </style>
+          </head>
+          <body>
+            <h2>${reportTitle}</h2>
+            <table>
+              <tr>
+                <th>S.No.</th>
+                <th>Items</th>
+                <th>Qty</th>
+                <th>Price</th>
+              </tr>
+              ${data?.items.map((item, index) => `
+                <tr>
+                  <td>${index + 1}</td>
+                  <td>${item.name}</td>
+                  <td>${item.qty}</td>
+                  <td>${item.total}</td>
+                </tr>
+              `).join('')}
+            </table>
+          </body>
+        </html>
+      `);
       WinPrint.document.close();
       WinPrint.focus();
       WinPrint.print();
     }
   };
+  
 
   const handlePDFDownload = () => {
     const doc = new jsPDF();
@@ -179,10 +227,10 @@ const SellReport = () => {
         <Typography
           variant="h5"
           sx={{
-            color: colors.red[500],
-            fontWeight: 'bold',
-            letterSpacing: '1px',
-            fontFamily: 'monospace',
+            color: colors.grey[600],
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    fontFamily: 'monospace'
           }}
         >
           Sell Reports
@@ -247,7 +295,7 @@ const SellReport = () => {
 
           <TextField
             size="small"
-            placeholder="Search customer"
+            placeholder="Search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             sx={{ width: '15vw', bgcolor: colors.grey[200], borderRadius: '5px' }}

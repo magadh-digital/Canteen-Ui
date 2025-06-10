@@ -254,7 +254,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                   display: 'block',
                   margin: '5px 0',
                   borderRadius: '8px',
-                  backgroundColor: expandedSegment === item.segment ? '#303050' : 'transparent',
+                  backgroundColor: expandedSegment === item.path ? '#303050' : 'transparent',
                   '&:hover': {
                     backgroundColor: '#404060',
                   },
@@ -263,7 +263,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
               >
                 <ListItemButton
                   onClick={() => {
-                    if (item.children) toggleExpand(item.segment || '');
+                    if (item.children) toggleExpand(item.path || '');
                   }}
                   sx={{
                     justifyContent: open ? 'initial' : 'center',
@@ -271,7 +271,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                     color: '#e0e0e0',
                   }}
                   component={!item.children ? (Link as React.ElementType) : 'div'}
-                  to={!item.children ? `/${item.segment}` : undefined}
+                  to={!item.children ? `/${item.path}` : undefined}
                 >
                   <ListItemIcon
                     sx={{
@@ -292,7 +292,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                     }}
                   />
                   {item.children &&
-                    (expandedSegment === item.segment ? (
+                    (expandedSegment === item.path ? (
                       <ExpandLess sx={{ color: '#e0e0e0' }} />
                     ) : (
                       <ExpandMore sx={{ color: '#e0e0e0' }} />
@@ -300,7 +300,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                 </ListItemButton>
               </ListItem>
               {item.children && (
-                <Collapse in={expandedSegment === item.segment} timeout="auto" unmountOnExit>
+                <Collapse in={expandedSegment === item.path} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {item.children.map((child, childIndex) => (
                       <ListItemButton
@@ -316,7 +316,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                           },
                         }}
                         component={Link as React.ElementType}
-                        to={`/${child.segment}`}
+                        to={`/${child.path}`}
                       >
                         <ListItemIcon
                           sx={{

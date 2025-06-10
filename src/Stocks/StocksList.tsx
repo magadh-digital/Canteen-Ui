@@ -43,7 +43,7 @@ const StocksList = () => {
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
-                    color: colors.red[500],
+                    color: colors.grey[600],
                     fontWeight: 'bold',
                     letterSpacing: '1px',
                     fontFamily: 'monospace'

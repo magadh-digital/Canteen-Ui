@@ -1,5 +1,5 @@
 
-import { Box,  Stack, Tab, Typography } from '@mui/material'
+import { Box,  colors,  Stack, Tab, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import CreateCanteen from './CreateCanteen'
 import { TabContext, TabList, } from '@mui/lab'
@@ -44,9 +44,10 @@ const CanteenList = () => {
         }}>
             <Stack direction={"row"} justifyContent={"space-between"} >
                 <Typography variant='h5' sx={{
-                    color: "red", fontWeight: "bold",
-                    fontFamily: "monospace",
-                    fontStyle: "italic"
+                     color: colors.grey[600],
+                     fontWeight: 'bold',
+                     letterSpacing: '1px',
+                     fontFamily: 'monospace'
                 }}>
                     Canteen List
                 </Typography>
