@@ -156,8 +156,8 @@ const CreatePurchase = () => {
 
             const res = await mutateAsync({ data: formattedData });
             if (res?.status === 200) {
-                // handleClose()
-                // navigate('/purchase')
+                handleClose()
+                navigate('/purchase')
                 toast.success("Purchase Created Successfully")
             }
         } catch (error: any) {
