@@ -185,6 +185,5 @@ function UserPosListWrapper() {
     }, [canteenId, navigate]);
 
     return <UserPosList canteenId={canteenId || ""} />;
-
 }
 

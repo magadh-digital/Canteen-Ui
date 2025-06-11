@@ -144,19 +144,20 @@ const CreatePurchase = () => {
                 sub_total: subTotal,
                 total_amount: payableAmount,
                 stocks_items: purchaseData?.stock_items.map(item => ({
-                    ID: item.ID,
+                    item_id: item.ID,
                     name: item.name,
                     description: item.description,
                     quantity: item.quantity ?? 0,
                     price: item.price ?? 0,
                     total: (item.quantity ?? 0) * (item.price ?? 0),
+                    unit: item.unit
                 })),
             };
 
             const res = await mutateAsync({ data: formattedData });
             if (res?.status === 200) {
-                handleClose()
-                navigate('/purchase')
+                // handleClose()
+                // navigate('/purchase')
                 toast.success("Purchase Created Successfully")
             }
         } catch (error: any) {
