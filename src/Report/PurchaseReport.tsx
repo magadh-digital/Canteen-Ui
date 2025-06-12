@@ -51,11 +51,12 @@ const PurchaseReport = () => {
         const purchasereport = data?.items
         if (purchasereport) {
             return purchasereport
-                .filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
+                .filter((item) => item?.supplier?.name?.toLowerCase().includes(search.toLowerCase()))
                 .map((item, index: number) => ({
                     ...item,
-                    id: item?.item_id,
+                    id: item?._id,
                     idx: index + 1 * (paginationModel.page * paginationModel.pageSize + 1),
+                    supplier: item?.supplier?.name
                 }))
         }
         return []
@@ -109,18 +110,30 @@ const PurchaseReport = () => {
                 <table>
                   <tr>
                     <th>S.No.</th>
-                    <th>Items</th>
-                    <th>Qty</th>
-                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Reference no</th>
+                    <th>Supplier</th>
+                    <th>Paid Amount</th>
+                    <th>Due Amount</th>
+                    <th>Total Amount</th>
                   </tr>
                   ${data?.items.map((item, index) => `
                     <tr>
                       <td>${index + 1}</td>
-                      <td>${item.name}</td>
-                      <td>${item.qty}</td>
-                      <td>${item.total}</td>
+                      <td>${item.purchase_date}</td>
+                      <td>${item.reference_no}</td>
+                      <td>${item.supplier?.name}</td>
+                      <td>${item.paid_amount}</td>
+                      <td>${item.due}</td>
+                      <td>${item.total_amount}</td>
                     </tr>
                   `).join('')}
+                  <tr>
+                  <td colspan="4"><b>Total</b></td>
+                  <td>${data?.paid_amount}</td>
+                  <td>${data?.due_amount}</td>
+                  <td>${data?.total_amount}</td>
+                  </tr>               
                 </table>
               </body>
             </html>
@@ -141,11 +154,14 @@ const PurchaseReport = () => {
             showHead: "everyPage",
             head: [columns],
             body: rows,
+            foot: [["Total", "", "", "", data?.paid_amount || 0, data?.due_amount || 0, data?.total_amount || 0]],
         });
 
 
         doc.save("sell_report.pdf");
-    }; const handleExcelDownload = () => {
+    };
+
+    const handleExcelDownload = () => {
         const plainRows = getPlainRows();
         const worksheet = XLSX.utils.json_to_sheet([]);
 
@@ -157,6 +173,9 @@ const PurchaseReport = () => {
         XLSX.utils.sheet_add_aoa(worksheet, [columnHeaders], { origin: 'A3' });
 
         const dataRows = plainRows.map(row => columnHeaders.map(col => row[col]));
+
+        dataRows.push(["Total", "", "", "", data?.paid_amount || 0, data?.due_amount || 0, data?.total_amount || 0]);
+
         XLSX.utils.sheet_add_aoa(worksheet, dataRows, { origin: 'A4' });
 
         worksheet['!merges'] = [
@@ -194,6 +213,8 @@ const PurchaseReport = () => {
             const rowData = columnHeaders.map(col => `"${row[col] ?? ""}"`);
             csvContent += rowData.join(",") + "\n";
         });
+
+        csvContent += `Total,,,,${data?.paid_amount || 0},${data?.due_amount || 0},${data?.total_amount || 0}`
 
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
         saveAs(blob, "sell_report.csv");

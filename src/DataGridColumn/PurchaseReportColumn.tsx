@@ -5,21 +5,36 @@ export const PurchaseReportColumn: GridColDef[] = [
     {
         field: 'idx',
         headerName: 'SNO',
-        width: 100,
+        width: 80,
     },
     {
-        field: "name",
-        headerName: "Product Name",
-        width: 300
+        field: "purchase_date",
+        headerName: "Date",
+        width: 140
     },
     {
-        field: 'qty',
-        headerName: 'Quantity',
-        width: 300
+        field: "reference_no",
+        headerName: "Reference No",
+        width: 150
     },
     {
-        field: 'total',
-        headerName: 'Selling Price',
-        width: 300
+        field: "supplier",
+        headerName: "Supplier Name",
+        width: 200
+    },
+    {
+        field: 'paid_amount',
+        headerName: 'Paid Amount',
+        width: 140
+    },
+    {
+        field: 'due',
+        headerName: 'Due Payment',
+        width: 140
+    },
+    {
+        field: 'total_amount',
+        headerName: 'Total Amount',
+        width: 140
     },
 ]

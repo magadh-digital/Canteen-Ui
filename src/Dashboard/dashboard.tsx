@@ -1,17 +1,27 @@
 import {
     Avatar, Box, Card, CardContent,
-    colors, Grid, LinearProgress, Typography,
+    colors, Grid, LinearProgress, Stack, Typography,
 } from "@mui/material";
-import { PieChart, } from "@mui/x-charts";
-import { GetReportOrderApi } from "../AllGetApi";
-import { ShoppingCart, LocalOffer } from "@mui/icons-material";
+import { BarChart, PieChart, } from "@mui/x-charts";
+import { GetMonthlyWiseDataApi, GetReportOrderApi } from "../AllGetApi";
+import { ShoppingCart, LocalOffer, } from "@mui/icons-material";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from "../AllStoreSlice/UserOrderListSlice";
 import { QuantityType, User } from "../AllTypes";
+import { useState } from "react";
 
 export const Dashboard = () => {
     const { data, isLoading } = GetReportOrderApi();
+    const [date, setDate] = useState({
+        start_date: moment(new Date()).format('YYYY-MM-DD'),
+        end_date: moment(new Date()).format('YYYY-MM-DD'),
+    })
+    const { data: monthlyData, isLoading: monthlyDataLoading } = GetMonthlyWiseDataApi({
+        start_date: date.start_date,
+        end_date: date.end_date
+    })
+    console.log(monthlyData);
     const metrics = [
         {
             title: "Monthly Orders / Sales",
@@ -56,6 +66,25 @@ export const Dashboard = () => {
         dispatch(setuserOrderDetails(details))
     }
 
+    const amount = [
+        {
+            name: "Sell Amount",
+            value: 785
+        },
+        {
+            name: "Discount Amount",
+            value: 678
+        },
+        {
+            name: "Due Amount",
+            value: 899
+        },
+        {
+            name: "Received Amount",
+            value: 378
+        }
+
+    ]
 
     return (
         <Box sx={{ height: '100%', p: 2, bgcolor: colors.grey[100], overflowX: "hidden" }}>
@@ -119,7 +148,7 @@ export const Dashboard = () => {
                                                 >
                                                     View
                                                 </span>
-                                              
+
                                             </td>
                                         </tr>
                                     ))}
@@ -146,30 +175,85 @@ export const Dashboard = () => {
                             series={[
                                 {
                                     data:
-                                        data?.last20orders?.map((item) => ({
-                                            name: item?.canteen?.name,
-                                            value: item?.total_amount
+                                        amount?.map((item) => ({
+                                            name: item?.name,
+                                            value: item?.value,
+                                            color: item?.name === "Sell Amount" ? colors.green[500] : item?.name === "Discount Amount" ? colors.blue[500] : item?.name === "Due Amount" ? colors.deepOrange[500] : colors.purple[500],
                                         })) || [],
                                     innerRadius: 90,
                                     arcLabel: (params) => params.label ?? "",
                                     arcLabelMinAngle: 20,
-                                    valueFormatter: (value) => `${value} %`,
+                                    valueFormatter: (value) => `₹ ${value?.value}`,
                                 },
                             ]}
                             skipAnimation={false}
                         />
+
                         <Box sx={{
                             width: "100%",
                             height: "200px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            fontSize: "1.5rem",
+                            fontSize: "0.8rem",
                             fontWeight: "bold",
-                            color: "primary.main",
+                            color: "grey",
                             bgcolor: colors.grey[100],
                         }}>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 10,
+                                width: "60%",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}>
 
+                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
+                                    <span style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        backgroundColor: colors.green[500],
+                                        borderRadius: "50%",
+                                        display: "inline-block",
+                                    }}>
+                                    </span>
+                                    Sell Amount
+                                </span>
+                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
+                                    <span style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        backgroundColor: colors.blue[500],
+                                        borderRadius: "50%",
+                                        display: "inline-block",
+                                    }}>
+                                    </span>
+                                    Discount
+                                </span>
+                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
+                                    <span style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        backgroundColor: colors.deepOrange[500],
+                                        borderRadius: "50%",
+                                        display: "inline-block",
+                                    }}>
+                                    </span>
+                                    Due Amount
+                                </span>
+                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
+                                    <span style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        backgroundColor: colors.purple[500],
+                                        borderRadius: "50%",
+                                        display: "inline-block",
+                                    }}>
+                                    </span>
+                                    Recived  Amount
+                                </span>
+                            </div>
                         </Box>
                     </Card>
                 </Grid>
@@ -190,21 +274,14 @@ export const Dashboard = () => {
                     />
                 </Stack> */}
 
-            {/* <Stack spacing={2} direction={isSmallScreen ? "column" : "row"} alignItems="center" sx={{ marginTop: 2, overflowX: "auto" }}>
-                    <BarChart
-                        xAxis={[{ scaleType: 'band', data: ['Group A', 'Group B', 'Group C', 'Group D', 'Group E'] }]}
-                        series={[{ data: [4, 3, 5, 7, 8] }, { data: [1, 6, 3, 6, 8] }]}
-                        width={isSmallScreen ? 300 : 500}
-                        height={isSmallScreen ? 200 : 300}
-                    />
-                    <LineChart
-                        sx={{ bgcolor: colors.grey[100] }}
-                        xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                        series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
-                        width={isSmallScreen ? 300 : 700}
-                        height={isSmallScreen ? 200 : 300}
-                    />
-                </Stack> */}
+            <Stack spacing={2} direction={"row"} alignItems="center" sx={{ marginTop: 2, overflowX: "auto" }}>
+                <BarChart
+                    width={900}
+                    height={300}
+                    xAxis={[{ scaleType: 'band', data: [monthlyData?.data?.map((item) => item?.date)] }]}
+                    series={[{ data: [4, 3, 5, 7, 8] }, { data: [1, 6, 3, 6, 8] }]}
+                />
+            </Stack>
 
         </Box >
     );

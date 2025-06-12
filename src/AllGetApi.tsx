@@ -1,7 +1,7 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
-import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, ReportDashboard, SellReportType, StockDetails, UpdateOrderType } from "./AllTypes"
+import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, MonthlyReportType, PurchaseReportType, ReportDashboard, SellReportType, StockDetails, UpdateOrderType } from "./AllTypes"
 import { ErrorHandle } from "./ErrorHandle"
 
 export const GetCanteenUserApi = () => {
@@ -284,10 +284,10 @@ export const GetPurchaseReportApi = ({
     startDate: string,
     endDate: string
 }) => {
-    const sellReport = async () => {
+    const purchaseReport = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/order/daily/report?start_date=${startDate}&end_date=${endDate}`)
-            const data = response.data as SellReportType
+            const response = await axios.get(`${baseUrl}/purchase/report?start_date=${startDate}&end_date=${endDate}`)
+            const data = response.data as PurchaseReportType
             return data
         } catch (error: any) {
             ErrorHandle(error.response)
@@ -295,6 +295,28 @@ export const GetPurchaseReportApi = ({
     }
     return useQuery({
         queryKey: ['purchasereport', startDate, endDate],
-        queryFn: sellReport
+        queryFn: purchaseReport
+    })
+}
+
+export const GetMonthlyWiseDataApi = ({
+    start_date,
+    end_date
+}: {
+    start_date: string,
+    end_date: string
+}) => {
+    const monthlyReport = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/report/finance?start_date=${start_date}&end_date=${end_date}`)
+            const data = response.data as MonthlyReportType
+            return data
+        } catch (error: any) {
+            ErrorHandle(error.response)
+        }
+    }
+    return useQuery({
+        queryKey: ['monthlyreport'],
+        queryFn: monthlyReport
     })
 }

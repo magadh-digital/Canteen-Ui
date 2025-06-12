@@ -128,6 +128,11 @@ const SellReport = () => {
                   <td>${item.total}</td>
                 </tr>
               `).join('')}
+              <tr>
+                <td colspan="2">Total:</td>
+                <td>${data?.total_qty}</td>
+                <td>${data?.total_amount}</td>
+              </tr>
             </table>
           </body>
         </html>
@@ -137,7 +142,7 @@ const SellReport = () => {
       WinPrint.print();
     }
   };
-  
+
 
   const handlePDFDownload = () => {
     const doc = new jsPDF();
@@ -150,6 +155,7 @@ const SellReport = () => {
       showHead: "everyPage",
       head: [columns],
       body: rows,
+      foot: [["Total", "", data?.total_qty || 0, data?.total_amount || 0]],
     });
 
 
@@ -168,7 +174,9 @@ const SellReport = () => {
     XLSX.utils.sheet_add_aoa(worksheet, [columnHeaders], { origin: 'A3' });
 
     const dataRows = plainRows.map(row => columnHeaders.map(col => row[col]));
+    dataRows.push(["Total", "", data?.total_qty || 0, data?.total_amount || 0]);
     XLSX.utils.sheet_add_aoa(worksheet, dataRows, { origin: 'A4' });
+
 
     worksheet['!merges'] = [
       {
@@ -207,6 +215,8 @@ const SellReport = () => {
       csvContent += rowData.join(",") + "\n";
     });
 
+    csvContent += `Total,,${data?.total_qty || 0},${data?.total_amount || 0}`
+
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, "sell_report.csv");
   };
@@ -228,9 +238,9 @@ const SellReport = () => {
           variant="h5"
           sx={{
             color: colors.grey[600],
-                    fontWeight: 'bold',
-                    letterSpacing: '1px',
-                    fontFamily: 'monospace'
+            fontWeight: 'bold',
+            letterSpacing: '1px',
+            fontFamily: 'monospace'
           }}
         >
           Sell Reports

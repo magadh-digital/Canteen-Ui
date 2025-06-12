@@ -422,6 +422,7 @@ export interface SellReportType {
   total_amount: number;
   date: string;
   items: SellItems[]
+  total_qty: number
 }
 
 export interface SellItems {
@@ -429,4 +430,35 @@ export interface SellItems {
   name: string;
   total: number;
   qty: number;
+}
+
+
+export interface PurchaseReportType {
+  due_amount: number;
+  paid_amount: number;
+  items: PurchaseItems[]
+  total_amount: number;
+}
+
+export interface PurchaseItems {
+  due: number;
+  purchase_date: string;
+  reference_no: string;
+  supplier: SupplierType;
+  total_amount: number;
+  _id: string
+  paid_amount: number
+}
+
+
+export interface MonthlyReportType {
+  data: MonthlyReport[];
+  group_by: string
+}
+
+export interface MonthlyReport {
+  Expense: number;
+  Income: number;
+  date: string
+  net_profit: number
 }

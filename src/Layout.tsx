@@ -26,6 +26,8 @@ import { ProfilePage } from './ProfilePage';
 // import { useSelector } from 'react-redux';
 // import { RootState } from './Store';
 import imgMenu from '../src/assets/logoBlack.jpeg'
+import sellRportIcon from '../src/assets/sellReportIcon.png'
+import purchaseReportIcon from '../src/assets/purchaseReportIcon.webp'
 import moment from 'moment';
 
 
@@ -187,6 +189,66 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
               flexDirection: "row",
               gap: 5
             }}>
+              <div
+                style={{
+                  cursor: "pointer",
+                  padding: "4px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  border: "1px solid #E0E0E0",
+                  borderRadius: 10,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  transition: "all 0.2s ease-in-out",
+                  backgroundColor: "#fff",
+                  width: 90,
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.boxShadow = "0 3px 8px rgba(0,0,0,0.15)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+                }}
+                onClick={() => navigate("/sell-reports")}
+              >
+                <img
+                  src={sellRportIcon}
+                  alt="Sell"
+                  style={{ width: 32, height: 28, marginBottom: 1 }}
+                />
+                <p style={{ color: "#333", margin: 0, fontWeight: 500, fontSize: 11 }}>Sell</p>
+              </div>
+
+              {/* Purchase Box */}
+              <div
+                style={{
+                  cursor: "pointer",
+                  padding: "4px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  border: "1px solid #E0E0E0",
+                  borderRadius: 10,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  transition: "all 0.2s ease-in-out",
+                  backgroundColor: "#fff",
+                  width: 90,
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.boxShadow = "0 3px 8px rgba(0,0,0,0.15)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+                }}
+                onClick={() => navigate("/purchase-reports")}
+              >
+                <img
+                  src={purchaseReportIcon}
+                  alt="Purchase"
+                  style={{ width: 32, height: 28, marginBottom: 1 }}
+                />
+                <p style={{ color: "#333", margin: 0, fontWeight: 500, fontSize: 11 }}>Purchase</p>
+              </div>
               <Button
                 onClick={() => navigate(`/pos?canteen_id=${canteen_id}`)}
                 variant="contained"
@@ -225,8 +287,8 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
             height={60}
             style={{
               alignContent: "center",
-              marginLeft:"auto",
-              marginRight:"auto"
+              marginLeft: "auto",
+              marginRight: "auto"
             }}
           />
           <IconButton
