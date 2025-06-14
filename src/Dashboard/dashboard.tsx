@@ -3,7 +3,7 @@ import {
     colors, Grid, LinearProgress, Stack, Typography,
 } from "@mui/material";
 import { BarChart, PieChart, } from "@mui/x-charts";
-import { GetMonthlyWiseDataApi, GetReportOrderApi } from "../AllGetApi";
+import { GetMonthlyWiseDataApi, GetReportOrderApi, GetSellReportApi, GetTodaySellReport } from "../AllGetApi";
 import { ShoppingCart, LocalOffer, } from "@mui/icons-material";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -14,14 +14,17 @@ import { useState } from "react";
 export const Dashboard = () => {
     const { data, isLoading } = GetReportOrderApi();
     const [date, setDate] = useState({
-        start_date: moment(new Date()).format('YYYY-MM-DD'),
-        end_date: moment(new Date()).format('YYYY-MM-DD'),
+        start_date: moment().startOf('month').format('YYYY-MM-DD'),
+        end_date: moment().endOf('month').format('YYYY-MM-DD'),
     })
-    const { data: monthlyData, isLoading: monthlyDataLoading } = GetMonthlyWiseDataApi({
+    const { data: monthlyReport, isLoading: monthlyDataLoading } = GetMonthlyWiseDataApi({
         start_date: date.start_date,
         end_date: date.end_date
     })
-    console.log(monthlyData);
+
+    const { data: TodaySellData, isLoading: TodaySellDataLoading } = GetTodaySellReport()
+
+    console.log(monthlyReport);
     const metrics = [
         {
             title: "Monthly Orders / Sales",
@@ -66,25 +69,8 @@ export const Dashboard = () => {
         dispatch(setuserOrderDetails(details))
     }
 
-    const amount = [
-        {
-            name: "Sell Amount",
-            value: 785
-        },
-        {
-            name: "Discount Amount",
-            value: 678
-        },
-        {
-            name: "Due Amount",
-            value: 899
-        },
-        {
-            name: "Received Amount",
-            value: 378
-        }
 
-    ]
+
 
     return (
         <Box sx={{ height: '100%', p: 2, bgcolor: colors.grey[100], overflowX: "hidden" }}>
@@ -157,130 +143,167 @@ export const Dashboard = () => {
                         </div>
                     </Card>
                 </Grid>
-
                 <Grid item xs={12} md={6}>
-                    <Card sx={{
-                        p: 2,
-                        boxShadow: 3,
-                        borderRadius: "15px",
-                        height: "400px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}>
+                    <Card
+                        sx={{
+                            p: 2,
+                            boxShadow: 3,
+                            borderRadius: "15px",
+                            height: "400px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Typography variant="h6" fontWeight={600} textAlign="left" mb={1}>
+                            Today's Sale Summary : -
+                        </Typography>
+
                         <PieChart
-                            sx={{
-                            }}
-                            height={300}
+                            height={220}
                             series={[
                                 {
-                                    data:
-                                        amount?.map((item) => ({
-                                            name: item?.name,
-                                            value: item?.value,
-                                            color: item?.name === "Sell Amount" ? colors.green[500] : item?.name === "Discount Amount" ? colors.blue[500] : item?.name === "Due Amount" ? colors.deepOrange[500] : colors.purple[500],
-                                        })) || [],
-                                    innerRadius: 90,
-                                    arcLabel: (params) => params.label ?? "",
-                                    arcLabelMinAngle: 20,
-                                    valueFormatter: (value) => `₹ ${value?.value}`,
+                                    data: [
+                                        {
+                                            id: 0,
+                                            value: TodaySellData?.sell_summary?.sub_total || 0,
+                                            label: "Sell",
+                                            color: colors.green[300],
+                                        },
+                                        {
+                                            id: 1,
+                                            value: TodaySellData?.sell_summary?.VoucherAmt || 0,
+                                            label: "Discount",
+                                            color: colors.blue[300],
+                                        },
+                                        {
+                                            id: 2,
+                                            value: TodaySellData?.purchases?.due_amount || 0,
+                                            label: "Due",
+                                            color: colors.deepOrange[300],
+                                        },
+                                        {
+                                            id: 3,
+                                            value:
+                                                (TodaySellData?.sell_summary?.cash_payment || 0) +
+                                                (TodaySellData?.sell_summary?.online_payment || 0),
+                                            label: "Received",
+                                            color: colors.purple[300],
+                                        },
+                                    ],
                                 },
                             ]}
-                            skipAnimation={false}
                         />
 
-                        <Box sx={{
-                            width: "100%",
-                            height: "200px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "0.8rem",
-                            fontWeight: "bold",
-                            color: "grey",
-                            bgcolor: colors.grey[100],
-                        }}>
-                            <div style={{
+                        <Box
+                            sx={{
+                                mt: 2,
+                                px: 2,
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 10,
-                                width: "60%",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                            }}>
-
-                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
-                                    <span style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        backgroundColor: colors.green[500],
-                                        borderRadius: "50%",
-                                        display: "inline-block",
-                                    }}>
-                                    </span>
-                                    Sell Amount
-                                </span>
-                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
-                                    <span style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        backgroundColor: colors.blue[500],
-                                        borderRadius: "50%",
-                                        display: "inline-block",
-                                    }}>
-                                    </span>
-                                    Discount
-                                </span>
-                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
-                                    <span style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        backgroundColor: colors.deepOrange[500],
-                                        borderRadius: "50%",
-                                        display: "inline-block",
-                                    }}>
-                                    </span>
-                                    Due Amount
-                                </span>
-                                <span style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", justifyContent: "space-between" }}>
-                                    <span style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        backgroundColor: colors.purple[500],
-                                        borderRadius: "50%",
-                                        display: "inline-block",
-                                    }}>
-                                    </span>
-                                    Recived  Amount
-                                </span>
-                            </div>
+                                gap: 1,
+                            }}
+                        >
+                            {[
+                                {
+                                    label: "Sell Amount",
+                                    color: colors.green[500],
+                                    value: TodaySellData?.sell_summary?.sub_total || 0,
+                                },
+                                {
+                                    label: "Discount",
+                                    color: colors.blue[500],
+                                    value: TodaySellData?.sell_summary?.VoucherAmt || 0,
+                                },
+                                {
+                                    label: "Due Amount",
+                                    color: colors.deepOrange[500],
+                                    value: TodaySellData?.purchases?.due_amount || 0,
+                                },
+                                {
+                                    label: "Received Amount",
+                                    color: colors.purple[500],
+                                    value:
+                                        (TodaySellData?.sell_summary?.cash_payment || 0) +
+                                        (TodaySellData?.sell_summary?.online_payment || 0),
+                                },
+                            ].map((item, index) => (
+                                <Box
+                                    key={index}
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        fontSize: "0.85rem",
+                                    }}
+                                >
+                                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                        <Box
+                                            sx={{
+                                                width: 16,
+                                                height: 16,
+                                                borderRadius: "50%",
+                                                backgroundColor: item.color,
+                                            }}
+                                        />
+                                        <Typography fontSize={14}>{item.label}</Typography>
+                                    </Box>
+                                    <Typography fontWeight={600} fontSize={14}>₹{item.value.toFixed(2)}</Typography>
+                                </Box>
+                            ))}
                         </Box>
                     </Card>
                 </Grid>
+
             </Grid>
 
-
-            {/* <Stack spacing={2} direction={isSmallScreen ? "column" : "row"} alignItems="center">
-                    <PieChart
-                        series={[{ data: [] }]}
-                        width={isSmallScreen ? 300 : 400}
-                        height={isSmallScreen ? 150 : 200}
+            <Stack
+                direction={"row"}
+                width={"100%"}
+                alignItems="center" sx={{
+                    marginTop: 2,
+                    overflowX: "auto"
+                }}>
+                {Array.isArray(monthlyReport?.data) && (
+                    <BarChart
+                        height={400}
+                        xAxis={[
+                            {
+                                scaleType: "band",
+                                data: monthlyReport.data.map((item) =>
+                                    new Date(item.date).toLocaleDateString("en-US", {
+                                        month: "short",
+                                        day: "numeric",
+                                    })
+                                ),
+                                label: "Date",
+                            },
+                        ]}
+                        series={[
+                            {
+                                type: "bar",
+                                data: monthlyReport.data.map((item) => item.Expense ?? 0),
+                                label: "Expense",
+                                color: "#ef5350",
+                            },
+                            {
+                                type: "bar",
+                                data: monthlyReport.data.map((item) => item.Income ?? 0),
+                                label: "Income",
+                                color: "#42a5f5",
+                            },
+                            {
+                                type: "bar",
+                                data: monthlyReport.data.map((item) => item.net_profit ?? 0),
+                                label: "Net Profit",
+                                color: "#66bb6a",
+                            },
+                        ]}
                     />
-                    <ScatterChart
-                        width={isSmallScreen ? 300 : 600}
-                        height={isSmallScreen ? 200 : 300}
-                        sx={{ bgcolor: colors.grey[100] }}
-                        series={[]}
-                    />
-                </Stack> */}
+                )}
 
-            <Stack spacing={2} direction={"row"} alignItems="center" sx={{ marginTop: 2, overflowX: "auto" }}>
-                <BarChart
-                    width={900}
-                    height={300}
-                    xAxis={[{ scaleType: 'band', data: [monthlyData?.data?.map((item) => item?.date)] }]}
-                    series={[{ data: [4, 3, 5, 7, 8] }, { data: [1, 6, 3, 6, 8] }]}
-                />
+
+
             </Stack>
 
         </Box >

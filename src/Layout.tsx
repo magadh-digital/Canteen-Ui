@@ -138,7 +138,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   return (
     <Box sx={{
       display: 'flex',
-      height: '90vh',
+      height: '100vh',
       // overflow: 'hidden',
       width: '100vw',
 

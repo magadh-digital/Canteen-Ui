@@ -45,10 +45,10 @@ const ProductList = () => {
     return (
         <Box sx={{
             width: "98%",
-            height: "100%",
+            height: "90vh",
             backgroundColor: "white",
             m: 1,
-            mt: 3,
+            mt: 9,
         }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="h6" sx={{
@@ -85,7 +85,8 @@ const ProductList = () => {
             }}>
                 <DataGrid
                     style={{
-                        backgroundColor: "white"
+                        backgroundColor: "white",
+                        height: "80vh"
                     }}
                     rows={ProductItemsRows}
                     columns={ProductItemsColumn}

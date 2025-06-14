@@ -1,7 +1,7 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
-import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, MonthlyReportType, PurchaseReportType, ReportDashboard, SellReportType, StockDetails, UpdateOrderType } from "./AllTypes"
+import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, MonthlyReportType, PurchaseReportType, ReportDashboard, SellReportType, StockDetails, TodaySellSummaryType, UpdateOrderType } from "./AllTypes"
 import { ErrorHandle } from "./ErrorHandle"
 
 export const GetCanteenUserApi = () => {
@@ -318,5 +318,21 @@ export const GetMonthlyWiseDataApi = ({
     return useQuery({
         queryKey: ['monthlyreport'],
         queryFn: monthlyReport
+    })
+}
+
+
+export const GetTodaySellReport = () => {
+    const getTodaySellingRport = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/report/sales/today`)
+            return res.data as TodaySellSummaryType
+        } catch (error) {
+            ErrorHandle(error)
+        }
+    }
+    return useQuery({
+        queryKey: ['todayreport'],
+        queryFn: getTodaySellingRport
     })
 }

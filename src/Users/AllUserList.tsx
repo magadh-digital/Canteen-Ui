@@ -30,7 +30,7 @@ const AllUserList = () => {
         <Box sx={{
             width: "100%",
             height: "100%",
-            mt: 2,
+            mt: 7,
             p: 2,
         }}>
             <Stack direction="row" justifyContent="space-between">

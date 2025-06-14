@@ -223,7 +223,7 @@ const PurchaseReport = () => {
     return (
         <Box sx={{
             m: 2,
-            mt: 4,
+            mt: 8,
             p: 2,
             width: '85vw',
             height: '100vh',
@@ -281,7 +281,7 @@ const PurchaseReport = () => {
                                     ...prev,
                                     endDate: formatted,
                                 }));
-                                refetch(); // Auto-call API
+                                refetch(); 
                             }}
                             slotProps={{ textField: { size: 'small' } }}
                         />
@@ -308,7 +308,7 @@ const PurchaseReport = () => {
                     paginationMode='client'
                     paginationModel={paginationModel}
                     onPaginationModelChange={handlePaginationModelChange}
-                    style={{ height: '75vh' }}
+                    style={{ height: '80vh' }}
                 />
             </Box>
         </Box>

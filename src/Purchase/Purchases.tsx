@@ -14,6 +14,9 @@ const Purchases = () => {
         page: 0,
         pageSize: 20,
     })
+
+    const [search, setSearch] = useState<string>("")
+
     const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
         setPaginationModel(newPaginationModel)
     }
@@ -22,7 +25,7 @@ const Purchases = () => {
         if (!data) return []
         const purchaseData = data?.purchases
         if (purchaseData) {
-            return purchaseData?.map((item: any, index: number) => {
+            return purchaseData?.filter((item) => item?.refrence_no?.toString()?.toLowerCase()?.includes(search.toLowerCase())).map((item: any, index: number) => {
                 return {
                     ...item,
                     id: item?.ID,
@@ -31,12 +34,12 @@ const Purchases = () => {
                 }
             })
         }
-    }, [data])
+    }, [data, paginationModel, search])
     return (
         <Box sx={{
             p: 2,
             height: '100vh',
-            mt: 2,
+            mt: 8,
             width: "87vw"
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
@@ -62,6 +65,9 @@ const Purchases = () => {
                             borderRadius: '5px',
 
                         }}
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder='Search'
                     />
                 </Stack>
             </Stack>
@@ -83,7 +89,7 @@ const Purchases = () => {
                         pageSize: 10
                     }}
                     style={{
-                        height: '75vh',
+                        height: '80vh',
                         backgroundColor: "white"
                     }}
                     onPaginationModelChange={handlePaginationModelChange}

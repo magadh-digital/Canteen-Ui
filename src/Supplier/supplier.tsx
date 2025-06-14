@@ -1,11 +1,12 @@
 
-import  { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { GetSupplierApi } from '../AllGetApi'
 import { Box, colors, Stack, TextField, Typography } from '@mui/material'
 import RefecthButton from '../RefecthButton'
 import { DataGrid, GridPaginationModel } from '@mui/x-data-grid'
 import { SupplierColumn } from '../DataGridColumn/SupplierColumn'
 import CreateSupplier from './CreateSupplier'
+import { UsePageHook } from '../Utils'
 
 const Supplier = () => {
     const { data, isLoading, isRefetching, refetch } = GetSupplierApi()
@@ -13,6 +14,9 @@ const Supplier = () => {
         page: 0,
         pageSize: 20,
     })
+
+    const [search, setSearch] = useState<string>("")
+
     const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
         setPaginationModel(newPaginationModel)
     }
@@ -21,7 +25,7 @@ const Supplier = () => {
         if (!data) return []
         const Supplierdata = data?.suppliers
         if (Supplierdata) {
-            return Supplierdata?.map((item, index: number) => {
+            return Supplierdata?.filter((item) => item?.name?.toString()?.toLowerCase()?.includes(search.toLowerCase())).map((item, index: number) => {
                 return {
                     ...item,
                     id: item?.ID,
@@ -30,19 +34,19 @@ const Supplier = () => {
                 }
             })
         }
-    }, [data])
+    }, [data, paginationModel, search])
     return (
         <Box sx={{
             p: 2,
             height: '100vh',
-            mt:2
+            mt: 8
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
-                     color: colors.grey[600],
-                     fontWeight: 'bold',
-                     letterSpacing: '1px',
-                     fontFamily: 'monospace'
+                    color: colors.grey[600],
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    fontFamily: 'monospace'
                 }}>
                     Supplier
                 </Typography>
@@ -52,11 +56,15 @@ const Supplier = () => {
                     <TextField
                         size='small'
                         sx={{
-                            width: '15vw',
-                            bgcolor: colors.grey[200],
+                            width: '12vw',
+                            bgcolor: colors.grey[50],
                             borderRadius: '5px',
 
                         }}
+                        placeholder='Search'
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+
                     />
                 </Stack>
             </Stack>
@@ -77,7 +85,7 @@ const Supplier = () => {
                         pageSize: 10
                     }}
                     style={{
-                        height: '75vh',
+                        height: '80vh',
                         backgroundColor: "white"
                     }}
                     onPaginationModelChange={handlePaginationModelChange}

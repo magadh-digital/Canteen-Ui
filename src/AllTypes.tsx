@@ -462,3 +462,32 @@ export interface MonthlyReport {
   date: string
   net_profit: number
 }
+
+
+export interface TodaySellSummaryType {
+  purchases : {
+    due_amount : number,
+    paid_amount : number,
+    shipping_charges : number,
+    sub_total : number,
+    total_amount : number,
+    _id :{
+      day: number,
+      month: number,
+      year: number
+    }
+  },
+  sell_summary : {
+    PayableAmt : number,
+    VoucherAmt : number,
+    cash_payment : number,
+    sub_total : number,
+    online_payment : number,
+    total_amount : number,
+    _id :{
+      day: number,
+      month: number,
+      year: number
+    }
+  }
+}

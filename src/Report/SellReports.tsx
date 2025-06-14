@@ -226,7 +226,7 @@ const SellReport = () => {
     <Box
       sx={{
         m: 2,
-        mt: 4,
+        mt: 8,
         p: 2,
         width: '85vw',
         height: '100vh',
@@ -308,7 +308,7 @@ const SellReport = () => {
             placeholder="Search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            sx={{ width: '15vw', bgcolor: colors.grey[200], borderRadius: '5px' }}
+            sx={{ width: '12vw', bgcolor: colors.grey[200], borderRadius: '5px' }}
           />
         </Stack>
       </Stack>
@@ -321,7 +321,7 @@ const SellReport = () => {
           paginationModel={paginationModel}
           pageSizeOptions={[20]}
           onPaginationModelChange={handlePaginationModelChange}
-          style={{ height: '75vh' }}
+          style={{ height: '80vh' }}
         />
       </Box>
     </Box>

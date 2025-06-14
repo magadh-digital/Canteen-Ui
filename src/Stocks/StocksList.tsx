@@ -1,5 +1,5 @@
 
-import { useMemo,  } from 'react'
+import { useMemo, useState,  } from 'react'
 import { GetStocksApi, } from '../AllGetApi'
 import { Box, colors, Stack, TextField, Typography } from '@mui/material'
 import RefecthButton from '../RefecthButton'
@@ -16,15 +16,16 @@ const StocksList = () => {
         page,
         limit
     })
+    const [search, setSearch] = useState<string>("")
     const StockItem = useMemo(() => {
         if (!data) return []
         const stockData = data?.remaining
         if (stockData) {
-            return stockData?.map((item, index: number) => {
+            return stockData?.filter((item) => item?.name?.toLowerCase().includes(search.toLowerCase()))?.map((item, index: number) => {
                 return {
                     ...item,
                     id: item?.ID,
-                    idx: index + 1,
+                    idx: index + 1 * (page * limit + 1),
                     address: item?.description,
                     remaining: {
                         remaining: item?.remaining,
@@ -33,13 +34,13 @@ const StocksList = () => {
                 }
             })
         }
-    }, [data])
+    }, [data, search, page, limit])
     return (
         <Box sx={{
             p: 2,
             // width: '85vw',
             height: '100vh',
-            mt: 2
+            mt: 8
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
@@ -61,6 +62,9 @@ const StocksList = () => {
                             borderRadius: '5px',
 
                         }}
+                        placeholder='Search'
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                     />
                 </Stack>
             </Stack>
@@ -75,7 +79,7 @@ const StocksList = () => {
                         pageSize: limit
                     }}
                     style={{
-                        height: '75vh',
+                        height: '80vh',
                         backgroundColor: 'white'
                     }}
                     onPaginationModelChange={(model) => {
