@@ -3,13 +3,17 @@ import {
     colors, Grid, LinearProgress, Stack, Typography,
 } from "@mui/material";
 import { BarChart, PieChart, } from "@mui/x-charts";
-import { GetMonthlyWiseDataApi, GetReportOrderApi, GetSellReportApi, GetTodaySellReport } from "../AllGetApi";
+import { GetMonthlyWiseDataApi, GetReportOrderApi, GetTodaySellReport } from "../AllGetApi";
 import { ShoppingCart, LocalOffer, } from "@mui/icons-material";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from "../AllStoreSlice/UserOrderListSlice";
 import { QuantityType, User } from "../AllTypes";
 import { useState } from "react";
+import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+
 
 export const Dashboard = () => {
     const { data, isLoading } = GetReportOrderApi();
@@ -17,12 +21,12 @@ export const Dashboard = () => {
         start_date: moment().startOf('month').format('YYYY-MM-DD'),
         end_date: moment().endOf('month').format('YYYY-MM-DD'),
     })
-    const { data: monthlyReport, isLoading: monthlyDataLoading } = GetMonthlyWiseDataApi({
+    const { data: monthlyReport, } = GetMonthlyWiseDataApi({
         start_date: date.start_date,
         end_date: date.end_date
     })
 
-    const { data: TodaySellData, isLoading: TodaySellDataLoading } = GetTodaySellReport()
+    const { data: TodaySellData, } = GetTodaySellReport()
 
     console.log(monthlyReport);
     const metrics = [
@@ -69,7 +73,12 @@ export const Dashboard = () => {
         dispatch(setuserOrderDetails(details))
     }
 
-
+    const handleDateRangeChange = (newValue: any) => {
+        setDate({
+            start_date: newValue[0].format('YYYY-MM-DD'),
+            end_date: newValue[1].format('YYYY-MM-DD'),
+        })
+    }
 
 
     return (
@@ -264,6 +273,13 @@ export const Dashboard = () => {
                     marginTop: 2,
                     overflowX: "auto"
                 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+
+                    <DateRangePicker calendars={2} onChange={handleDateRangeChange} />
+
+
+                </LocalizationProvider>
                 {Array.isArray(monthlyReport?.data) && (
                     <BarChart
                         height={400}
