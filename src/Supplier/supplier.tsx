@@ -6,7 +6,6 @@ import RefecthButton from '../RefecthButton'
 import { DataGrid, GridPaginationModel } from '@mui/x-data-grid'
 import { SupplierColumn } from '../DataGridColumn/SupplierColumn'
 import CreateSupplier from './CreateSupplier'
-import { UsePageHook } from '../Utils'
 
 const Supplier = () => {
     const { data, isLoading, isRefetching, refetch } = GetSupplierApi()

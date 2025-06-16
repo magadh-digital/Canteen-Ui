@@ -300,15 +300,12 @@ export const GetPurchaseReportApi = ({
 }
 
 export const GetMonthlyWiseDataApi = ({
-    start_date,
-    end_date
-}: {
-    start_date: string,
-    end_date: string
-}) => {
+    dateRange
+}: any) => {
+    const { startDate, endDate } = dateRange;
     const monthlyReport = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/report/finance?start_date=${start_date}&end_date=${end_date}`)
+            const response = await axios.get(`${baseUrl}/report/finance?start_date=${startDate}&end_date=${endDate}`)
             const data = response.data as MonthlyReportType
             return data
         } catch (error: any) {
@@ -316,8 +313,9 @@ export const GetMonthlyWiseDataApi = ({
         }
     }
     return useQuery({
-        queryKey: ['monthlyreport'],
-        queryFn: monthlyReport
+        queryKey: ['monthlyreport', startDate, endDate],
+        queryFn: monthlyReport,
+        enabled: !!dateRange.startDate && !!dateRange.endDate,
     })
 }
 

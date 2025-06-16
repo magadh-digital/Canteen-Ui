@@ -20,7 +20,7 @@ import { RootState } from '../Store';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { GridDeleteIcon } from '@mui/x-data-grid';
-import { UsePageHook } from '../Utils';
+import { UsePageHook } from '../Utils/Utils';
 import { ErrorHandle } from '../ErrorHandle';
 
 

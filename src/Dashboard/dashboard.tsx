@@ -9,26 +9,26 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setUserItemViewData, setUserItemViewId, setuserOrderDetails } from "../AllStoreSlice/UserOrderListSlice";
 import { QuantityType, User } from "../AllTypes";
+import dayjs from 'dayjs';
+import CustomDateRangePicker from "../Utils/CustomeDateRange";
 import { useState } from "react";
-import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-
 
 export const Dashboard = () => {
     const { data, isLoading } = GetReportOrderApi();
-    const [date, setDate] = useState({
-        start_date: moment().startOf('month').format('YYYY-MM-DD'),
-        end_date: moment().endOf('month').format('YYYY-MM-DD'),
-    })
+    const [date, setDate] = useState<{
+        startDate: string | null;
+        endDate: string | null;
+    }>({
+        startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+        endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
+    });
+
     const { data: monthlyReport, } = GetMonthlyWiseDataApi({
-        start_date: date.start_date,
-        end_date: date.end_date
+        dateRange: date
     })
 
     const { data: TodaySellData, } = GetTodaySellReport()
 
-    console.log(monthlyReport);
     const metrics = [
         {
             title: "Monthly Orders / Sales",
@@ -73,12 +73,7 @@ export const Dashboard = () => {
         dispatch(setuserOrderDetails(details))
     }
 
-    const handleDateRangeChange = (newValue: any) => {
-        setDate({
-            start_date: newValue[0].format('YYYY-MM-DD'),
-            end_date: newValue[1].format('YYYY-MM-DD'),
-        })
-    }
+    console.log(date);
 
 
     return (
@@ -269,57 +264,72 @@ export const Dashboard = () => {
             <Stack
                 direction={"row"}
                 width={"100%"}
-                alignItems="center" sx={{
+                alignItems="center"
+                sx={{
                     marginTop: 2,
-                    overflowX: "auto"
-                }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    overflowX: "auto",
+                }}
+            >
+                <div style={{ width: "100%", }}>
+                    <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
+                        <CustomDateRangePicker
+                            width={"350px"}
+                            date_type="range"
+                            startDate={dayjs(date.startDate, "YYYY-MM-DD")}
+                            endDate={dayjs(date.endDate, "YYYY-MM-DD")}
+                            onChange={(startDate, endDate) => {
+                                setDate({
+                                    startDate: startDate ? startDate.format("YYYY-MM-DD") : null,
+                                    endDate: endDate ? endDate.format("YYYY-MM-DD") : null,
+                                });
+                            }}
+                        />
+                    </div>
+
+                    {isLoading && <div>Loading...</div>}
+
+                    <div style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}   >
 
 
-                    <DateRangePicker calendars={2} onChange={handleDateRangeChange} />
-
-
-                </LocalizationProvider>
-                {Array.isArray(monthlyReport?.data) && (
-                    <BarChart
-                        height={400}
-                        xAxis={[
-                            {
-                                scaleType: "band",
-                                data: monthlyReport.data.map((item) =>
-                                    new Date(item.date).toLocaleDateString("en-US", {
-                                        month: "short",
-                                        day: "numeric",
-                                    })
-                                ),
-                                label: "Date",
-                            },
-                        ]}
-                        series={[
-                            {
-                                type: "bar",
-                                data: monthlyReport.data.map((item) => item.Expense ?? 0),
-                                label: "Expense",
-                                color: "#ef5350",
-                            },
-                            {
-                                type: "bar",
-                                data: monthlyReport.data.map((item) => item.Income ?? 0),
-                                label: "Income",
-                                color: "#42a5f5",
-                            },
-                            {
-                                type: "bar",
-                                data: monthlyReport.data.map((item) => item.net_profit ?? 0),
-                                label: "Net Profit",
-                                color: "#66bb6a",
-                            },
-                        ]}
-                    />
-                )}
-
-
-
+                        {Array.isArray(monthlyReport?.data) && (
+                            <BarChart
+                                height={400}
+                                xAxis={[
+                                    {
+                                        scaleType: "band",
+                                        data: monthlyReport.data.map((item) =>
+                                            new Date(item.date).toLocaleDateString("en-US", {
+                                                month: "short",
+                                                day: "numeric",
+                                            })
+                                        ),
+                                        label: "Date",
+                                    },
+                                ]}
+                                series={[
+                                    {
+                                        type: "bar",
+                                        data: monthlyReport.data.map((item) => item.Expense ?? 0),
+                                        label: "Expense",
+                                        color: "#ef5350",
+                                    },
+                                    {
+                                        type: "bar",
+                                        data: monthlyReport.data.map((item) => item.Income ?? 0),
+                                        label: "Income",
+                                        color: "#42a5f5",
+                                    },
+                                    {
+                                        type: "bar",
+                                        data: monthlyReport.data.map((item) => item.net_profit ?? 0),
+                                        label: "Net Profit",
+                                        color: "#66bb6a",
+                                    },
+                                ]}
+                            />
+                        )}
+                    </div>
+                </div>
             </Stack>
 
         </Box >

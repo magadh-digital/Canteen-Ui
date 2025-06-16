@@ -4,7 +4,7 @@ import { GetOrderDetailsApi } from "../AllGetApi"
 import { useEffect, useMemo, useState } from "react"
 import RefecthButton from "../RefecthButton"
 import { OrderDetailsColumn } from "../DataGridColumn/OrderDetailsColumn"
-import { UsePageHook } from "../Utils"
+import { UsePageHook } from "../Utils/Utils"
 
 export const OrderList = () => {
     const canteen_id = localStorage.getItem("canteen_user_id")
@@ -37,7 +37,7 @@ export const OrderList = () => {
     return (
         <Box
             sx={{
-                mt:7,
+                mt: 7,
                 p: 4,
                 height: "100vh",
                 width: "100%",

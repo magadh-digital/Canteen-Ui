@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { GetStocksApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
 import { toast } from "react-toastify"
-import { UsePageHook } from "../Utils"
+import { UsePageHook } from "../Utils/Utils"
 import { ErrorHandle } from "../ErrorHandle"
 
 

@@ -9,7 +9,7 @@ import { AddVoucher } from "./AddVoucherAndUpdate"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../Store"
 import { setZoomImage } from "../AllStoreSlice/ZoomImageSlice"
-import { CustomPagination, UsePageHook } from "../Utils"
+import { CustomPagination, UsePageHook } from "../Utils/Utils"
 
 const AllUserList = () => {
     const { page, limit, setPage, setLimit } = UsePageHook({

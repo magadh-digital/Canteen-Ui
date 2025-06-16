@@ -1,12 +1,12 @@
 
-import { useMemo, useState,  } from 'react'
+import { useMemo, useState, } from 'react'
 import { GetStocksApi, } from '../AllGetApi'
 import { Box, colors, Stack, TextField, Typography } from '@mui/material'
 import RefecthButton from '../RefecthButton'
 import { DataGrid, } from '@mui/x-data-grid'
 import CreateStocks from './CreateStocks'
 import { StockItemColumn } from '../DataGridColumn/StockItemColumn'
-import { UsePageHook } from '../Utils'
+import { UsePageHook } from '../Utils/Utils'
 // import CreatePurchase from './CreatePurchase'
 
 const StocksList = () => {
