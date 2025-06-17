@@ -170,7 +170,7 @@ export const Dashboard = () => {
                                     data: [
                                         {
                                             id: 0,
-                                            value: TodaySellData?.sell_summary?.sub_total || 0,
+                                            value: TodaySellData?.sell_summary?.total_amount || 0,
                                             label: "Sell",
                                             color: colors.green[300],
                                         },
@@ -180,17 +180,15 @@ export const Dashboard = () => {
                                             label: "Discount",
                                             color: colors.blue[300],
                                         },
-                                        {
-                                            id: 2,
-                                            value: TodaySellData?.purchases?.due_amount || 0,
-                                            label: "Due",
-                                            color: colors.deepOrange[300],
-                                        },
+                                        // {
+                                        //     id: 2,
+                                        //     value: TodaySellData?.purchases?.due_amount || 0,
+                                        //     label: "Due",
+                                        //     color: colors.deepOrange[300],
+                                        // },
                                         {
                                             id: 3,
-                                            value:
-                                                (TodaySellData?.sell_summary?.cash_payment || 0) +
-                                                (TodaySellData?.sell_summary?.online_payment || 0),
+                                            value: TodaySellData?.sell_summary?.PayableAmt || 0,
                                             label: "Received",
                                             color: colors.purple[300],
                                         },
@@ -212,24 +210,22 @@ export const Dashboard = () => {
                                 {
                                     label: "Sell Amount",
                                     color: colors.green[500],
-                                    value: TodaySellData?.sell_summary?.sub_total || 0,
+                                    value: TodaySellData?.sell_summary?.total_amount || 0,
                                 },
                                 {
                                     label: "Discount",
                                     color: colors.blue[500],
                                     value: TodaySellData?.sell_summary?.VoucherAmt || 0,
                                 },
-                                {
-                                    label: "Due Amount",
-                                    color: colors.deepOrange[500],
-                                    value: TodaySellData?.purchases?.due_amount || 0,
-                                },
+                                // {
+                                //     label: "Due Amount",
+                                //     color: colors.deepOrange[500],
+                                //     value: TodaySellData?.purchases?.due_amount || 0,
+                                // },
                                 {
                                     label: "Received Amount",
                                     color: colors.purple[500],
-                                    value:
-                                        (TodaySellData?.sell_summary?.cash_payment || 0) +
-                                        (TodaySellData?.sell_summary?.online_payment || 0),
+                                    value: TodaySellData?.sell_summary?.PayableAmt || 0,
                                 },
                             ].map((item, index) => (
                                 <Box
@@ -271,7 +267,7 @@ export const Dashboard = () => {
                 }}
             >
                 <div style={{ width: "100%", }}>
-                    <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
+                    <div style={{ display: "flex", justifyContent: "flex-start", marginTop: "10px" }}>
                         <CustomDateRangePicker
                             width={"350px"}
                             date_type="range"

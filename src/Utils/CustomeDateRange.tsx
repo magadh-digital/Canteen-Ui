@@ -69,9 +69,9 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
 
     const formatRange = (start: Dayjs | null, end: Dayjs | null): string => {
         if (!start && !end) return '';
-        if (start && !end) return `${start.format('DD/MM/YYYY')} - `;
-        if (!start && end) return ` - ${end.format('DD/MM/YYYY')}`;
-        return `${start?.format('DD/MM/YYYY') ?? ''} - ${end?.format('DD/MM/YYYY') ?? ''}`;
+        if (start && !end) return `${start.format('yyyy-MM-DD')} - `;
+        if (!start && end) return ` - ${end.format('yyyy-MM-DD')}`;
+        return `${start?.format('DD-MM-YYYY') ?? ''} - ${end?.format('DD-MM-YYYY') ?? ''}`;
     };
 
     const handleDone = () => {

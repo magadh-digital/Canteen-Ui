@@ -19,20 +19,21 @@ import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import moment from 'moment'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import CustomDateRangePicker from '../Utils/CustomeDateRange'
 
 
 const PurchaseReport = () => {
-    const [date, setDate] = useState({
-        startDate: moment(new Date()).format('YYYY-MM-DD'),
-        endDate: moment(new Date()).format('YYYY-MM-DD'),
+    const [date, setDate] = useState<{
+        startDate: string | null;
+        endDate: string | null;
+    }>({
+        startDate: dayjs().format('YYYY-MM-DD'),
+        endDate: dayjs().format('YYYY-MM-DD'),
     });
     const { data, isLoading, isRefetching, refetch } = GetPurchaseReportApi({
-        startDate: date.startDate,
-        endDate: date.endDate
+        startDate: date.startDate as string,
+        endDate: date.endDate as string
     })
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
@@ -254,38 +255,18 @@ const PurchaseReport = () => {
                 </ButtonGroup>
                 <Stack spacing={2} direction='row' alignItems={'center'}>
                     <RefecthButton refetch={refetch} isRefetching={isRefetching} />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {/* Start Date Picker */}
-                        <DatePicker
-                            label="Start Date"
-                            value={dayjs(date.startDate)}
-                            maxDate={dayjs(date.endDate)}
-                            onChange={(newValue: any) => {
-                                setDate((prev) => ({
-                                    ...prev,
-                                    startDate: dayjs(newValue).format('YYYY-MM-DD'),
-                                }));
-                            }}
-                            slotProps={{ textField: { size: 'small' } }}
-                        />
-
-                        {/* End Date Picker */}
-                        <DatePicker
-                            label="End Date"
-                            value={dayjs(date.endDate)}
-                            minDate={dayjs(date.startDate)}
-                            maxDate={dayjs()}
-                            onChange={(newValue: any) => {
-                                const formatted = dayjs(newValue).format('YYYY-MM-DD');
-                                setDate((prev) => ({
-                                    ...prev,
-                                    endDate: formatted,
-                                }));
-                                refetch(); 
-                            }}
-                            slotProps={{ textField: { size: 'small' } }}
-                        />
-                    </LocalizationProvider>
+                    <CustomDateRangePicker
+                        width={"350px"}
+                        date_type="range"
+                        startDate={dayjs(date.startDate, "YYYY-MM-DD")}
+                        endDate={dayjs(date.endDate, "YYYY-MM-DD")}
+                        onChange={(startDate, endDate) => {
+                            setDate({
+                                startDate: startDate ? startDate.format("YYYY-MM-DD") : null,
+                                endDate: endDate ? endDate.format("YYYY-MM-DD") : null,
+                            });
+                        }}
+                    />
                     <TextField
                         size='small'
                         value={search}
