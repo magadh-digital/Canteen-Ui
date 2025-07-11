@@ -44,11 +44,10 @@ const ProductList = () => {
 
     return (
         <Box sx={{
-            width: "98%",
-            height: "90vh",
+            
             backgroundColor: "white",
-            m: 1,
-            mt: 9,
+            padding: 2,
+            
         }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="h6" sx={{
@@ -57,16 +56,22 @@ const ProductList = () => {
                     letterSpacing: '1px',
                     fontFamily: 'monospace'
                 }}>Product List</Typography>
-                <Stack direction="row" spacing={3}>
+                <Stack direction="row" spacing={1} alignItems="center">
                     <TextField
                         value={Search}
                         onChange={(e) => setSearch(e.target.value)}
                         label="Search"
                         size="small"
+                        sx={{
+                            height: "30px",
+                        }}
                     />
                     <Button
                         variant="contained"
                         size="small"
+                        sx={{
+                            height: "30px",
+                        }}
                         onClick={() => {
                             dispatch(setAddProduct(canteen_id))
                         }}
@@ -79,9 +84,9 @@ const ProductList = () => {
             <Box sx={{
                 width: "100%",
                 height: "95%",
-                backgroundColor: "#E0E0E0",
+               
                 mt: 2,
-                p: 2,
+                
             }}>
                 <DataGrid
                     style={{
