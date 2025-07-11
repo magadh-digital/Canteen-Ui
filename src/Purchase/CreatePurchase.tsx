@@ -7,6 +7,8 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    MenuItem,
+    Select,
     Stack,
     TextField,
     Typography,
@@ -37,32 +39,30 @@ const CreatePurchase = () => {
     const { mutateAsync } = PostPurchaseApi()
     const [purchaseData, setPurchaseData] = useState<AddPurcahseTypes>({
         supplier_id: '',
-        // purchase_date: '',
         refrence_no: '',
         notes: '',
         sub_total: '',
-        shipping_charges: '',
-        discount: '',
+        shipping_charges: 0,
+        discount: 0,
         total_amount: '',
-        paid_amount: '',
+        paid_amount: 0,
         canteen_id: canteenData?.id,
         stock_items: [],
-        other_charges: ''
+        other_charges: 0
     });
     const handleClose = () => {
         setPurchaseData({
             supplier_id: '',
-            // purchase_date: '',
             refrence_no: '',
             notes: '',
             sub_total: '',
-            shipping_charges: '',
-            discount: '',
+            shipping_charges: 0,
+            discount: 0,
             total_amount: '',
-            paid_amount: '',
+            paid_amount: 0,
             canteen_id: canteenData?.id,
             stock_items: [],
-            other_charges: ''
+            other_charges: 0
         })
         navigate("/purchase")
         setOpen(false)
@@ -73,12 +73,14 @@ const CreatePurchase = () => {
     const handleSavePurchaseData = (value: any) => {
         const name = value.target.name;
         const newValue = value.target.value;
+
+        const numberFields = ["shipping_charges", "discount", "paid_amount", "other_charges"];
+
         setPurchaseData((prevState) => ({
             ...prevState,
-            [name]: name === "shipping_charges" || name === "discount" || name === "paid_amount" ? Number(newValue) : newValue
-        }))
-
-    }
+            [name]: numberFields.includes(name) ? Number(newValue || 0) : newValue
+        }));
+    };
 
     useEffect(() => {
         if (canteenData?.id) {
@@ -143,6 +145,11 @@ const CreatePurchase = () => {
                 ...purchaseData,
                 sub_total: subTotal,
                 total_amount: payableAmount,
+                shipping_charges: Number(purchaseData.shipping_charges || 0),
+                canteen_id: canteenData?.id,
+                discount: Number(purchaseData.discount || 0),
+                paid_amount: Number(purchaseData.paid_amount || 0),
+                other_charges: Number(purchaseData.other_charges || 0),
                 stocks_items: purchaseData?.stock_items.map(item => ({
                     item_id: item.ID,
                     name: item.name,
@@ -153,6 +160,7 @@ const CreatePurchase = () => {
                     unit: item.unit
                 })),
             };
+
 
             const res = await mutateAsync({ data: formattedData });
             if (res?.status === 200) {
@@ -360,11 +368,21 @@ const CreatePurchase = () => {
                                         <td style={{
                                             width: "10%",
                                         }}>
-                                            <input
+                                            {/* <input
                                                 value={item.unit || ""}
                                                 name="sell_price"
                                                 onChange={(e) => handleUpdateStockItem(item.ID || "", "unit", String(e.target.value))}
-                                            />
+                                            /> */}
+                                            <Select
+                                                size='small'
+                                                value={item.unit || ""}
+                                                disabled
+                                                onChange={(e) => handleUpdateStockItem(item.ID || "", "unit", String(e.target.value))}
+                                            >
+                                                <MenuItem value="KG">kg</MenuItem>
+                                                <MenuItem value="PIECE">Piece</MenuItem>
+                                                <MenuItem value="PLATE">plate</MenuItem>
+                                            </Select>
                                         </td>
                                         <td>0.00</td>
                                         <td style={{

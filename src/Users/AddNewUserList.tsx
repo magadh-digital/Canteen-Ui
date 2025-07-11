@@ -54,46 +54,46 @@ const AddNewUserList = () => {
     }
 
     const handleSaveUser = async () => {
+        const phoneStr = addUser.phone?.toString().trim();
+    
+        if (!addUser.name) {
+            toast.error("Please Enter User Name");
+            return;
+        }
+        if (!addUser.email) {
+            toast.error("Please Enter User Email");
+            return;
+        }
+        if (!addUser.role) {
+            toast.error("Please Enter User Role");
+            return;
+        }
+        if (!phoneStr || phoneStr.length !== 10) {
+            toast.error("Please Enter a valid 10-digit Phone Number");
+            return;
+        }
+    
         const formData = new FormData();
-
         formData.append("name", addUser.name);
         formData.append("email", addUser.email);
         formData.append("role", addUser.role);
-        formData.append("phone", Number(addUser.phone).toString());
+        formData.append("phone", phoneStr);
+    
         if (addUser.image instanceof File) {
             formData.append("image", addUser.image);
         }
-
-        if (formData?.get("name") === "") {
-            toast.error("Please Enter User Name")
-            return
-        }
-        if (formData?.get("email") === "") {
-            toast.error("Please Enter User Email")
-            return
-        }
-        if (formData?.get("role") === "") {
-            toast.error("Please Enter User Role")
-            return
-        }
-        if (formData?.get("phone") === "") {
-            toast.error("Please Enter User Phone")
-            return
-        }
+    
         try {
             const res = await mutateAsync(formData);
             if (res?.status === 200) {
-                handleClose()
-                toast.success("User Added Successfully")
+                handleClose();
+                toast.success("User Added Successfully");
             }
-
-
-
         } catch (error: any) {
-            ErrorHandle(error.response)
+            ErrorHandle(error.response);
         }
-    }
-
+    };
+    
     return (
         <div>
             <button style={{
@@ -177,6 +177,7 @@ const AddNewUserList = () => {
                                         borderRadius: "15px"
                                     }
                                 }}
+                                error={!!addUser.phone && addUser.phone?.toString().length !== 10}
                             />
                             <TextField
                                 id="outlined-basic"

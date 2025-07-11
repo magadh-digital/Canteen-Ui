@@ -70,44 +70,6 @@ const PosList = () => {
                     </>
                 ) : (
                     <>
-                        <Box sx={{
-                            width: '30%',
-                            height: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            flexDirection: "row",
-                            bgcolor: "white"
-                        }}>
-                            <div style={{
-                                width: "10%",
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                backgroundColor: colors.grey[100],
-                            }}>
-                                <Tooltip title="Add Product">
-                                    <span onClick={() =>
-                                        dispatch(setAddProduct(canteenId))}
-                                        style={{
-                                            cursor: "pointer",
-                                            marginTop: "65px",
-                                            backgroundColor: colors.grey[300],
-                                            borderRadius: "10%",
-                                        }}>
-                                        <GridAddIcon sx={{
-                                            width: "200px",
-                                            height: "40px",
-                                            color: colors.green[500]
-                                        }} />
-                                    </span>
-                                </Tooltip>
-                                <UpdateStocks />
-                            </div>
-                            <ItemQuantityDetails />
-
-                        </Box>
                         <Box
                             sx={{
                                 width: '70%',
@@ -187,17 +149,58 @@ const PosList = () => {
                                             <Typography variant='h5'
                                                 color={colors.green[900]}
                                             >
-                                            No Items Selected
-                                        </Typography>
-                                    </Stack>
-                            </>
+                                                No Items Selected
+                                            </Typography>
+                                        </Stack>
+                                    </>
                                 )}
 
+                            </Box>
                         </Box>
-                    </Box>
-            </>
+                        <Box sx={{
+                            width: '30%',
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            bgcolor: "white"
+                        }}>
+                            <ItemQuantityDetails />
+                            <div style={{
+                                width: "auto",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                backgroundColor: colors.grey[100],
+                            }}>
+                                <div style={{ width: "100%" }}>
+                                    <Tooltip title="Add Product">
+                                        <button onClick={() =>
+                                            dispatch(setAddProduct(canteenId))}
+                                            style={{
+                                                padding: 5,
+                                                marginTop: 65,
+                                                backgroundColor: colors.grey[300],
+                                                color: colors.green[500],
+                                                width: "100%",
+                                                fontWeight: "bold"
+                                            }}>
+                                            <GridAddIcon sx={{
+                                                fontSize: 30,
+                                            }} />
+                                        </button>
+                                    </Tooltip>
+                                </div>
+                                <UpdateStocks />
+                            </div>
+
+                        </Box>
+
+                    </>
                 )}
-        </Box>
+            </Box>
 
         </Box >
     )

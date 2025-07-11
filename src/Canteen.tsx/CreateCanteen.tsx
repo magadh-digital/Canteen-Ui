@@ -15,6 +15,8 @@ const CreateCanteen = () => {
         email: "",
         password: ""
     });
+    const [contactError, setContactError] = React.useState(false);
+
     const { mutateAsync } = PostCanteenUserApi()
 
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,23 +29,24 @@ const CreateCanteen = () => {
 
     const handleSubmitUserDetails = async () => {
 
-        if(CanteenUserData?.name === "") {
+        if (CanteenUserData?.name === "") {
             toast.error("Please Enter Canteen Name")
             return
         }
-        if(CanteenUserData?.description === "") {
+        if (CanteenUserData?.description === "") {
             toast.error("Please Enter Canteen Description")
             return
         }
-        if(CanteenUserData?.contact === 0) {
-            toast.error("Please Enter Canteen Contact")
-            return
+        if (!CanteenUserData.contact || CanteenUserData.contact.toString().length !== 10) {
+            setContactError(true);
+            toast.error("Please enter a valid 10-digit phone number");
+            return;
         }
-        if(CanteenUserData?.email === "") {
+        if (CanteenUserData?.email === "") {
             toast.error("Please Enter Canteen Email")
             return
         }
-        if(CanteenUserData?.password === "") {
+        if (CanteenUserData?.password === "") {
             toast.error("Please Enter Canteen Password")
             return
         }
@@ -134,7 +137,20 @@ const CreateCanteen = () => {
                                 value={CanteenUserData.contact}
                                 sx={{ bgcolor: "white" }}
                                 label="Phone number"
-                                onChange={handleChangeValue}
+                                error={contactError}
+                                helperText={contactError ? "Phone number must be 10 digits" : ""}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setCanteenUserData(prev => ({
+                                        ...prev,
+                                        contact: Number(value)
+                                    }));
+
+                                    // Reset error if input becomes valid
+                                    if (value.length === 10) {
+                                        setContactError(false);
+                                    }
+                                }}
                             />
                         </Grid>
 

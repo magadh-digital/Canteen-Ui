@@ -13,6 +13,7 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
     const handleClose = () => setOpen(false);
     const { mutateAsync, isPending } = UpdateUserData();
     const { data: canteenUser } = GetCanteenUserApi();
+    const [phoneError, setPhoneError] = React.useState(false);
 
     const [updateUserData, setUpdateUserData] = React.useState<CanteenUserDataType>({
         name: "", email: "", role: "", profile_url: "", phone: "", canteen_id: []
@@ -29,15 +30,24 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
     }, [data]);
 
     const handleUpdate = async () => {
+        const phoneStr = updateUserData.phone?.toString().trim();
+
+        if (!phoneStr || phoneStr.length !== 10) {
+            setPhoneError(true);
+            toast.error("Please enter a valid 10-digit phone number");
+            return;
+        }
+
         const formData = new FormData();
         formData.append('name', updateUserData.name || '');
         formData.append('email', updateUserData.email || '');
         formData.append('role', updateUserData.role || '');
-        formData.append('phone', Number(updateUserData.phone)?.toString() || '');
+        formData.append('phone', phoneStr);
         formData.append('canteen_id', updateUserData?.canteen_id?.toString() || '');
         if (updateUserData.profile_url instanceof File) {
             formData.append('profile_url', updateUserData.profile_url);
         }
+
         try {
             const res = await mutateAsync({ data: formData, user_id });
             if (res?.status === 200) {
@@ -45,10 +55,10 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
                 toast.success("User Updated Successfully");
             }
         } catch (error: any) {
-            // toast.error(error.response.data.message);
-            ErrorHandle(error.response)
+            ErrorHandle(error.response);
         }
     };
+
 
     return (
         <>
@@ -93,7 +103,23 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
                             <MenuItem value={"CUSTOMER"}>CUSTOMER</MenuItem>
                             <MenuItem value={"EMPLOYEE"}>EMPLOYEE</MenuItem>
                         </Select>
-                        <TextField label="Phone" value={updateUserData.phone} size='small' fullWidth onChange={(e) => setUpdateUserData({ ...updateUserData, phone: e.target.value })} />
+                        <TextField
+                            label="Phone"
+                            value={updateUserData.phone}
+                            size='small'
+                            fullWidth
+                            error={phoneError}
+                            helperText={phoneError ? "Phone number must be 10 digits" : ""}
+                            onChange={(e) => {
+                                const phone = e.target.value;
+                                setUpdateUserData({ ...updateUserData, phone });
+
+                                if (phone.length === 10) {
+                                    setPhoneError(false);
+                                }
+                            }}
+                        />
+
                         <FormControl fullWidth>
                             <Select
                                 multiple

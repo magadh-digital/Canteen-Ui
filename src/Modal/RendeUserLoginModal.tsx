@@ -88,7 +88,7 @@ export default function RenderUserLoginModal() {
       dispatch(SetToken(res?.data?.user?.token))
       dispatch(setLoginType("USER"))
       setLoading(false);
-  
+
       handleClose();
     } catch (error: any) {
       ErrorHandle(error.response)
@@ -147,8 +147,13 @@ export default function RenderUserLoginModal() {
                 label="Phone Number"
                 value={phone}
                 onChange={(e) => {
-                  setPhone(e.target.value);
-                  setErrors({ ...errors, phone: '' });
+                  // Allow only digits
+                  const value = e.target.value.replace(/\D/g, '');
+
+                  if (value.length <= 10) {
+                    setPhone(value);
+                    setErrors({ ...errors, phone: '' });
+                  }
                 }}
                 error={!!errors.phone}
                 helperText={errors.phone}
@@ -159,6 +164,7 @@ export default function RenderUserLoginModal() {
                 type="tel"
                 sx={{ mb: 3 }}
               />
+
 
               <Button
                 fullWidth

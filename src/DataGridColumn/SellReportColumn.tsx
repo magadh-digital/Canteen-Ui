@@ -9,8 +9,13 @@ export const SellReportColumn: GridColDef[] = [
     },
     {
         field: "name",
-        headerName: "Product Name",
+        headerName: "ProductName",
         width: 300
+    },
+    {
+        field: "unit_type",
+        headerName: "UnitType",
+        width: 150
     },
     {
         field: 'qty',
@@ -19,7 +24,12 @@ export const SellReportColumn: GridColDef[] = [
     },
     {
         field: 'total',
-        headerName: 'Selling Price',
-        width: 300
+        headerName: 'SellingPrice',
+        width: 300,
+        renderCell: ({ value }) => {
+            return (
+                <span> {"₹"}{value}</span>
+            )
+        }
     },
 ]
