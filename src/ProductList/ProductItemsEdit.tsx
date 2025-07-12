@@ -29,6 +29,7 @@ export const ProductItemsEdit = () => {
         available: boolean;
         image_url: string | File;
         canteen_id: string | null;
+        order?: string
     }>({
         name: menuItemsData?.name || "",
         price: menuItemsData?.price || 0,
@@ -37,7 +38,8 @@ export const ProductItemsEdit = () => {
         unit: menuItemsData?.unit || "",
         available: menuItemsData?.available || false,
         image_url: menuItemsData?.image_url || "",
-        canteen_id: canteen_id
+        canteen_id: canteen_id,
+        order: menuItemsData?.order
     });
 
     useEffect(() => {
@@ -51,6 +53,7 @@ export const ProductItemsEdit = () => {
                 available: menuItemsData.available || true,
                 image_url: menuItemsData.image_url || '',
                 canteen_id: canteen_id,
+                order: menuItemsData.order
             });
         }
     }, [menuItemsData, menuItemId]);
@@ -58,7 +61,10 @@ export const ProductItemsEdit = () => {
     const handleClose = () => dispatch(setMenuItemId(''));
 
     const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setEditData({ ...EditData, [event.target.name]: event.target.value });
+        setEditData({
+            ...EditData,
+            [event.target.name]: event.target.name === 'price' || event.target.name === 'order' ? Number(event.target.value) : event.target.value
+        });
     };
 
     const handleSelectChange = (event: SelectChangeEvent) => {
@@ -81,6 +87,7 @@ export const ProductItemsEdit = () => {
             formData.append('unit', EditData.unit);
             formData.append('available', EditData.available.toString());
             formData.append('canteen_id', canteen_id || '');
+            formData.append('order', EditData.order || '');
 
             if (EditData.image_url instanceof File) {
                 formData.append('image_url', EditData.image_url);
@@ -120,6 +127,13 @@ export const ProductItemsEdit = () => {
                         <TextField size="small" label="Name" name="name" fullWidth value={EditData.name} onChange={handleTextFieldChange} />
                         <TextField size="small" label="Price" name="price" fullWidth type="number" value={EditData.price} onChange={handleTextFieldChange} />
                         <TextField size="small" label="Description" name="description" fullWidth multiline rows={2} value={EditData.description} onChange={handleTextFieldChange} />
+                        <TextField size="small"
+                            label="OrderNumber"
+                            name="order" fullWidth multiline
+                            rows={2}
+                            value={EditData.order}
+                            onChange={handleTextFieldChange}
+                        />
 
                         <FormControl fullWidth>
                             <InputLabel>Category</InputLabel>

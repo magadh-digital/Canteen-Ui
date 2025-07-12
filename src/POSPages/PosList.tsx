@@ -94,7 +94,7 @@ const PosList = () => {
                                 sx={{
                                     width: '100%',
                                     bgcolor: colors.green[100],
-                                    height: '100px',
+                                    height: '80px',
                                     display: 'flex',
                                     flexShrink: 0,
                                     position: "sticky",

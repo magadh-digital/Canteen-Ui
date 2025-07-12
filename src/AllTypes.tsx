@@ -70,6 +70,7 @@ export interface MenuItemType {
   updated_at: string;
   quantity?: number
   unit?: string
+  order?: string
 }
 
 export interface AddMenuProductType {
