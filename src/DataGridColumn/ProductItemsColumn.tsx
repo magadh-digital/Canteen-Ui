@@ -76,13 +76,15 @@ export const ProductItemsColumn: GridColDef[] = [
         field: 'url',
         headerName: 'Image',
         width: 130,
-        renderCell: ({ value }) => {
+        renderCell: ({ value , row}) => {
             const dispatch = useDispatch()
+            const thumbnail_url = row?.thumbnailurl || value
+            if (!value) return <div style={{ height: "100%", display: "flex", alignItems: "center" }}>No Image</div>
 
             return (
                 <>
                     <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
-                        <img src={value} width={"50px"} height={"50px"} onClick={() => dispatch(setZoomImage(value))} />
+                        <img src={thumbnail_url} width={"50px"} height={"50px"} onClick={() => dispatch(setZoomImage(value))} />
                     </div>
                 </>
             )

@@ -19,11 +19,47 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
             if (!printWindow) return;
 
             const receiptContent = renderToString(
-                <div style={{ maxWidth: "100%", margin: "auto", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
+                <div style={{
+                    maxWidth: "100%", margin: "auto",
+                    fontFamily: "Arial, sans-serif",
+                    textAlign: "center"
+                }}>
                     <h3>{order?.canteen?.name}</h3>
-                    <p style={{ margin: "2px", fontSize: "12px" }}>{moment(order?.created_at).format("DD MMM YYYY h:mm A")}</p>
-                    <p style={{ margin: "2px", fontSize: "12px" }}>Invoice ID: {order?.order_id}</p>
-                    <p style={{ margin: "2px", fontSize: "12px" }}>Customer: {order?.customer_name}</p>
+                    <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "40%",
+                        margin: "auto",
+                        textAlign: "center"
+                    }}>
+                        <div style={{
+                            textAlign: "left",
+                            alignItems: "flex-start",
+                            fontSize: "15px",
+                            padding: "5px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "2px"
+                        }}>
+                            <span>Date</span>
+                            <span>Invoice Id</span>
+                            <span>Customer</span>
+                        </div>
+                        <div style={{
+                            textAlign: "left",
+                            alignItems: "flex-start",
+                            fontSize: "15px",
+                            padding: "5px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "2px"
+                        }}>
+                            <span>{moment(order?.created_at).format("DD MMM YYYY")}</span>
+                            <span>{order?.order_id}</span>
+                            <span>{order?.customer_name}</span>
+                        </div>
+                    </div>
                     <hr style={{ width: "100%", margin: "2px 0", borderTop: "1px dashed black" }} />
                     <p style={{ fontSize: "17px", margin: "5px 0" }}>INVOICE</p>
                     <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black", fontSize: "12px" }}>
@@ -31,21 +67,21 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
                             <tr style={{
                                 borderBottom: "1px solid black",
                             }}>
-                                <th style={{ textAlign: "left",fontSize: "8px" }}>SL</th>
-                                <th style={{ textAlign: "left" ,fontSize: "8px" }}>Name</th>
-                                <th style={{ textAlign: "right", fontSize: "8px" }}>Qty</th>
-                                <th style={{ textAlign: "right",fontSize: "8px" }}>Price</th>
-                                <th style={{ textAlign: "right",fontSize: "8px" }}>Amount</th>
+                                <th style={{ textAlign: "left", fontSize: "12px" }}>SL</th>
+                                <th style={{ textAlign: "left", fontSize: "12px" }}>Name</th>
+                                <th style={{ textAlign: "right", fontSize: "12px" }}>Qty</th>
+                                <th style={{ textAlign: "right", fontSize: "12px" }}>Price</th>
+                                <th style={{ textAlign: "right", fontSize: "12px" }}>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {order?.items?.map((item, index) => (
                                 <tr key={item?.item_id}>
-                                    <td style={{fontSize: "8px"}}>{index + 1}</td>
-                                    <td style={{fontSize: "8px"}}>{item.name}</td>
-                                    <td style={{ textAlign: "right",fontSize: "8px" }}>{item.qty}</td>
-                                    <td style={{ textAlign: "right" ,fontSize: "8px"}}>₹{item.price}</td>
-                                    <td style={{ textAlign: "right",fontSize: "8px" }}>₹{item.total}</td>
+                                    <td style={{ fontSize: "12px" }}>{index + 1}</td>
+                                    <td style={{ fontSize: "12px" }}>{item.name}</td>
+                                    <td style={{ textAlign: "right", fontSize: "12px" }}>{item.qty}</td>
+                                    <td style={{ textAlign: "right", fontSize: "12px" }}>₹{item.price}</td>
+                                    <td style={{ textAlign: "right", fontSize: "12px" }}>₹{item.total}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -53,26 +89,23 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
                     <hr style={{ borderTop: "1px dashed black", margin: "1px 0" }} />
                     <table style={{ width: "100%", borderCollapse: "collapse", }}>
                         <tbody>
-                            <tr >
-                                <td style={{ textAlign: "right",fontSize: "8px"  }}>Total Amt:</td>
-                                <td style={{ textAlign: "right",fontSize: "8px" }}>₹{order?.total_amount}</td>
-                            </tr>
                             <tr>
-                                <td style={{ textAlign: "right" ,fontSize: "8px"}}>Total Due:</td>
-                                <td style={{ textAlign: "right",fontSize: "8px" }}>₹{order?.total_amount}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ textAlign: "right",fontSize: "8px" }}>Voucher:</td>
-                                <td style={{ textAlign: "right" ,fontSize: "8px"}}> -₹{Number(order?.voucher_amt ?? 0)}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ textAlign: "right" ,fontSize: "8px"}}>Paid Amount:</td>
-                                <td style={{ textAlign: "right",fontSize: "8px" }}>₹{Number(order?.payable_amt ?? 0)}</td>
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "flex-end",
+                                    fontSize: "12px"
+                                }}>
+                                    <span>Total Amt..............................................₹{order?.total_amount ?? 0}</span>
+                                    <span>Total Due..............................................₹{order?.total_amount ?? 0}</span>
+                                    <span>Voucher:.................................................₹{Number(order?.voucher_amt ?? 0)}</span>
+                                    <span>Paid Amount..............................................₹{Number(order?.payable_amt ?? 0)}</span>
+                                </div>
                             </tr>
                         </tbody>
                     </table>
                     <hr style={{ borderTop: "1px dashed black", margin: "10px 0" }} />
-                    <p style={{ fontStyle: "italic",fontSize: "8px" }}>In Text: {toWord.convert(Number(order?.total_amount ?? 0))}</p>
+                    <p style={{ fontStyle: "italic", fontSize: "12px" }}>In Text: {toWord.convert(Number(order?.total_amount ?? 0))}</p>
                 </div>
             );
 

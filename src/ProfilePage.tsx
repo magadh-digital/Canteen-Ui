@@ -33,8 +33,13 @@ export const ProfilePage = () => {
     return (
         <>
             <Tooltip title=" View Profile">
-                <span onClick={handleClickOpen} style={{ cursor: "pointer" }}>
-                    <img src={`${imgagePr}`} width={"48px"} height={"48px"} />
+                <span onClick={handleClickOpen} style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+
+                    borderRadius: "50%",
+                    border: "1px solid #ccc",
+                    padding: "5px",
+                 }}>
+                    <img src={`${imgagePr}`} width={"20px"} height={"20px"} />
                 </span>
             </Tooltip>
 

@@ -36,11 +36,10 @@ const Supplier = () => {
     }, [data, paginationModel, search])
     return (
         <Box sx={{
-            p: 2,
-            height: '100vh',
-            mt: 8
+            
         }}>
-            <Stack direction='row' justifyContent={'space-between'}>
+            <Stack direction='row' justifyContent={'space-between'} alignItems={'center'} sx={{
+                backgroundColor: "white", p: 2 }}>
                 <Typography variant='h5' sx={{
                     color: colors.grey[600],
                     fontWeight: 'bold',
@@ -70,8 +69,9 @@ const Supplier = () => {
             <Box
                 mt={2}
                 sx={{
-                    backgroundColor: colors.grey[200],
-                    p: 2
+                    backgroundColor: "white",
+                    p: 2,
+                    
                 }}
             >
                 <DataGrid
@@ -84,7 +84,7 @@ const Supplier = () => {
                         pageSize: 10
                     }}
                     style={{
-                        height: '80vh',
+                        height: '75vh',
                         backgroundColor: "white"
                     }}
                     onPaginationModelChange={handlePaginationModelChange}

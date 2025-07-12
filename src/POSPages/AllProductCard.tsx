@@ -185,7 +185,6 @@ const AllProductCard = ({ canteenId }: { canteenId: string }) => {
                                         alt={item.name}
                                     />
                                     <CardContent>
-                                        {item?.order || 0}
                                         <Typography
                                             variant="h6"
                                             sx={{

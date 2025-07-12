@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { NAVIGATION } from './SidebarPages';
-import { Button, Collapse, colors, Stack, } from '@mui/material';
+import { Button, ButtonGroup, Collapse, colors, Stack, } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { PagesTypes } from './AllTypes';
@@ -29,7 +29,37 @@ import imgMenu from '../src/assets/logoBlack.jpeg'
 import sellRportIcon from '../src/assets/sellReportIcon.png'
 import purchaseReportIcon from '../src/assets/purchaseReportIcon.webp'
 import moment from 'moment';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { keyframes } from '@emotion/react';
+import AccessTimeIcon from '@mui/icons-material/AccessTime'; // clock icon
 
+
+const moveArrow = keyframes`
+  0% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+`;
+const AnimatedButton = styled(Button)(({ theme }) => ({
+  textTransform: "none",
+  height: "30px",
+
+
+  position: "relative",
+  overflow: "hidden",
+  "& .arrow": {
+    marginLeft: theme.spacing(1),
+    animation: `${moveArrow} 1s infinite ease-in-out`,
+  },
+}));
 
 
 const drawerWidth = 240;
@@ -107,7 +137,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   const [expandedSegment, setExpandedSegment] = React.useState<string | null>(null);
   const navigate = useNavigate()
   const location = useLocation();
-  const canteen_id = localStorage.getItem('canteen_user_id')
+  // const canteen_id = localStorage.getItem('canteen_user_id')
   // const { canteenData } = useSelector((state: RootState) => state.canteenData)
   const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
   React.useEffect(() => {
@@ -151,7 +181,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
         open={open}
         sx={{
           zIndex: theme.zIndex.drawer + 1,
-          backgroundColor: colors.grey[100],
+          backgroundColor: "white",
           border: "none",
           boxShadow: "0px 2px 2px #bebebe, 0px 0px 1px #ffffff",
           borderBottom: "0.1px solid #E0E0E0",
@@ -174,13 +204,40 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                 style={{ borderRadius: "30%", marginRight: "10px" }} />
           }
           <Stack width={"100%"} direction="row" spacing={2} alignItems="center" justifyContent="space-between">
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="h6" noWrap component="div" sx={{ color: 'black' }}>
+
+            <Stack direction="row" alignItems="center" >
+
+
+
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  fontWeight: 700,
+                  color: "#1F2937", // Tailwind's gray-800
+                }}
+              >
                 Magadh Canteen
               </Typography>
-              <Typography sx={{ color: colors.grey[900] }}>
-                ({currentDate})
-              </Typography>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 2,
+                  backgroundColor: "#F3F4F6", // soft gray background
+                  color: "#4B5563", // dark gray text
+                  fontSize: 14,
+                  fontWeight: 500,
+                }}
+              >
+                <AccessTimeIcon sx={{ fontSize: 18, mr: 0.5 }} />
+                {currentDate}
+              </Box>
+            </Stack>
+            <Stack direction="row" alignItems="center" spacing={1.5}>
             </Stack>
 
             <div style={{
@@ -189,66 +246,39 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
               flexDirection: "row",
               gap: 5
             }}>
-              <div
-                style={{
-                  cursor: "pointer",
-                  padding: "4px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  border: "1px solid #E0E0E0",
-                  borderRadius: 10,
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                  transition: "all 0.2s ease-in-out",
-                  backgroundColor: "#fff",
-                  width: 90,
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.boxShadow = "0 3px 8px rgba(0,0,0,0.15)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
-                }}
-                onClick={() => navigate("/sell-reports")}
-              >
-                <img
-                  src={sellRportIcon}
-                  alt="Sell"
-                  style={{ width: 32, height: 28, marginBottom: 1 }}
-                />
-                <p style={{ color: "#333", margin: 0, fontWeight: 500, fontSize: 11 }}>Sell</p>
-              </div>
 
-              {/* Purchase Box */}
-              <div
-                style={{
-                  cursor: "pointer",
-                  padding: "4px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  border: "1px solid #E0E0E0",
-                  borderRadius: 10,
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                  transition: "all 0.2s ease-in-out",
-                  backgroundColor: "#fff",
-                  width: 90,
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.boxShadow = "0 3px 8px rgba(0,0,0,0.15)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
-                }}
-                onClick={() => navigate("/purchase-reports")}
-              >
-                <img
-                  src={purchaseReportIcon}
-                  alt="Purchase"
-                  style={{ width: 32, height: 28, marginBottom: 1 }}
-                />
-                <p style={{ color: "#333", margin: 0, fontWeight: 500, fontSize: 11 }}>Purchase</p>
-              </div>
+              <ButtonGroup variant="outlined" aria-label="outlined button group">
+
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => navigate("/sell-reports")}
+                  startIcon={<img src={sellRportIcon} alt="POS" style={{ width: 20, height: 20 }} />}
+                >
+
+
+                  SELL
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => navigate("/purchase-reports")}
+                  startIcon={<img src={purchaseReportIcon} alt="POS" style={{ width: 20, height: 20 }} />}
+                >
+
+
+                  PURCHASE
+                </Button>
+
+                <AnimatedButton size='small' variant="contained" color="primary" onClick={() => navigate("/pos")}>
+                  Go to POS
+                  <ArrowForwardIcon className="arrow" />
+                </AnimatedButton>
+
+              </ButtonGroup>
+
+              {/*              
               <Button
                 onClick={() => navigate(`/pos?canteen_id=${canteen_id}`)}
                 variant="contained"
@@ -260,7 +290,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
                   border: "none"
                 }}>
                 POS
-              </Button>
+              </Button> */}
               <ProfilePage />
 
             </div>
@@ -307,7 +337,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List >
+        {/* <List >
           {NAVIGATION.map((item: PagesTypes, index) => (
             <React.Fragment key={index}>
               <ListItem
@@ -405,21 +435,136 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
               )}
             </React.Fragment>
           ))}
-        </List>
+        </List> */}
+
+        <List sx={{ p: 1 }}>
+  {NAVIGATION.map((item: PagesTypes, index) => (
+    <React.Fragment key={index}>
+      <ListItem
+        disablePadding
+        sx={{
+          display: 'block',
+          marginY: 0.5,
+          borderRadius: 2,
+          backgroundColor: expandedSegment === item.path ? '#1f1f2e' : 'transparent',
+          transition: 'background-color 0.3s',
+          '&:hover': {
+            backgroundColor: '#2a2a3c',
+          },
+        }}
+      >
+        <ListItemButton
+          onClick={() => item.children && toggleExpand(item.path || '')}
+          sx={{
+            justifyContent: open ? 'initial' : 'center',
+            px: 2,
+            py: 1.2,
+            color: '#f5f5f5',
+            borderRadius: 2,
+            transition: 'all 0.3s ease',
+          }}
+          component={!item.children ? (Link as React.ElementType) : 'div'}
+          to={!item.children ? `/${item.path}` : undefined}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              justifyContent: 'center',
+              mr: open ? 2 : 'auto',
+              color: '#f5f5f5',
+              transition: 'color 0.3s',
+            }}
+          >
+            {item.icon}
+          </ListItemIcon>
+          <ListItemText
+            primary={item.title}
+            primaryTypographyProps={{
+              fontSize: '0.9rem',
+              fontWeight: 500,
+            }}
+            sx={{
+              opacity: open ? 1 : 0,
+              color: '#f5f5f5',
+              transition: 'opacity 0.3s',
+            }}
+          />
+          {item.children &&
+            (expandedSegment === item.path ? (
+              <ExpandLess sx={{ color: '#f5f5f5' }} />
+            ) : (
+              <ExpandMore sx={{ color: '#f5f5f5' }} />
+            ))}
+        </ListItemButton>
+      </ListItem>
+
+      {/* Children Collapse */}
+      {item.children && (
+        <Collapse in={expandedSegment === item.path} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {item.children.map((child, childIndex) => (
+              <ListItemButton
+                key={childIndex}
+                sx={{
+                  pl: open ? 5 : 3,
+                  py: 0.9,
+                  my: 0.4,
+                  mx: 1,
+                  backgroundColor: '#252537',
+                  borderRadius: 1.5,
+                  '&:hover': {
+                    backgroundColor: '#33334d',
+                  },
+                }}
+                component={Link as React.ElementType}
+                to={`/${child.path}`}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    justifyContent: 'center',
+                    mr: open ? 1.5 : 'auto',
+                    color: '#b0b0b0',
+                  }}
+                >
+                  {child.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={child.title}
+                  primaryTypographyProps={{
+                    fontSize: '0.8125rem',
+                  }}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color: '#d0d0d0',
+                    transition: 'opacity 0.3s',
+                  }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
+      )}
+    </React.Fragment>
+  ))}
+</List>
+
       </Drawer>
 
 
       <Box
         sx={{
+         width: '100%',
+        height: '100%',
           flexGrow: 1,
-          marginLeft: open ? 0 : 0,
-          transition: 'margin 0.3s',
-          paddingTop: 0,
-          paddingBottom: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          width: "100%",
-          height: "100%"
+          bgcolor:"rgb(238, 238, 238)",
+          padding: 2,
+          paddingTop: 10,
+          
+          transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
         }}
       >
         {isPOSPage ? children : <Outlet />}

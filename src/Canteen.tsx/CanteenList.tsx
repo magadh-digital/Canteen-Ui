@@ -37,12 +37,18 @@ const CanteenList = () => {
 
     return (
         <Box sx={{
-            p: 2,
-            width: "100%",
-            height: "80vh",
-            mt:8
+            padding: 2,
+            backgroundColor: "white",
+            
+          
         }}>
-            <Stack direction={"row"} justifyContent={"space-between"} >
+            <Stack direction={"row"} justifyContent={"space-between"} 
+             sx={{
+                backgroundColor: "white",
+              
+                
+             }}
+            >
                 <Typography variant='h5' sx={{
                      color: colors.grey[600],
                      fontWeight: 'bold',
@@ -52,7 +58,9 @@ const CanteenList = () => {
                     Canteen List
                 </Typography>
                 <TabContext value={value}>
-                    <Box sx={{ mb: -5 }}>
+                    <Box sx={{
+                        
+                      }}>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                             <Tab label="Canteen List" value="0" />
                             <Tab label="Create Canteen" value="1" />
@@ -67,12 +75,15 @@ const CanteenList = () => {
             )}
             {value === "0" && (
                 <Box sx={{
-                    height: "80vh",
+                    
+                    backgroundColor: "white",
+                    height: "75vh",
                     mt: 5,
-                    width: "100%",
-                    backgroundColor: "#E0E0E0",
-                    p: 2,
-                    borderRadius: "10px"
+                    
+                    
+                    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+                   
+                   
                 }}>
 
                     <DataGrid

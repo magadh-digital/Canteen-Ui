@@ -38,9 +38,12 @@ const Purchases = () => {
     return (
         <Box sx={{
             p: 2,
-            height: '100vh',
-            mt: 8,
-            width: "87vw"
+            backgroundColor: "white",
+            
+            
+            
+           
+            
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
@@ -72,11 +75,10 @@ const Purchases = () => {
                 </Stack>
             </Stack>
             <Box sx={{
-                height: "80vh",
+                
                 backgroundColor: "#E0E0E0",
-                p: 2,
-                borderRadius: "10px",
-                mt: 2
+                mt: 2,
+               
             }}>
 
                 <DataGrid
@@ -89,7 +91,8 @@ const Purchases = () => {
                         pageSize: 10
                     }}
                     style={{
-                        height: '80vh',
+                        height: '75vh',
+                        
                         backgroundColor: "white"
                     }}
                     onPaginationModelChange={handlePaginationModelChange}

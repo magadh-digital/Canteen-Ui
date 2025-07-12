@@ -223,12 +223,10 @@ const PurchaseReport = () => {
 
     return (
         <Box sx={{
-            m: 2,
-            mt: 8,
+            
             p: 2,
-            width: '85vw',
-            height: '100vh',
-            bgcolor: colors.grey[100],
+            
+            bgcolor: "white",
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
