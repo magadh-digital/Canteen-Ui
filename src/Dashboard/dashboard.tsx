@@ -159,7 +159,7 @@ export const Dashboard = () => {
                         sx={{
                             p: 2,
                             boxShadow: 3,
-                            borderRadius: "15px",
+                            
                             height: "400px",
                             display: "flex",
                             flexDirection: "column",
@@ -179,7 +179,7 @@ export const Dashboard = () => {
                                             id: 0,
                                             value: TodaySellData?.sell_summary?.total_amount || 0,
                                             label: "Sell",
-                                            color: colors.green[300],
+                                            color: colors.blue[500],
                                         },
                                         {
                                             id: 1,
@@ -197,7 +197,7 @@ export const Dashboard = () => {
                                             id: 3,
                                             value: TodaySellData?.sell_summary?.PayableAmt || 0,
                                             label: "Received",
-                                            color: colors.purple[300],
+                                            color: colors.blue[100],
                                         },
                                     ],
                                 },
@@ -216,12 +216,12 @@ export const Dashboard = () => {
                             {[
                                 {
                                     label: "Sell Amount",
-                                    color: colors.green[500],
+                                    color: colors.blue[500],
                                     value: TodaySellData?.sell_summary?.total_amount || 0,
                                 },
                                 {
                                     label: "Discount",
-                                    color: colors.blue[500],
+                                    color: colors.blue[300],
                                     value: TodaySellData?.sell_summary?.VoucherAmt || 0,
                                 },
                                 // {
@@ -231,7 +231,7 @@ export const Dashboard = () => {
                                 // },
                                 {
                                     label: "Received Amount",
-                                    color: colors.purple[500],
+                                    color: colors.blue[100],
                                     value: TodaySellData?.sell_summary?.PayableAmt || 0,
                                 },
                             ].map((item, index) => (
@@ -314,19 +314,19 @@ export const Dashboard = () => {
                                         type: "bar",
                                         data: monthlyReport.data.map((item) => item.Expense ?? 0),
                                         label: "Expense",
-                                        color: "#ef5350",
+                                        color:colors.blue[500],
                                     },
                                     {
                                         type: "bar",
                                         data: monthlyReport.data.map((item) => item.Income ?? 0),
                                         label: "Income",
-                                        color: "#42a5f5",
+                                        color: colors.blue[300],
                                     },
                                     {
                                         type: "bar",
                                         data: monthlyReport.data.map((item) => item.net_profit ?? 0),
                                         label: "Net Profit",
-                                        color: "#66bb6a",
+                                        color: colors.blue[100],
                                     },
                                 ]}
                             />
