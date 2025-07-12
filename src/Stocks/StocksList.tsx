@@ -38,9 +38,8 @@ const StocksList = () => {
     return (
         <Box sx={{
             p: 2,
-            // width: '85vw',
-            height: '100vh',
-            mt: 8
+           
+            backgroundColor: "white",
         }}>
             <Stack direction='row' justifyContent={'space-between'}>
                 <Typography variant='h5' sx={{
@@ -68,7 +67,7 @@ const StocksList = () => {
                     />
                 </Stack>
             </Stack>
-            <Box mt={2} bgcolor={colors.grey[200]} p={2}>
+            <Box mt={3} bgcolor={colors.grey[200]} >
                 <DataGrid
                     rows={StockItem || []}
                     columns={StockItemColumn}
@@ -79,7 +78,7 @@ const StocksList = () => {
                         pageSize: limit
                     }}
                     style={{
-                        height: '80vh',
+                        height: '75vh',
                         backgroundColor: 'white'
                     }}
                     onPaginationModelChange={(model) => {

@@ -25,7 +25,6 @@ const ProductList = () => {
 
 
     const ProductItemsRows = useMemo(() => {
-
         const itemsData = data?.menuitems || [];
         if (!itemsData) return [];
         if (itemsData) {
@@ -34,12 +33,11 @@ const ProductList = () => {
                     ...items,
                     id: items?.id,
                     idx: index + 1,
-                    url: data?.base_url + items?.image_url
+                    thumbnailurl: data?.base_url + (items?.thumbnailurl ?? ""),
+                    url: data?.base_url + (items?.image_url ?? ""),
                 }
             })
-
         }
-
     }, [data, Search]);
 
     return (

@@ -28,10 +28,9 @@ const AllUserList = () => {
 
     return (
         <Box sx={{
-            width: "100%",
-            height: "100%",
-            mt: 7,
             p: 2,
+            backgroundColor: "white",
+            
         }}>
             <Stack direction="row" justifyContent="space-between">
                 <Stack spacing={1} ml={2}>

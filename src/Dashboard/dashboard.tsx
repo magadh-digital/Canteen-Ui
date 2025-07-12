@@ -1,6 +1,6 @@
 import {
     Avatar, Box, Card, CardContent,
-    colors, Grid, LinearProgress, Stack, Typography,
+    colors, Grid, LinearProgress, Skeleton, Stack, Typography,
 } from "@mui/material";
 import { BarChart, PieChart, } from "@mui/x-charts";
 import { GetMonthlyWiseDataApi, GetReportOrderApi, GetTodaySellReport } from "../AllGetApi";
@@ -39,30 +39,30 @@ export const Dashboard = () => {
         {
             title: "Today's Orders / Sales",
             value: `${data?.data?.todayOrders ?? 0} / ${data?.data?.todaySales ?? 0}`,
-            color: "error.main",
+            color: "primary.main",
             icon: <ShoppingCart fontSize="large" />
         },
         {
             title: "Yearly Orders / Sales",
             value: `${data?.data?.yearlyOrders ?? 0} / ${data?.data?.yearlySales ?? 0}`,
-            color: "primary.dark", icon: <ShoppingCart fontSize="large" />
+            color: "primary.main", icon: <ShoppingCart fontSize="large" />
         },
         {
             title: "Monthly Vouchers",
             value: data?.data?.monthlyVouchers ?? 0,
-            color: "info.main",
+            color: "primary.main",
             icon: <LocalOffer fontSize="large" />
         },
         {
             title: "Today's Vouchers",
             value: data?.data?.todayVouchers ?? 0,
-            color: "warning.main",
+            color: "primary.main",
             icon: <LocalOffer fontSize="large" />
         },
         {
             title: "Yearly Vouchers",
             value: data?.data?.yearlyVouchers ?? 0,
-            color: "info.dark",
+            color: "primary.main",
             icon: <LocalOffer fontSize="large" />
         },
     ];
@@ -79,40 +79,47 @@ export const Dashboard = () => {
     return (
         <Box sx={{ height: '100%', p: 2, bgcolor: colors.grey[100], overflowX: "hidden" }}>
             <Typography variant="h4" align="left" sx={{ marginBottom: 3, fontWeight: 600 }}>Dashboard</Typography>
-            {isLoading ? (
-                <LinearProgress />
-            ) : (
+           
                 <Grid container spacing={3} sx={{ padding: 0 }}>
                     {metrics.map((metric, index) => (
                         <Grid item xs={16} sm={6} md={3} key={index}>
-                            <Card sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                padding: 2,
-                                boxShadow: 3,
-                                borderLeft: `5px solid`,
-                                borderColor: metric.color
-                            }}>
-                                <CardContent sx={{ flexGrow: 1 }}>
-                                    <Typography variant="h6" color="textSecondary">
-                                        {metric.title}
-                                    </Typography>
-                                    <Typography variant="h4" fontWeight="bold">
-                                        {metric.value}
-                                    </Typography>
-                                </CardContent>
-                                {metric.icon}
-                            </Card>
+                            {
+                                isLoading ? (
+                                    <Skeleton variant="rectangular" width="100%" height={150} sx={{ borderRadius: 2 }} />
+                                ) : (
+                                    <Card sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        padding: 2,
+                                        boxShadow: 3,
+                                        borderLeft: `5px solid`,
+                                        borderColor: metric.color
+                                    }}>
+                                        <CardContent sx={{ flexGrow: 1 }}>
+                                            <Typography variant="h6" color="textSecondary">
+                                                {metric.title}
+                                            </Typography>
+                                            <Typography variant="h4" fontWeight="bold">
+                                                {metric.value}
+                                            </Typography>
+                                        </CardContent>
+                                        {metric.icon}
+                                    </Card>
+
+                                )
+                            }
+                           
                         </Grid>
                     ))}
                 </Grid>
-            )}
+        
 
 
 
 
             <Grid container spacing={3} sx={{ mt: 5 }}>
                 <Grid item xs={8} md={6}>
+                    
                     <Card sx={{ p: 2, boxShadow: 3, borderRadius: "15px", height: "400px", width: "100%" }}>
                         <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
                             Latest 20 Orders
