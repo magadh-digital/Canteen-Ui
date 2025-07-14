@@ -71,6 +71,7 @@ export interface MenuItemType {
   quantity?: number
   unit?: string
   thumbnailurl?: string;
+  order?: string
 }
 
 export interface AddMenuProductType {
@@ -423,7 +424,7 @@ export interface SellReportType {
   total_amount: number;
   date: string;
   items: SellItems[]
-  total_qty: number
+  total_qty: number;
 }
 
 export interface SellItems {
@@ -431,6 +432,9 @@ export interface SellItems {
   name: string;
   total: number;
   qty: number;
+  item_details: {
+    unit : string
+  }
 }
 
 

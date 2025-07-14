@@ -46,6 +46,11 @@ export const ProductItemsColumn: GridColDef[] = [
         width: 230
     },
     {
+        field: 'order',
+        headerName: 'Order',
+        width: 230
+    },
+    {
         field: 'category',
         headerName: 'Category',
         width: 130

@@ -237,6 +237,14 @@ const PurchaseReport = () => {
                 }}>
                     Purchase Report
                 </Typography>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Tooltip title="Total Amount">
+                        <Typography sx={{ color: colors.green[500], borderColor: colors.green[500] }}>
+                    Total Amount :        {"₹"}{data?.total_amount}
+                        </Typography>
+                    </Tooltip>
+                </div>
+
                 <ButtonGroup size='small'>
                     <Tooltip title='Print'>
                         <Button size='small' onClick={handlePrint}><Print /></Button>

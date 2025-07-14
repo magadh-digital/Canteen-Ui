@@ -106,33 +106,69 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
             if (!printWindow) return;
 
             const receiptContent = renderToString(
-                <div style={{ maxWidth: "100%", margin: "auto", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
-                    <h3>{"MAGADH CANTEEN"}</h3>
-                    <p style={{ margin: "2px", fontSize: "12px" }}>{moment().format("DD MMM YYYY h:mm A")}</p>
-                    <p style={{ margin: "2px", fontSize: "12px" }}>Invoice ID: {billData?.order_id}</p>
-                    <p style={{ margin: "2px", fontSize: "12px" }} >Customer: {billData?.customer_name}</p>
+                <div style={{
+                    maxWidth: "100%", margin: "auto",
+                    fontFamily: "Arial, sans-serif",
+                    textAlign: "center"
+                }}>
+                    <h3>{canteenData?.name}</h3>
+                    <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "40%",
+                        margin: "auto",
+                        textAlign: "center"
+                    }}>
+                        <div style={{
+                            textAlign: "left",
+                            alignItems: "flex-start",
+                            fontSize: "15px",
+                            padding: "5px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "2px"
+                        }}>
+                            <span>Date</span>
+                            <span>Invoice Id</span>
+                            <span>Customer</span>
+                        </div>
+                        <div style={{
+                            textAlign: "left",
+                            alignItems: "flex-start",
+                            fontSize: "15px",
+                            padding: "5px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "2px"
+                        }}>
+                            <span>{moment().format("DD MMM YYYY h:mm A")}</span>
+                            <span>{billData?.order_id}</span>
+                            <span>{billData?.customer_name}</span>
+                        </div>
+                    </div>
                     <hr style={{ width: "100%", margin: "2px 0", borderTop: "1px dashed black" }} />
-                    <p style={{ margin: "2px", fontSize: "17px" }}>INVOICE</p>
+                    <p style={{ fontSize: "17px", margin: "5px 0" }}>INVOICE</p>
                     <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black" }}>
                         <thead>
                             <tr style={{
-                                borderBottom: "1px solid black",
+                                borderBottom: "1px solid black"
                             }}>
-                                <th style={{ textAlign: "left", fontSize: "8px" }}>SL</th>
-                                <th style={{ textAlign: "left", fontSize: "8px" }}>Name</th>
-                                <th style={{ textAlign: "right", fontSize: "8px" }}>Qty</th>
-                                <th style={{ textAlign: "right", fontSize: "8px" }}>Price</th>
-                                <th style={{ textAlign: "right", fontSize: "8px" }}>Amount</th>
+                                <th style={{ textAlign: "left", fontSize: "12px" }}>SL</th>
+                                <th style={{ textAlign: "left", fontSize: "12px" }}>Name</th>
+                                <th style={{ textAlign: "right", fontSize: "12px" }}>Qty</th>
+                                <th style={{ textAlign: "right", fontSize: "12px" }}>Price</th>
+                                <th style={{ textAlign: "right", fontSize: "12px" }}>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {billData?.items?.map((item, index) => (
                                 <tr key={item?.item_id}>
-                                    <td style={{ fontSize: "8px" }}   >{index + 1}</td>
-                                    <td style={{ fontSize: "8px" }}>{item.name}</td>
-                                    <td style={{ textAlign: "right", fontSize: "8px" }}>{item.qty}</td>
-                                    <td style={{ textAlign: "right", fontSize: "8px" }}>₹{item.price}</td>
-                                    <td style={{ textAlign: "right", fontSize: "8px" }}>₹{item.total}</td>
+                                    <td style={{ fontSize: "12px" }}>{index + 1}</td>
+                                    <td style={{ fontSize: "12px" }}>{item.name}</td>
+                                    <td style={{ textAlign: "right", fontSize: "12px" }}>{item.qty}</td>
+                                    <td style={{ textAlign: "right", fontSize: "12px" }}>₹{item.price}</td>
+                                    <td style={{ textAlign: "right", fontSize: "12px" }}>₹{item.total}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -141,7 +177,18 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                     <table style={{ width: "100%", borderCollapse: "collapse", }}>
                         <tbody>
                             <tr >
-                                <td style={{ textAlign: "right", fontSize: "8px" }}>Total Amt:</td>
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "flex-end",
+                                    fontSize: "12px"
+                                }}>
+                                    <span>Total Amt..............................................₹{billData?.total_amount ?? 0}</span>
+                                    <span>Total Due..............................................₹{billData?.total_amount ?? 0}</span>
+                                    <span>Voucher:.................................................₹{Number(billData?.voucher_amt ?? 0)}</span>
+                                    <span>Paid Amount..............................................₹{Number(billData?.payable_amt ?? 0)}</span>
+                                </div>
+                                {/* <td style={{ textAlign: "right", fontSize: "8px" }}>Total Amt:</td>
                                 <td style={{ textAlign: "right", fontSize: "8px" }}>₹{billData?.total_amount}</td>
                             </tr>
                             <tr>
@@ -154,12 +201,12 @@ export default function UserPaymentMethod({ canteen_id }: { canteen_id: string }
                             </tr>
                             <tr>
                                 <td style={{ textAlign: "right", fontSize: "8px" }}>Paid Amount:</td>
-                                <td style={{ textAlign: "right", fontSize: "8px" }}>₹{Number(billData?.payable_amt ?? 0)}</td>
+                                <td style={{ textAlign: "right", fontSize: "8px" }}>₹{Number(billData?.payable_amt ?? 0)}</td> */}
                             </tr>
                         </tbody>
                     </table>
-                    <hr style={{ borderTop: "1px dashed black", margin: "10px 0" }} />
-                    <p style={{ fontStyle: "italic", fontSize: "8px" }}>In Text:
+                    <hr style={{ borderTop: "1px dashed black", margin: "12px 0" }} />
+                    <p style={{ fontStyle: "italic", fontSize: "12px" }}>In Text:
                         {toWord.convert(Number(billData?.total_amount ?? 0))}
                     </p>
                 </div>

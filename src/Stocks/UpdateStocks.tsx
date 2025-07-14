@@ -222,14 +222,14 @@ const UpdateStocks = () => {
     return (
         <>
             <div style={{
-                marginTop: 1,
+                // marginTop: 1,
             }}>
                 <Tooltip title="Update Stocks">
                     <button style={{
                         padding: 10,
                         backgroundColor: colors.grey[300],
                         color: colors.green[500],
-                        width: "200px",
+                        width: "100%",
                         fontWeight: "bold"
                     }}
                         onClick={() => setOpen(true)}

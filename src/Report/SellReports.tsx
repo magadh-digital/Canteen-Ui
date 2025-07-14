@@ -31,10 +31,10 @@ const SellReport = () => {
   const [date, setDate] = useState<{
     startDate: string | null;
     endDate: string | null;
-}>({
+  }>({
     startDate: dayjs().format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
-});
+  });
   const reportTitle = `Sell Report (${moment(date.startDate).format('DD-MM-YYYY')} to ${moment(date.endDate).format('DD-MM-YYYY')})`;
 
 
@@ -64,6 +64,7 @@ const SellReport = () => {
           ...item,
           id: item?.item_id,
           idx: index + 1 + paginationModel.page * paginationModel.pageSize,
+          unit_type: item?.item_details?.unit
         }));
     }
     return [];
@@ -82,7 +83,7 @@ const SellReport = () => {
   };
 
   const handlePrint = () => {
-    const WinPrint = window.open('', '', 'width=900,height=650');
+    const WinPrint = window.open('', 'width=900,height=650');
     if (WinPrint) {
       WinPrint.document.write(`
         <html>
@@ -118,19 +119,21 @@ const SellReport = () => {
               <tr>
                 <th>S.No.</th>
                 <th>Items</th>
+                <th>Unit</th>
                 <th>Qty</th>
                 <th>Price</th>
               </tr>
-              ${data?.items.map((item, index) => `
+              ${data?.items?.map((item, index) => `
                 <tr>
                   <td>${index + 1}</td>
                   <td>${item.name}</td>
+                  <td>${item.item_details?.unit}</td>
                   <td>${item.qty}</td>
                   <td>${item.total}</td>
                 </tr>
               `).join('')}
               <tr>
-                <td colspan="2">Total:</td>
+                <td colspan="3">Total:</td>
                 <td>${data?.total_qty}</td>
                 <td>${data?.total_amount}</td>
               </tr>
@@ -156,7 +159,7 @@ const SellReport = () => {
       showHead: "everyPage",
       head: [columns],
       body: rows,
-      foot: [["Total", "", data?.total_qty || 0, data?.total_amount || 0]],
+      foot: [["Total", "", "", data?.total_qty || 0, data?.total_amount || 0]],
     });
 
 
@@ -175,7 +178,7 @@ const SellReport = () => {
     XLSX.utils.sheet_add_aoa(worksheet, [columnHeaders], { origin: 'A3' });
 
     const dataRows = plainRows.map(row => columnHeaders.map(col => row[col]));
-    dataRows.push(["Total", "", data?.total_qty || 0, data?.total_amount || 0]);
+    dataRows.push(["Total", "", "", data?.total_qty || 0, data?.total_amount || 0]);
     XLSX.utils.sheet_add_aoa(worksheet, dataRows, { origin: 'A4' });
 
 
@@ -216,7 +219,7 @@ const SellReport = () => {
       csvContent += rowData.join(",") + "\n";
     });
 
-    csvContent += `Total,,${data?.total_qty || 0},${data?.total_amount || 0}`
+    csvContent += `Total,,,${data?.total_qty || 0},${data?.total_amount || 0}`
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, "sell_report.csv");
@@ -232,7 +235,7 @@ const SellReport = () => {
         bgcolor: "white",
       }}
     >
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography
           variant="h5"
           sx={{
@@ -244,6 +247,19 @@ const SellReport = () => {
         >
           Sell Reports
         </Typography>
+        <ButtonGroup size='small'>
+          <Tooltip title="Total QTY">
+            <Button sx={{ color: colors.grey[700], borderColor: colors.grey[700] }}>
+              {data?.total_qty ?? 0}
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="Total Amount">
+            <Button sx={{ color: colors.green[500], borderColor: colors.green[500] }}>
+              {"₹"}{data?.total_amount}
+            </Button>
+          </Tooltip>
+        </ButtonGroup>
         <Stack spacing={2} direction="row" alignItems="center">
           <ButtonGroup size="small">
             <Tooltip title="Print">

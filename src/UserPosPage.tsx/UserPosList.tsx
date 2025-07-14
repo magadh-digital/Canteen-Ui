@@ -73,18 +73,6 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
                     </>
                 ) : (
                     <>
-                        <Box sx={{
-                            width: '30%',
-                            height: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            flexDirection: "column",
-                            bgcolor: "white"
-                        }}>
-                            <ItemQuantityDetails />
-
-                        </Box>
                         <Box
                             sx={{
                                 width: '70%',
@@ -168,6 +156,19 @@ const UserPosList = ({ canteenId }: { canteenId: string }) => {
 
                             </Box>
                         </Box>
+                        <Box sx={{
+                            width: '30%',
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "column",
+                            bgcolor: "white"
+                        }}>
+                            <ItemQuantityDetails />
+
+                        </Box>
+
                     </>
                 )}
             </Box>

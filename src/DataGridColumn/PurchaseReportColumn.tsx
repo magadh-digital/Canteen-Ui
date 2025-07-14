@@ -25,16 +25,32 @@ export const PurchaseReportColumn: GridColDef[] = [
     {
         field: 'paid_amount',
         headerName: 'Paid Amount',
-        width: 140
+        width: 140,
+        renderCell: ({ value }) => {
+            return (
+                <span> {"₹"}{value}</span>
+            )
+        }
     },
     {
         field: 'due',
         headerName: 'Due Payment',
-        width: 140
+        width: 140,
+        renderCell: ({ value }) => {
+            return (
+                <span> {"₹"}{value}</span>
+            )
+        }
     },
     {
         field: 'total_amount',
         headerName: 'Total Amount',
-        width: 140
+        width: 140,
+        renderCell: ({ value }) => {
+            return (
+                <span> {"₹"}{value}</span>
+            )
+        }
     },
+
 ]

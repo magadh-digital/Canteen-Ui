@@ -137,7 +137,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   const [expandedSegment, setExpandedSegment] = React.useState<string | null>(null);
   const navigate = useNavigate()
   const location = useLocation();
-  const canteen_id = localStorage.getItem('canteen_user_id')
+  // const canteen_id = localStorage.getItem('canteen_user_id')
   // const { canteenData } = useSelector((state: RootState) => state.canteenData)
   const [currentDate, setCurrentDate] = React.useState<string>(moment().format("DD-MM-YYYY hh:mm:ss"));
   React.useEffect(() => {

@@ -34,7 +34,7 @@ const CreateStocks = (refetch: any) => {
             toast.error("Please Enter Stock Unit")
             return
         }
-        
+
         try {
             const res = await mutateAsync({
                 data: AddStock
@@ -129,6 +129,7 @@ const CreateStocks = (refetch: any) => {
                                             >
                                                 <MenuItem value="KG">KG</MenuItem>
                                                 <MenuItem value="PIECE">PIECE</MenuItem>
+                                                <MenuItem value="PLATE">PLATE</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Grid>
