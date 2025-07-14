@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
-import { Box, Button, colors, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery } from '@mui/material';
+import { Box, Button, colors, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,  useMediaQuery } from '@mui/material';
 import { MenuItemType } from '../AllTypes';
 import { Delete } from '@mui/icons-material';
-import { decrementQuantity, incrementQuantity, removeItem, resetData, } from '../AllStoreSlice/AddQuantitySlice';
+import { decrementQuantity, incrementQuantity, removeItem, resetData, updateQuantity, } from '../AllStoreSlice/AddQuantitySlice';
 import { setOrderData, setPrice, setQuantity } from '../AllStoreSlice/PriceAndQuantitySlice';
-import { useEffect,  } from 'react';
+import { useEffect, } from 'react';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const ItemQuantityDetails = () => {
@@ -65,14 +65,57 @@ const ItemQuantityDetails = () => {
                                                 onClick={() =>
                                                     dispatch(incrementQuantity(item.id))}
                                             />
-                                            <span
-                                                style={{
-                                                    fontSize: "14px",
-                                                    color: "red",
+                                            {/* <TextField
+                                                type="number"
+                                                variant="outlined"
+                                                size="small"
+                                                value={itemQuantity}
+                                                inputProps={{
+                                                    min: 1,
+                                                    style: {
+                                                        textAlign: "center",
+                                                        padding: "1px 0",   // reduce padding
+                                                        height: "15px",     // control input height
+                                                    },
                                                 }}
-                                            >
-                                                {itemQuantity}
-                                            </span>
+                                                sx={{
+                                                    width: "50px",
+                                                    mx: 1,
+                                                    '& .MuiInputBase-root': {
+                                                        height: '30px', // set total height
+                                                        fontSize: '12px', // reduce font size
+                                                    },
+                                                }}
+                                                onChange={(e) => {
+                                                    const value = parseInt(e.target.value);
+                                                    if (!isNaN(value) && value >= 1) {
+                                                        dispatch(updateQuantity({ id: item.id, quantity: value }));
+                                                    }
+                                                }}
+                                            /> */}
+
+                                            <input
+                                               
+                                                value={itemQuantity}
+                                                min={1}
+                                                onChange={(e) => {
+                                                    const value = parseInt(e.target.value);
+                                                    if (!isNaN(value) && value >= 1) {
+                                                        dispatch(updateQuantity({ id: item.id, quantity: value }));
+                                                    }
+                                                }}
+                                                style={{
+                                                    width: "50px",
+                                                    textAlign: "center",
+                                                    padding: "1px 0",   
+                                                    height: "15px",     
+                                                    fontSize: '12px',
+                                                    backgroundColor: "transparent",
+                                                    border: "1px solid #ccc",
+                                                    margin: "1.5px",
+                                                    color:"black"
+                                                }}
+                                            />
                                             <ExpandLessIcon
                                                 sx={{
                                                     bgcolor: "red",

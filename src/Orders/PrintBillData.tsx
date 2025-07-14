@@ -12,142 +12,212 @@ const PrintBillData = ({ data: order }: { data: GetOrderTypes | null }) => {
     const handlePrint = () => {
         setOpen(true);
     };
-
     useEffect(() => {
         if (open && order) {
             const printWindow = window.open("", "_blank");
             if (!printWindow) return;
 
             const receiptContent = renderToString(
-                <div style={{
-                    maxWidth: "100%", margin: "auto",
-                    fontFamily: "Arial, sans-serif",
-                    textAlign: "center"
-                }}>
-                    <h3>{order?.canteen?.name}</h3>
-                    <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "40%",
-                        margin: "auto",
-                        textAlign: "center"
-                    }}>
-                        <div style={{
-                            textAlign: "left",
-                            alignItems: "flex-start",
-                            fontSize: "15px",
-                            padding: "5px",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "2px"
-                        }}>
-                            <span>Date</span>
-                            <span>Invoice Id</span>
-                            <span>Customer</span>
-                        </div>
-                        <div style={{
-                            textAlign: "left",
-                            alignItems: "flex-start",
-                            fontSize: "15px",
-                            padding: "5px",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "2px"
-                        }}>
-                            <span>{moment(order?.created_at).format("DD MMM YYYY")}</span>
-                            <span>{order?.order_id}</span>
-                            <span>{order?.customer_name}</span>
-                        </div>
-                    </div>
-                    <hr style={{ width: "100%", margin: "2px 0", borderTop: "1px dashed black" }} />
-                    <p style={{ fontSize: "17px", margin: "5px 0" }}>INVOICE</p>
-                    <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid black", fontSize: "12px" }}>
-                        <thead>
-                            <tr style={{
-                                borderBottom: "1px solid black",
-                            }}>
-                                <th style={{ textAlign: "left", fontSize: "12px" }}>SL</th>
-                                <th style={{ textAlign: "left", fontSize: "12px" }}>Name</th>
-                                <th style={{ textAlign: "right", fontSize: "12px" }}>Qty</th>
-                                <th style={{ textAlign: "right", fontSize: "12px" }}>Price</th>
-                                <th style={{ textAlign: "right", fontSize: "12px" }}>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {order?.items?.map((item, index) => (
-                                <tr key={item?.item_id}>
-                                    <td style={{ fontSize: "12px" }}>{index + 1}</td>
-                                    <td style={{ fontSize: "12px" }}>{item.name}</td>
-                                    <td style={{ textAlign: "right", fontSize: "12px" }}>{item.qty}</td>
-                                    <td style={{ textAlign: "right", fontSize: "12px" }}>₹{item.price}</td>
-                                    <td style={{ textAlign: "right", fontSize: "12px" }}>₹{item.total}</td>
+                <section className="receipt-template">
+                    <header className="receipt-header">
+                        <h2 className="store-name">{order?.canteen?.name}</h2>
+                    </header>
+
+                    <section className="info-area">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td className="w-30"><span>Date:</span></td>
+                                    <td>{moment(order?.created_at).format("DD MMM YYYY")}</td>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <hr style={{ borderTop: "1px dashed black", margin: "1px 0" }} />
-                    <table style={{ width: "100%", borderCollapse: "collapse", }}>
-                        <tbody>
-                            <tr>
-                                <div style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "flex-end",
-                                    fontSize: "12px"
-                                }}>
-                                    <span>Total Amt..............................................₹{order?.total_amount ?? 0}</span>
-                                    <span>Total Due..............................................₹{order?.total_amount ?? 0}</span>
-                                    <span>Voucher:.................................................₹{Number(order?.voucher_amt ?? 0)}</span>
-                                    <span>Paid Amount..............................................₹{Number(order?.payable_amt ?? 0)}</span>
-                                </div>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr style={{ borderTop: "1px dashed black", margin: "10px 0" }} />
-                    <p style={{ fontStyle: "italic", fontSize: "12px" }}>In Text: {toWord.convert(Number(order?.total_amount ?? 0))}</p>
-                </div>
+                                <tr>
+                                    <td className="w-30"><span>Invoice ID:</span></td>
+                                    <td>{order?.order_id}</td>
+                                </tr>
+                                <tr>
+                                    <td className="w-30">Customer Name:</td>
+                                    <td>{order?.customer_name}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <h4 className="main-title">INVOICE</h4>
+
+                    <section className="listing-area item-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td className="w-10 text-center">Sl.</td>
+                                    <td className="w-40 text-center">Name</td>
+                                    <td className="w-15 text-center">Qty</td>
+                                    <td className="w-15 text-right">Price</td>
+                                    <td className="w-20 text-right">Amount</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {order?.items?.map((item, index) => (
+                                    <tr key={item.item_id}>
+                                        <td className="text-center">{index + 1}</td>
+                                        <td>{item.name}</td>
+                                        <td className="text-center">{item.qty}</td>
+                                        <td className="text-right">₹{item.price}</td>
+                                        <td className="text-right">₹{item.total}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section className="info-area calculation-area">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td className="w-70">Total Amt:</td>
+                                    <td>₹{order?.total_amount}</td>
+                                </tr>
+                                <tr>
+                                    <td className="w-70">Voucher:</td>
+                                    <td>₹{Number(order?.voucher_amt ?? 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td className="w-70">Amount Paid:</td>
+                                    <td>₹{Number(order?.payable_amt ?? 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td className="w-70">Due:</td>
+                                    <td>₹{Number(order?.total_amount) - Number(order?.payable_amt)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section className="info-area italic">
+                        <span className="text-small"><b>In Text:</b> {toWord.convert(Number(order?.total_amount ?? 0))}</span>
+                    </section>
+                    <section style={{ marginTop: "5px", fontWeight: 800 }}>
+                        <span className="duplicate-tag">DUPLICATE</span>
+                    </section>
+                </section>
             );
 
-            printWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Invoice</title>
-                          <style>
-                               @page {
-                                    size: auto; 
-                                       margin: 5mm; 
-                                    }
-                                body {
-                                    font-family: Arial, sans-serif;
-                                     text-align: center;
-                                     margin: 0;
-                                     padding: 0;
-                                     }
-                                 table {
-                                     width: 100%;
-                                     margin-top: 1px;
-                                     border-collapse: collapse;
-                                      }
-                                 td, th {
-                                     padding: 1px;
-                                     font-size: 12px;
-                                       }
-                           </style>
-                        </head>
-                        <body>
-                            ${receiptContent}
-                            <script>
-                                window.print();
-                                setTimeout(() => window.close(), 100);
-                            </script>
-                        </body>
-                    </html>
-                `);
 
+            const receiptCSS = `
+            .receipt-template {
+    width: 58mm;
+    max-width: 58mm;
+    font-family: 'Courier New', monospace;
+    margin: 0 auto;
+    font-weight: 600;
+}
+.duplicate-tag {
+    font-size: 14px;
+    color: red;
+    font-weight: 800;
+    text-align: center;
+    margin-top: 5px;
+
+}
+.receipt-template .text-small { font-size: 10px; }
+.receipt-template .bold { font-weight: 700; }
+.receipt-template .italic { font-style: italic; }
+.receipt-template .main-title {
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    margin: 10px 0 5px 0;
+}
+.receipt-template .store-name {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+}
+.receipt-template table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.receipt-template td, .receipt-template th {
+    font-size: 12px;
+    padding: 2px;
+    word-break: break-word;
+    font-weight: 600;
+}
+.receipt-template .receipt-header {
+    text-align: center;
+}
+.receipt-template .info-area table {
+    margin: auto;
+    text-align: left;
+    font-weight: 600;
+}
+.receipt-template .listing-area table thead tr {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    font-weight: 800;
+}
+.receipt-template .listing-area table tbody tr {
+    border-top: 1px dashed #000;
+    border-bottom: 1px dashed #000;
+}
+.receipt-template .calculation-area {
+    font-weight: bold;
+}
+.receipt-template .calculation-area table td:nth-child(2) {
+    border-bottom: 1px dashed #000;
+    text-align: right;
+}
+@media print {
+    @page {
+        size: 58mm auto;
+        margin: 0;
+    }
+
+    html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        background: none;
+    }
+
+    .receipt-template {
+        width: 58mm;
+        margin: 0 auto;
+        page-break-after: avoid;
+        font-weight: 600;
+    }
+}
+
+            }
+            `;
+
+
+
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Invoice</title>
+                        <style>
+                           ${receiptCSS}
+                       </style>
+                    </head>
+                    <body>
+                        ${receiptContent}
+                        <script>
+                            window.print();
+                            setTimeout(() => window.close(), 100);
+                        </script>
+                    </body>
+                </html>
+            `);
+
+            printWindow.document.close();
             setOpen(false);
         }
     }, [order, open]);
+
 
     return (
         <Button

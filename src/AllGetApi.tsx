@@ -1,7 +1,7 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
-import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, MonthlyReportType, PurchaseReportType, ReportDashboard, SellReportType, StockDetails, TodaySellSummaryType, UpdateOrderType } from "./AllTypes"
+import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, IUnitTypes, MonthlyReportType, PurchaseReportType, ReportDashboard, SellReportType, StockDetails, TodaySellSummaryType,  UpdateOrderType } from "./AllTypes"
 import { ErrorHandle } from "./ErrorHandle"
 
 export const GetCanteenUserApi = () => {
@@ -332,5 +332,25 @@ export const GetTodaySellReport = () => {
     return useQuery({
         queryKey: ['todayreport'],
         queryFn: getTodaySellingRport
+    })
+}
+
+
+export const GetUnitTypeApi = ({
+    enabled
+}: { enabled: boolean }) => {
+    const unitType = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/unit/`)
+            const data = response.data
+            return data as IUnitTypes
+        } catch (error: any) {
+            ErrorHandle(error.response)
+        }
+    }
+    return useQuery({
+        queryKey: ['unittype'],
+        queryFn: unitType,
+        enabled: !!enabled
     })
 }

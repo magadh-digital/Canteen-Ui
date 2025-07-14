@@ -43,9 +43,16 @@ const QuantitySlice = createSlice({
         },
         setnewData: (state, action) => {
             state.data = action.payload
-        }
+        },
+        updateQuantity: (state, action) => {
+            const { id, quantity } = action.payload;
+            const item = state.data.find((item) => item.id === id);
+            if (item) {
+                item.quantity = quantity;
+            }
+        },
     },
 });
 
-export const { incrementQuantity, decrementQuantity, setData, resetData, removeItem,setnewData } = QuantitySlice.actions;
+export const { incrementQuantity, decrementQuantity, setData, resetData, removeItem,setnewData, updateQuantity } = QuantitySlice.actions;
 export default QuantitySlice.reducer;

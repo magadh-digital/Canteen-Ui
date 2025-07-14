@@ -1,6 +1,6 @@
 import axios from "axios"
 import { baseUrl } from "./ApiEndPoint"
-import { AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UpdatePurcahseTypes, } from "./AllTypes"
+import { AddStockItemType, CanteenUserType, CreateOrderType, LoginType, SupplierType, UnitTypes, UpdatePurcahseTypes, } from "./AllTypes"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StockItemType } from "./Stocks/UpdateStocks"
 import { ErrorHandle } from "./ErrorHandle"
@@ -351,3 +351,40 @@ export const DeleteOrderByAdmin = () => {
         }
     })
 }
+
+export const UnitAddTypesPost = () => {
+    const queryClient = useQueryClient();
+    const unitAdd = async ({ data }: { data: UnitTypes }) => {
+        try {
+            const response = await axios.post(`${baseUrl}/unit/create`, data)
+            return response
+        } catch (error: any) {
+            ErrorHandle(error.response)
+        }
+    }
+    return useMutation({
+        mutationFn: unitAdd,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['unittype'] })
+        }
+    })
+}
+
+export const UnitDeleteTypesPost = () => {
+    const queryClient = useQueryClient();
+    const unitDelete = async ({ id }: { id: string }) => {
+        try {
+            const response = await axios.delete(`${baseUrl}/unit/${id}`)
+            return response
+        } catch (error: any) {
+            ErrorHandle(error.response)
+        }
+    }
+    return useMutation({
+        mutationFn: unitDelete,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['unittype'] })
+        }
+    })
+}
+

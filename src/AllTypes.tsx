@@ -323,6 +323,21 @@ export interface ItemDetail {
   name: string
 }
 
+
+export interface IUnitTypes {
+  data: UnitTypes[]
+  message: string
+}
+
+export interface UnitTypes {
+  name?: string;
+  description?: string;
+  _id?: string
+  active?: boolean;
+  created_at?: string;
+  updated_at?: string
+}
+
 export interface ReportDashboard {
   data: {
     _id: string
@@ -433,7 +448,7 @@ export interface SellItems {
   total: number;
   qty: number;
   item_details: {
-    unit : string
+    unit: string
   }
 }
 
@@ -470,26 +485,26 @@ export interface MonthlyReport {
 
 
 export interface TodaySellSummaryType {
-  purchases : {
-    due_amount : number,
-    paid_amount : number,
-    shipping_charges : number,
-    sub_total : number,
-    total_amount : number,
-    _id :{
+  purchases: {
+    due_amount: number,
+    paid_amount: number,
+    shipping_charges: number,
+    sub_total: number,
+    total_amount: number,
+    _id: {
       day: number,
       month: number,
       year: number
     }
   },
-  sell_summary : {
-    PayableAmt : number,
-    VoucherAmt : number,
-    cash_payment : number,
-    sub_total : number,
-    online_payment : number,
-    total_amount : number,
-    _id :{
+  sell_summary: {
+    PayableAmt: number,
+    VoucherAmt: number,
+    cash_payment: number,
+    sub_total: number,
+    online_payment: number,
+    total_amount: number,
+    _id: {
       day: number,
       month: number,
       year: number

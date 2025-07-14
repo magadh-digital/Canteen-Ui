@@ -1,18 +1,23 @@
 import { useDispatch, } from "react-redux";
-import { GetMenuItemListApi } from "../AllGetApi";
-import { Box, Button, colors, Stack, TextField, Typography } from "@mui/material";
+import { GetMenuItemListApi, } from "../AllGetApi";
+import {
+    Box, Button, ButtonGroup, colors, Stack, TextField, Typography, useTheme
+} from "@mui/material";
 import RefecthButton from "../RefecthButton";
 import { DataGrid, GridPaginationModel } from "@mui/x-data-grid";
 import { useMemo, useState } from "react";
 import { ProductItemsColumn } from "../DataGridColumn/ProductItemsColumn";
 import { setAddProduct } from "../AllStoreSlice/AddProductCanteenSlice";
+import AllUnitTypes from "./UnitTypes";
+
 
 const ProductList = () => {
     const canteen_id = localStorage.getItem("canteen_user_id");
-    const [Search, setSearch] = useState<string>('');
+
     const { data, isLoading, isRefetching, refetch } = GetMenuItemListApi({
         canteen_id: canteen_id || "",
     });
+    const [Search, setSearch] = useState<string>('');
     const dispatch = useDispatch()
     const [page, setPage] = useState<GridPaginationModel>({
         page: 1,
@@ -22,6 +27,7 @@ const ProductList = () => {
     const handlePageChange = (newPage: GridPaginationModel) => {
         setPage(newPage);
     };
+
 
 
     const ProductItemsRows = useMemo(() => {
@@ -39,21 +45,27 @@ const ProductList = () => {
             })
         }
     }, [data, Search]);
+    const theme = useTheme();
+
+
 
     return (
         <Box sx={{
-            
             backgroundColor: "white",
             padding: 2,
-            
         }}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between">
                 <Typography variant="h6" sx={{
                     color: colors.grey[600],
                     fontWeight: 'bold',
                     letterSpacing: '1px',
                     fontFamily: 'monospace'
-                }}>Product List</Typography>
+                }}>
+                    Product List
+                </Typography>
                 <Stack direction="row" spacing={1} alignItems="center">
                     <TextField
                         value={Search}
@@ -64,32 +76,39 @@ const ProductList = () => {
                             height: "30px",
                         }}
                     />
-                    <Button
-                        variant="contained"
-                        size="small"
-                        sx={{
-                            height: "30px",
-                        }}
-                        onClick={() => {
-                            dispatch(setAddProduct(canteen_id))
-                        }}
-                    >
-                        Add Product
-                    </Button>
+                    <ButtonGroup size="small">
+                        <Button
+                            variant="contained"
+                            size="small"
+                            sx={{
+                                height: "30px",
+                            }}
+                            onClick={() => {
+                                dispatch(setAddProduct(canteen_id))
+                            }}
+                        >
+                            Add Product
+                        </Button>
+                        <AllUnitTypes />
+                    </ButtonGroup>
                     <RefecthButton refetch={refetch} isRefetching={isRefetching} />
                 </Stack>
             </Stack>
             <Box sx={{
-                width: "100%",
-                height: "95%",
-               
                 mt: 2,
-                
             }}>
                 <DataGrid
-                    style={{
-                        backgroundColor: "white",
-                        height: "80vh"
+                    sx={{
+                        bgcolor: "white",
+                        "& .MuiDataGrid-columnHeaders": {
+                            backgroundColor: theme.palette.grey[100],
+                            fontWeight: 600,
+                            fontSize: 14,
+                        },
+                        "& .MuiDataGrid-row": {
+                            fontSize: 13,
+                        },
+                        height: "75vh",
                     }}
                     rows={ProductItemsRows}
                     columns={ProductItemsColumn}
@@ -103,6 +122,7 @@ const ProductList = () => {
                 />
 
             </Box>
+
         </Box>
     )
 }

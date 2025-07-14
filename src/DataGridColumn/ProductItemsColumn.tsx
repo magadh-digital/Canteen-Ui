@@ -13,12 +13,12 @@ export const ProductItemsColumn: GridColDef[] = [
     {
         field: 'idx',
         headerName: 'Sno',
-        width: 70
+        width: 50
     },
     {
         field: 'name',
         headerName: 'Name',
-        width: 230,
+        width: 200,
         renderCell: ({ value }) => {
             return (
                 <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
@@ -30,7 +30,7 @@ export const ProductItemsColumn: GridColDef[] = [
     {
         field: 'price',
         headerName: 'Price',
-        width: 130,
+        width: 100,
         renderCell: ({ value }) => {
             return (
                 <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
@@ -43,12 +43,12 @@ export const ProductItemsColumn: GridColDef[] = [
     {
         field: 'description',
         headerName: 'Description',
-        width: 230
+        width: 200
     },
     {
         field: 'order',
         headerName: 'Order',
-        width: 230
+        width: 100
     },
     {
         field: 'category',
@@ -58,7 +58,7 @@ export const ProductItemsColumn: GridColDef[] = [
     {
         field: 'unit',
         headerName: 'Unit',
-        width: 130
+        width: 100
     },
     {
         field: "created_at",
@@ -93,7 +93,7 @@ export const ProductItemsColumn: GridColDef[] = [
     {
         field: 'actions',
         headerName: 'Actions',
-        width: 230,
+        width: 200,
         renderCell: ({ row }) => {
             const dispatch = useDispatch()
             const { mutateAsync } = DeleteProductItem()
@@ -120,8 +120,14 @@ export const ProductItemsColumn: GridColDef[] = [
             return (
                 <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
                     <ButtonGroup size="small">
-                        <Button variant="contained" onClick={handleOpen} size="small">Edit</Button>
-                        <Button variant="contained" onClick={handleDeleteItem} color="error" size="small">Delete</Button>
+                        <Button variant="contained" sx={{
+                            backgroundColor: colors.green[500]
+                        }} onClick={handleOpen} size="small">Edit</Button>
+                        <Button variant="contained" sx={{
+                            backgroundColor: colors.red[500],
+                            fontWeight: "bold"
+                        }}
+                        onClick={handleDeleteItem} color="error" size="small">Delete</Button>
                     </ButtonGroup>
                 </div>
             )

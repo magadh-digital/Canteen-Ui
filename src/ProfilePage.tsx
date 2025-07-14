@@ -28,8 +28,6 @@ export const ProfilePage = () => {
         navigate('/login');
     };
 
-
-
     return (
         <>
             <Tooltip title=" View Profile">
@@ -186,9 +184,8 @@ export const ProfilePage = () => {
                             fontSize: "15px",
                             fontWeight: "bold"
                         }}>
-                        Log Out <img src={`${imagelog}`} alt='"no img' width={"40px"} height={"30px"} />
+                        Log Out <img src={imagelog} alt='"no img' width={"40px"} height={"30px"} />
                     </Button>
-
                 </div>
             </Drawer>
         </>
