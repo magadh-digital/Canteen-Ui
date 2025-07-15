@@ -90,6 +90,7 @@ export const ProductItemsEdit = () => {
             formData.append('available', EditData.available.toString());
             formData.append('canteen_id', canteen_id || '');
             formData.append('order', EditData.order || '');
+            console.log(EditData.unit);
 
             if (EditData.image_url instanceof File) {
                 formData.append('image_url', EditData.image_url);

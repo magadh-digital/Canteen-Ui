@@ -300,6 +300,7 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
 
             printWindow.document.close();
             setOpen(false);
+            handleCLosePRint()
         }
     }, [billData, printOpen]);
 
@@ -660,12 +661,12 @@ export default function PaymentMethod({ canteen_id }: { canteen_id: string }) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button
+                    {/* <Button
                         variant='contained'
                         onClick={() => handleCLosePRint()}
                         color="error">
                         Close
-                    </Button>
+                    </Button> */}
                     <Button onClick={handlePrint} color="primary" variant='contained'>
                         <Print /> Download invoice
                     </Button>
