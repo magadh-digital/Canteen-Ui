@@ -4,9 +4,13 @@ import { AddStockItemType } from '../AllTypes';
 import { CreateStockItemApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
 import { ErrorHandle } from '../ErrorHandle';
+import { GetUnitTypeApi } from '../AllGetApi';
 
 const CreateStocks = (refetch: any) => {
     const [open, setOpen] = React.useState(false);
+    const { data: unitData } = GetUnitTypeApi({
+        enabled: !!open
+    })
     const [AddStock, setAddStock] = React.useState<AddStockItemType>({
         name: "",
         description: "",
@@ -127,9 +131,11 @@ const CreateStocks = (refetch: any) => {
                                                 })}
                                                 sx={{ width: "300px" }}
                                             >
-                                                <MenuItem value="KG">KG</MenuItem>
-                                                <MenuItem value="PIECE">PIECE</MenuItem>
-                                                <MenuItem value="PLATE">PLATE</MenuItem>
+                                                {unitData?.data?.map((item) => {
+                                                    return (
+                                                        <MenuItem key={item?._id} value={item?.name}>{item?.name}</MenuItem>
+                                                    )
+                                                })}
                                             </Select>
                                         </FormControl>
                                     </Grid>

@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store';
 import { setAddProduct } from '../AllStoreSlice/AddProductCanteenSlice';
+import { GetUnitTypeApi } from '../AllGetApi';
 
 
 
@@ -25,6 +26,7 @@ const Transition = React.forwardRef(function Transition(
 const AddMenuProduct = () => {
     const { canteen_id } = useSelector((state: RootState) => state.AddProductCanteen)
     const dispatch = useDispatch()
+    const { data: unitTypes, } = GetUnitTypeApi({ enabled: true })
     const [available, setAvailable] = React.useState(true);
     const [AddMenuItem, setMenuItem] = React.useState<AddMenuProductType>({
         name: "",
@@ -61,13 +63,17 @@ const AddMenuProduct = () => {
 
     }
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+        event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
+    ) => {
         const { name, value } = event.target;
         setMenuItem((prevState) => ({
             ...prevState,
-            [name]: name === "price" ? Number(value) : value
-        }))
-    }
+            [name!]: name === "price" ? Number(value) : value
+        }));
+    };
+
+
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -265,9 +271,9 @@ const AddMenuProduct = () => {
                                             name="unit"
                                             onChange={(event: any) => handleInputChange(event)}
                                         >
-                                            <MenuItem value="PIECE">Piece</MenuItem>
-                                            <MenuItem value="KG">Kg</MenuItem>
-                                            <MenuItem value="PLATE">Plate</MenuItem>
+                                            {unitTypes?.data?.map((item) => {
+                                                return <MenuItem value={item.name}>{item.name}</MenuItem>
+                                            })}
                                         </Select>
                                     </FormControl>
 

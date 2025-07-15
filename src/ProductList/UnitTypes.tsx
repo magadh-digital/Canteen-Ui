@@ -45,7 +45,6 @@ const AllUnitTypes = () => {
                 name: "",
                 description: ""
             })
-            setOpen(false)
             unitRefetch()
 
         } catch (error) {

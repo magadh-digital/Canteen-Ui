@@ -1,7 +1,7 @@
 import { PostAdd } from "@mui/icons-material"
 import { Autocomplete, Box, Button, colors, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Stack, Tab, Tabs, TextField, Tooltip, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import { GetStocksApi } from "../AllGetApi"
+import { GetStocksApi, GetUnitTypeApi } from "../AllGetApi"
 import { UpdateStockItemApi } from "../AllPostApi"
 import { toast } from "react-toastify"
 import { GridAddIcon, GridDeleteIcon } from "@mui/x-data-grid"
@@ -31,12 +31,14 @@ export interface StockItemType {
 
 
 const UpdateStocks = () => {
-    const { page, limit, } = UsePageHook({ page: 1, limit: 100 })
-
     const [open, setOpen] = useState(false)
+    const { page, limit, } = UsePageHook({ page: 1, limit: 100 })
     const { data, } = GetStocksApi({
         page,
         limit
+    })
+    const { data: unitData } = GetUnitTypeApi({
+        enabled: !!open
     })
     const [value, setValue] = useState("0")
     const { mutateAsync } = UpdateStockItemApi()
@@ -360,8 +362,13 @@ const UpdateStocks = () => {
                                                     })
                                                 }}
                                             >
-                                                <MenuItem value={"KG"}>Kg</MenuItem>
-                                                <MenuItem value={"PIECE"}>Piece</MenuItem>
+                                                {unitData?.data?.map((item) => (
+                                                    <MenuItem
+                                                        key={item._id}
+                                                        value={item.name}
+                                                    >{item.name}</MenuItem>
+
+                                                ))}
                                             </Select>
                                         </FormControl>
                                         <TextField
@@ -479,8 +486,9 @@ const UpdateStocks = () => {
                                                     })
                                                 }}
                                             >
-                                                <MenuItem value={"KG"}>Kg</MenuItem>
-                                                <MenuItem value={"PIECE"}>Piece</MenuItem>
+                                                {unitData?.data?.map((item) => (
+                                                    <MenuItem key={item?._id} value={item?.name}> {item?.name}</MenuItem>
+                                                ))}
                                             </Select>
                                         </FormControl>
                                         <TextField

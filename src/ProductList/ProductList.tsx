@@ -57,7 +57,8 @@ const ProductList = () => {
             <Stack
                 direction="row"
                 alignItems="center"
-                justifyContent="space-between">
+                justifyContent="space-between"
+            >
                 <Typography variant="h6" sx={{
                     color: colors.grey[600],
                     fontWeight: 'bold',
@@ -72,9 +73,6 @@ const ProductList = () => {
                         onChange={(e) => setSearch(e.target.value)}
                         label="Search"
                         size="small"
-                        sx={{
-                            height: "30px",
-                        }}
                     />
                     <ButtonGroup size="small">
                         <Button

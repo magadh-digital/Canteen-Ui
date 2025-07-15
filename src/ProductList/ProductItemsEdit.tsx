@@ -7,6 +7,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import { UpdateProductItem } from '../AllPostApi';
 import { toast } from 'react-toastify';
 import { ErrorHandle } from '../ErrorHandle';
+import { GetUnitTypeApi } from '../AllGetApi';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children: React.ReactElement<any, any> },
@@ -20,6 +21,7 @@ export const ProductItemsEdit = () => {
     const canteen_id = localStorage.getItem('canteen_user_id');
     const dispatch = useDispatch();
     const { mutateAsync: updateMenuItem } = UpdateProductItem();
+    const { data: unitData } = GetUnitTypeApi({ enabled: menuItemId !== '' });
     const [EditData, setEditData] = useState<{
         name: string;
         price: number;
@@ -148,9 +150,9 @@ export const ProductItemsEdit = () => {
                         <FormControl fullWidth>
                             <InputLabel>Unit</InputLabel>
                             <Select size="small" label="Unit" name="unit" value={EditData.unit} onChange={handleSelectChange}>
-                                <MenuItem value="PIECE">Piece</MenuItem>
-                                <MenuItem value="KG">Kg</MenuItem>
-                                <MenuItem value="PLATE">Plate</MenuItem>
+                                {unitData?.data?.map((option) => (
+                                    <MenuItem key={option._id} value={option.name}>{option.name}</MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
 

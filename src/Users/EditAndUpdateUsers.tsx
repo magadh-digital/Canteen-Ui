@@ -107,6 +107,7 @@ const EditAndUpdateUsers = ({ user_id, data }: { user_id: string, data: CanteenU
                             label="Phone"
                             value={updateUserData.phone}
                             size='small'
+                            
                             fullWidth
                             error={phoneError}
                             helperText={phoneError ? "Phone number must be 10 digits" : ""}
