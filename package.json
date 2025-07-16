@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^5.1.1",
     "@mui/icons-material": "^6.2.1",
     "@mui/lab": "^6.0.0-beta.20",
     "@mui/material": "^6.2.1",
@@ -35,13 +36,15 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-draggable": "^4.4.6",
+    "react-hook-form": "^7.60.0",
     "react-qr-code": "^2.0.15",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.28.0",
     "react-toastify": "^11.0.2",
     "redux-persist": "^6.0.0",
     "to-words": "^4.4.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

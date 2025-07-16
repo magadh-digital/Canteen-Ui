@@ -46,6 +46,7 @@ const ProductList = () => {
             backgroundColor: "white",
             padding: 2,
             
+            
         }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="h6" sx={{
@@ -80,16 +81,19 @@ const ProductList = () => {
                 </Stack>
             </Stack>
             <Box sx={{
-                width: "100%",
-                height: "95%",
                
                 mt: 2,
+                width: "100%",
                 
             }}>
                 <DataGrid
                     style={{
                         backgroundColor: "white",
-                        height: "80vh"
+                        height: "80vh",
+                    
+                        
+                        border: "none",
+                      
                     }}
                     rows={ProductItemsRows}
                     columns={ProductItemsColumn}
