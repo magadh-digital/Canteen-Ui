@@ -146,6 +146,8 @@ const UpdateStocks = () => {
             type: "IN"
         })
         setItemQuantity(0)
+        handleCloseMinus()
+
     }
 
     const handleCloseMinus = () => {
@@ -168,7 +170,7 @@ const UpdateStocks = () => {
 
             const res = await mutateAsync({ data: updatedStock });
             if (res?.status === 200) {
-                setOpen(false);
+                setOpen(false); 
                 handleCloseMinus();
                 toast.success("Stock Updated Successfully");
             }

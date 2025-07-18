@@ -66,7 +66,7 @@ const CreateStocks = (refetch: any) => {
             <Button onClick={() => setOpen(true)} variant="contained" color="success">
                 Create Stock
             </Button>
-            <Dialog open={open} onClose={() => setOpen(false)} sx={{
+            <Dialog open={open} onClose={()=>handleClose()} sx={{
                 "& .MuiDialog-paper": {
                     width: "auto",
                     borderRadius: "25px"
