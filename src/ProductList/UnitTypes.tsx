@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GetUnitTypeApi } from "../AllGetApi";
 import {
     Box, Button, ButtonGroup, CircularProgress, colors, Dialog, DialogActions,
     Divider, Stack, TextField, Typography,
 } from "@mui/material";
-import { Add, Delete,  } from "@mui/icons-material";
+import { Add, Delete, } from "@mui/icons-material";
 import { ErrorHandle } from "../ErrorHandle";
-import { UnitAddTypesPost, UnitDeleteTypesPost,  } from "../AllPostApi";
+import { UnitAddTypesPost, UnitDeleteTypesPost, } from "../AllPostApi";
 import moment from "moment";
 import { UnitTypes } from '../AllTypes';
 import RefecthButton from '../RefecthButton';
@@ -14,9 +14,8 @@ import RefecthButton from '../RefecthButton';
 
 const AllUnitTypes = () => {
     const [open, setOpen] = useState(false);
-    const [enabled, setEnabled] = useState(false);
     const { mutateAsync } = UnitAddTypesPost()
-    const { mutateAsync: unitDelete } = UnitDeleteTypesPost()   
+    const { mutateAsync: unitDelete } = UnitDeleteTypesPost()
 
     const [unitAdd, setUnitAdd] = useState<UnitTypes>({
         name: "",
@@ -27,9 +26,13 @@ const AllUnitTypes = () => {
         isLoading: unitIsLoading,
         isRefetching: unitIsRefetching,
         refetch: unitRefetch
-    } = GetUnitTypeApi({
-        enabled: enabled
-    })
+    } = GetUnitTypeApi()
+
+    useEffect(() => {
+       if(open === true){
+        unitRefetch()
+       }
+    }, [open])
 
 
     const handleAddUnit = async () => {
@@ -71,7 +74,6 @@ const AllUnitTypes = () => {
             <Button size="small"
                 onClick={() => {
                     setOpen(true)
-                    setEnabled(true)
                 }}>
                 Unit
                 <Add sx={{ fontSize: 16 }} />

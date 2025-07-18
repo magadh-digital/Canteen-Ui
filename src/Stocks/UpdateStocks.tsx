@@ -37,9 +37,7 @@ const UpdateStocks = () => {
         page,
         limit
     })
-    const { data: unitData } = GetUnitTypeApi({
-        enabled: !!open
-    })
+    const { data: unitData, refetch } = GetUnitTypeApi()
     const [value, setValue] = useState("0")
     const { mutateAsync } = UpdateStockItemApi()
     const [arrayAddStock, setArrayAddStock] = useState<StockItemType[]>([])
@@ -66,6 +64,12 @@ const UpdateStocks = () => {
         setValue(newValue);
         setItemQuantity(0)
     };
+
+    useEffect(() => {
+        if (open) {
+            refetch()
+        }
+    }, [open])
 
 
     useEffect(() => {

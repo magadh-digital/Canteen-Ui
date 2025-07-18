@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AddStockItemType } from '../AllTypes';
 import { CreateStockItemApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
@@ -8,14 +8,19 @@ import { GetUnitTypeApi } from '../AllGetApi';
 
 const CreateStocks = (refetch: any) => {
     const [open, setOpen] = React.useState(false);
-    const { data: unitData } = GetUnitTypeApi({
-        enabled: !!open
-    })
+    const { data: unitData, refetch : unitRefetch   } = GetUnitTypeApi()
     const [AddStock, setAddStock] = React.useState<AddStockItemType>({
         name: "",
         description: "",
         unit: "KG"
     })
+
+    useEffect(()=>{
+        if(open === true){
+            unitRefetch()
+        }
+    },[open])
+
     const { mutateAsync } = CreateStockItemApi()
     const handleClose = () => {
         setOpen(false)
@@ -25,6 +30,8 @@ const CreateStocks = (refetch: any) => {
             unit: "KG"
         })
     }
+
+
     const handleSaveStockData = async () => {
         if (!AddStock.name) {
             toast.error("Please Enter Stock Name")

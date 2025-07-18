@@ -21,7 +21,7 @@ export const ProductItemsEdit = () => {
     const canteen_id = localStorage.getItem('canteen_user_id');
     const dispatch = useDispatch();
     const { mutateAsync: updateMenuItem } = UpdateProductItem();
-    const { data: unitData } = GetUnitTypeApi({ enabled: menuItemId !== '' });
+    const { data: unitData, refetch, isRefetching } = GetUnitTypeApi();
     const [EditData, setEditData] = useState<{
         name: string;
         price: number;
@@ -43,6 +43,11 @@ export const ProductItemsEdit = () => {
         canteen_id: canteen_id,
         order: menuItemsData?.order
     });
+    useEffect(() => {
+        if (menuItemId !== '') {
+            refetch()
+        }
+    }, [menuItemId])
 
     useEffect(() => {
         if (menuItemsData) {

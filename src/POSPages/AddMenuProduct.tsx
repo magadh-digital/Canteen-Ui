@@ -2,7 +2,7 @@
 import { AppBar, Box, Button, Checkbox, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions';
 import { GridCloseIcon } from '@mui/x-data-grid';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AddMenuProductType } from '../AllTypes';
 import { PostMenuItemApi } from '../AllPostApi';
 import { toast } from 'react-toastify';
@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(
 const AddMenuProduct = () => {
     const { canteen_id } = useSelector((state: RootState) => state.AddProductCanteen)
     const dispatch = useDispatch()
-    const { data: unitTypes, } = GetUnitTypeApi({ enabled: true })
+    const { data: unitTypes, refetch } = GetUnitTypeApi()
     const [available, setAvailable] = React.useState(true);
     const [AddMenuItem, setMenuItem] = React.useState<AddMenuProductType>({
         name: "",
@@ -38,6 +38,11 @@ const AddMenuProduct = () => {
         image_url: "",
     })
     const { mutateAsync, isPending } = PostMenuItemApi()
+    useEffect(() => {
+        if (canteen_id !== '') {
+            refetch()
+        }
+    }, [canteen_id])
 
 
 
