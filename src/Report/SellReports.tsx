@@ -12,6 +12,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from '@mui/material';
 import RefecthButton from '../RefecthButton';
 import { DataGrid, GridPaginationModel } from '@mui/x-data-grid';
@@ -42,33 +43,30 @@ const SellReport = () => {
     startDate: date.startDate as string,
     endDate: date.endDate as string
   });
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+  const [page, setPage] = useState<GridPaginationModel>({
     page: 0,
-    pageSize: 20,
+    pageSize: 100
   });
   const [search, setSearch] = useState<string>("");
 
-  const handlePaginationModelChange = (newModel: GridPaginationModel) => {
-    setPaginationModel(newModel);
+  const handlePageChange = (newPage: GridPaginationModel) => {
+    setPage(newPage);
   };
 
   const ReportItem = useMemo(() => {
     if (!data) return [];
-    const sellDataReport = data?.items;
-    if (sellDataReport) {
-      return sellDataReport
-        .filter((item) =>
-          item.name.toLowerCase().includes(search.toLowerCase())
-        )
-        .map((item, index: number) => ({
-          ...item,
-          id: item?.item_id,
-          idx: index + 1 + paginationModel.page * paginationModel.pageSize,
-          unit_type: item?.item_details?.unit
-        }));
-    }
-    return [];
-  }, [data, search, paginationModel,]);
+    const sellDataReport = data?.items || [];
+    return sellDataReport
+      .filter((item) =>
+        item.name?.toLowerCase().includes(search.toLowerCase())
+      )
+      .map((item, index: number) => ({
+        ...item,
+        id: index,
+        idx: index + 1 + page.pageSize * page.page,
+        unit_type: item?.item_details?.unit,
+      }));
+  }, [data, search]);
 
   const getPlainRows = () => {
     return ReportItem.map((row) => {
@@ -81,7 +79,7 @@ const SellReport = () => {
       return plainRow;
     });
   };
-
+  const theme = useTheme();
   const handlePrint = () => {
     const WinPrint = window.open('', 'width=900,height=650');
     if (WinPrint) {
@@ -229,9 +227,9 @@ const SellReport = () => {
   return (
     <Box
       sx={{
-       
+
         p: 2,
-       
+
         bgcolor: "white",
       }}
     >
@@ -311,16 +309,29 @@ const SellReport = () => {
         </Stack>
       </Stack>
 
-      <Box mt={2} id="print-section">
+      <Box mt={2}>
         <DataGrid
-          rows={ReportItem || []}
+          sx={{
+            bgcolor: "white",
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.grey[100],
+              fontWeight: 600,
+              fontSize: 14,
+            },
+            "& .MuiDataGrid-row": {
+              fontSize: 13,
+            },
+            height: "75vh",
+          }}
+          rows={ReportItem}
           columns={SellReportColumn}
           loading={isLoading || isRefetching}
-          paginationModel={paginationModel}
-          pageSizeOptions={[20]}
-          onPaginationModelChange={handlePaginationModelChange}
-          style={{ height: '80vh' }}
+          paginationMode="client"
+          paginationModel={page}
+          onPaginationModelChange={handlePageChange}
+          pageSizeOptions={[10, 20, 50, 100]}
         />
+
       </Box>
     </Box>
   );

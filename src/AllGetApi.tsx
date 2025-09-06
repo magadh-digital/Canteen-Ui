@@ -3,7 +3,7 @@ import { baseUrl } from "./ApiEndPoint"
 import { useQuery } from "@tanstack/react-query"
 import { AllUserType, GetApiUserCanteens, GetMenuItemList, GetPurchaseApiTypes, GetStockDataTypes, GetSupplierApiType, IUnitTypes, MonthlyReportType, PurchaseReportType, ReportDashboard, SellReportType, StockDetails, TodaySellSummaryType, UpdateOrderType } from "./AllTypes"
 import { ErrorHandle } from "./ErrorHandle"
-import { useSelector } from "react-redux"
+// import { useSelector } from "react-redux"
 
 export const GetCanteenUserApi = () => {
     const canteenUser = async () => {

@@ -21,7 +21,7 @@ export const ProductItemsEdit = () => {
     const canteen_id = localStorage.getItem('canteen_user_id');
     const dispatch = useDispatch();
     const { mutateAsync: updateMenuItem } = UpdateProductItem();
-    const { data: unitData, refetch, isRefetching } = GetUnitTypeApi();
+    const { data: unitData, refetch } = GetUnitTypeApi();
     const [EditData, setEditData] = useState<{
         name: string;
         price: number;

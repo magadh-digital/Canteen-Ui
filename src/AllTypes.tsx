@@ -450,6 +450,7 @@ export interface SellItems {
   item_details: {
     unit: string
   }
+  item_id_obj: string
 }
 
 
